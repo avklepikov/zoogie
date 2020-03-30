@@ -18,7 +18,8 @@ Project Model (model.py)
 Database connectors / controllers 
 - represent various options to run the model with different databases, so users may reuse the Model in their projects and databases which they prefer
 
-db_constants - defines mapping between model classes/attributes and database tables/fields
+db_constants.py - defines mapping between model classes/attributes and database tables/fields
+
 db.py - db controller to run SQLite database + database initiation method which creates database from a scratch.
 
 
