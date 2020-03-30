@@ -10,13 +10,17 @@ Being a Python adept I made a decision to create a solution which is based on re
 Coding is my hobby from my childhood, but I am not a professional developer. In 2016 I tryed Python and took a few internet courses on it. But still I am junior level developer and appreciate your advise or help on the following areas: VMC, interaction of model with database, UI.
 
 # Zoogie concept
-I see the following structure of Zoogie project:
+I use the following structure of Zoogie project:
 
-Project Model
+Project Model (model.py)
 - represents a datamodel for all project managements concepts and artifacts. Users should be able to use it togerther with provided database or UI functionality or just separately as a starting toolkit for own python projects.
 
-Database connectors / controllers
+Database connectors / controllers 
 - represent various options to run the model with different databases, so users may reuse the Model in their projects and databases which they prefer
+
+db_constants - defines mapping between model classes/attributes and database tables/fields
+db.py - db controller to run SQLite database + database initiation method which creates database from a scratch.
+
 
 UI
 - Zoogie provides fully pack of functionality not only to resue model in different projects but also to be used as a full pack application.
