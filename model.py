@@ -1,11 +1,52 @@
+"""Model.py introduces Project Management related conceptes and artifacts 
+
+Superclass ProjectObject is used to manage general methods:
+    append   : to create new item with related data
+    update   : update item's data
+    delete   : delete item
+    viewItem (_id) : to retrieve item's data based on its primary key _id
+    viewProjectRelatedItems (_Project_id): to retrieve list of items related to the Project based on its primary key _Project_id
+    viewList :
+    
+Classes: Business name is Project Objects
+    ProjectObject    : Superclass with common attributes and methods
+    Benefit          : List of benefits which are expected from the Project
+    BenefitApproach  : Applied policy by which benefits delivery is managed
+    BusinessCase     : Justification to run the project
+    DailyLog         : Daily informal records of Project Manager
+    ErrorRegister    : List of errors identified during the product acceptance test
+    Issue            : Identified problem or change request
+    Lesson           : Lesson learned to be taked into account in future
+    Mandate          : Mandate from senior management to start the project
+    Product          : Project product or subproduct or interim product that is produced by the Project
+    ProjectBrief     : Brief formal justification of the Project during Initiation Stage
+    QualityApproach  : Applied policy to manage project quality
+    QualityRegister  : List of quality acceptance events and their status
+    RiskApproach     : Applied policy to manage Project risks
+    RiskRegister     : List of identified risks
+    Stakeholder      : List of Project stakeholders
+    WorkPackage      : Specified amount of work and its output authorized during a stage
+    Stage            : Defined time horizont or project phase with a specified delivery
+    CommunicationApproach : Applied policy to manage Project communications
+    Team             : List of project members
+    ChangeApproach   : Applied approach to manage Project changes
+    QualityCriteria  : Quality requirement to be met by the project's product
+    Project          : Project class around which all other Project object are organized
+    
+    
+"""
+
 import logging
-import db
+import db        #database connector to run the model on SQLLite DB
 
 
 class ProjectObject():   # Unified methods are set in this SuperClass
         """Provides each Project Class with unified methods to read and update the database
         
-        Accepted methods:
+        Attributes:
+        -none-
+        
+        Methods:
             append
             update
             delete
@@ -17,22 +58,36 @@ class ProjectObject():   # Unified methods are set in this SuperClass
         
         
         def append (self):
+                """Created a Database record and writes all Project Object attributes into it
+                """
                 print ('append: ', self.__class__.__name__, self.__dict__)
                 _sql = db.compile_INSERT_script(self.__class__.__name__, self.__dict__)
                 db.executeSQL(_sql)
 
 
         def update (self):
+                """Finds related Project Object record and overwrites all Project Object attributes into it
+                """
                 print ('update', self.__class__.__name__, self.__dict__)
                 _sql = db.compile_UPDATE_script (self.__class__.__name__, self.__dict__)
                 db.executeSQL(_sql)
                 
         def delete (self):
+                """Finds related Project Object record and delete it from database
+                """                
                 logging.info ('delete: ', self.__class__.__name__, self.__dict__)
                 
                 
         def viewItem (self, _id):
-                #print ('viewitem: ', self.__class__.__name__, self.__dict__)
+                """Retrieves Project Object item from database based on its ID
+                
+                Args:
+                    _id  (str)  : Record id
+                
+                Returns:
+                    _dict   : attibute names
+                    _data   : values
+                """
                 _sql = db.complile_SELECT_BY_ITEM_ID(self.__class__.__name__, self.__dict__,_id)
                 _data = db.executeSQLget(_sql)
                 _dict = {}
@@ -44,6 +99,15 @@ class ProjectObject():   # Unified methods are set in this SuperClass
                 return _dict, _data                
 
         def viewProjectRelatedItems (self, _Project_id):
+                """Retrieves Project related Object items from database based on its Project ID
+                
+                Args:
+                    _Project_id  (str)  : Project id
+                
+                Returns:
+                    _dict   : attibute names
+                    _data   : values
+                """                
                 #print ('viewitem: ', self.__class__.__name__, self.__dict__)
                 _sql = db.complile_SELECT_BY_PROJECT_ID(self.__class__.__name__, self.__dict__,_Project_id)
                 _data = db.executeSQLget(_sql)
@@ -72,7 +136,24 @@ class ProjectObject():   # Unified methods are set in this SuperClass
 
 
 
-class Benefit (ProjectObject): # OK
+class Benefit (ProjectObject):          # OK
+        """Superclass object to manage general attributes and methods for all Project Objects (classes)
+        
+        ATTRIBUTES:
+            ID                   (int): Item technical ID in database
+            BusinessID           (str): BusinessID in format accepted by Project Office
+            RelatedProject       (str): Related Project primary key
+            Title                (str): Short name of the Benefit
+            Description          (str): Benefit description
+            Category             (str): Benefit category
+            Measurement          (str): How Benefit is measured: technics and units of measure
+            Responsibility       (str): Who is responsibles of Benefit measurement
+            ResourceRequirements (str): Resouce required to perform benefit measurement
+            Baseline             (str): Benefit baseline value defined in the begining of the project
+        
+        Methods:
+            Please refer to Superclass Methods for standard methods applied across all Project Classes    
+        """
         def __init__ (self,
                       BusinessID: str = None,
                       RelatedProject: int = None,
@@ -96,7 +177,19 @@ class Benefit (ProjectObject): # OK
                 self.ResourceRequirements = ResourceRequirements
                 self.Baseline = Baseline  
                 
-class BenefitApproach (ProjectObject): # OK
+class BenefitApproach (ProjectObject):  # OK
+        """BenefitApproach  : Applied policy by which benefits delivery is managed
+        
+        Attributes:
+            ID                (int): Item technical ID in database
+            RelatedProject    (str): Related Project primary key
+            General           (str): Policy text
+            ManagementActions (str): Management actions to support execution of stated policy
+            Review            (str): 
+           
+        Methods:
+            Please refer to Superclass Methods for standard methods applied across all Project Classes   
+        """
         def __init__ (self,
                       RelatedProject: int = None,
                       General: str = None,
@@ -110,7 +203,25 @@ class BenefitApproach (ProjectObject): # OK
                 self.Review = Review
         
 
-class BusinessCase (ProjectObject): # OK
+class BusinessCase (ProjectObject):     # OK
+        """Justification to run the project
+        
+        Attributes:
+            ID                    (int): Item technical ID in database 
+            RelatedProject        (int): Related Project primary key
+            ExecutiveSummary      (str): Few lines explaining project ideas and purpose  
+            Reasons               (str): Explained reasons to start the project
+            Options               (str): Analysis of available options including running the project and doing nothing
+            ExpectedBenefits      (str): Expected Benefits from Project and its products
+            ExpectedDisBenefits   (str): Expected DisBenefits from Project and its products
+            Timescale             (str): Explanation related to key time line expectations
+            Costs                 (str): Explanation of Project costs
+            InvestmentArraisal    (str): Who and how approves the investments and based on what criteria 
+        
+        Methods:
+            Please refer to Superclass Methods for standard methods applied across all Project Classes    
+        """
+        
         def __init__(self,
                      RelatedProject: int = None,
                      ExecutiveSummary: str = None,
@@ -134,7 +245,24 @@ class BusinessCase (ProjectObject): # OK
                 self.Costs=Costs
                 self.InvestmentArraisal=InvestmentArraisal                
 
-class DailyLog (ProjectObject):  #OK
+class DailyLog (ProjectObject):         # OK
+        """Daily informal records of Project Manager
+        
+        Attributes:
+            ID              (int): Item technical ID in database
+            BusinessID      (int): BusinessID in format accepted by Project Office
+            RelatedProject  (int): Related Project primary key
+            RaisedDate      (str): Date of recording
+            Category        (str): Category of Record {Event; Problem; Action}
+            Description     (str): Description
+            Responsible     (str): Responsible for action
+            TargetDate      (str): Target date for Actions
+            Status          (str): Problem or Action status - {Closed; Canceled}
+            Results         (str): Extra explanation of results for problems or events or actions
+        
+        Methods:
+            Please refer to Superclass Methods for standard methods applied across all Project Classes    
+        """
         def __init__ (self,
                       BusinessID: int = None,
                       RelatedProject: int = None,
@@ -158,7 +286,23 @@ class DailyLog (ProjectObject):  #OK
                 self.Status=Status
                 self.Results=Results                
 
-class ErrorRegister (ProjectObject):   # OK
+class ErrorRegister (ProjectObject):    # OK
+        """List of errors identified during the product acceptance test
+        
+        Attributes:
+            ID              (int): Item technical ID in database
+            BusinessID      (str): BusinessID in format accepted by Project Office
+            RelatedProject  (int): Related Project primary key
+            RelatedProduct  (int): Related Product primary key for which error was registered
+            Title           (str): Short description
+            Description     (str): Long description
+            RaisedBy        (str): Person name who found/registered an error
+            RaisedDate      (str): Date when error was identified and registered
+            ClosedDate      (str): Date when error was solved 
+            Status          (str): Current Status {Open, Solved, Closed, Canceled}
+        Methods:
+            Please refer to Superclass Methods for standard methods applied across all Project Classes    
+        """
         def __init__ (self,
                       BusinessID: str = None,
                       RelatedProject: int = None,
@@ -182,7 +326,27 @@ class ErrorRegister (ProjectObject):   # OK
                 self.ClosedDate=ClosedDate
                 self.Status=Status                
 
-class Issue (ProjectObject):  # OK
+class Issue (ProjectObject):            # OK
+        """Identified problem or change request
+        
+        Attributes:
+            ID              (int): Item technical ID in database
+            BusinessID      (str): BusinessID in format accepted by Project Office
+            RelatedProject  (int): Related Project primary key
+            Title           (str): Short description
+            Category        (str): Category from {Off-spec, change request, problem}
+            DateRaised      (str): Date when error was identified and registered
+            RaisedBy        (str):  Person name who found/registered an error
+            IssueAuthor     (str): ?
+            Description     (str): Long description
+            Priority        (str): Priority from {high, medium, low}
+            Severity        (str): ?
+            Status          (str): Status from {Open, Closed, Canceled}
+            ClosureDate     (str): Date of issue closure
+        
+        Methods:
+            Please refer to Superclass Methods for standard methods applied across all Project Classes     
+        """
         def __init__ (self,
                       BusinessID: str = None,
                       RelatedProject: int = None,
@@ -212,7 +376,30 @@ class Issue (ProjectObject):  # OK
                 self.Status=Status
                 self.ClosureDate=ClosureDate                
 
-class Lesson (ProjectObject):   # OK
+class Lesson (ProjectObject):           # OK
+        """Lesson learned to be taked into account in other Projects
+        
+        Attributes:
+            ID              (int): Item technical ID in database
+            BusinessID      (str): BusinessID in format accepted by Project Office
+            RelatedProject  (int): Related Project primary key
+            Title           (str): Short description
+            Description     (str): Long description
+            Category        (str): Category from custom reference table (not-predefined)
+            Event           (str): Description of event occurred
+            Effect          (str): What effect event had on the project
+            CauseTrigger    (str): What what the reason for the event
+            EarlyWarningIndicator     (str): Is there any early indicator that event will occurr?
+            Recommendations (str): Reccommendations for future projects
+            DateLogged      (str): Date when Lesson was logged
+            LoggedBy        (str): Person name logged the lesson
+            Priority        (str): Priority from {High, Medium, Low}
+            
+        Methods:
+            Please refer to Superclass Methods for standard methods applied across all Project Classes
+            
+        """
+        
         def __init__ (self,
                       BusinessID: str = None,
                       RelatedProject: int = None,
@@ -244,7 +431,18 @@ class Lesson (ProjectObject):   # OK
                 self.LoggedBy=LoggedBy
                 self.Priority=Priority                
 
-class Mandate (ProjectObject):   # OK
+class Mandate (ProjectObject):          # OK
+        """Mandate from senior management to start the project
+        
+        Attributes:
+            ID              (int): Item technical ID in database
+            RelatedProject  (int): Related Project primary key
+            Mandate         (str): Text of mandate email, meeting minutes or other document)
+        
+        Methods:
+            Please refer to Superclass Methods for standard methods applied across all Project Classes    
+            
+        """
         def __init__ (self,
                       Mandate: str = None,
                       RelatedProject: int = None,
@@ -254,23 +452,26 @@ class Mandate (ProjectObject):   # OK
                 self.Mandate=Mandate
                 self.RelatedProject=RelatedProject                
 
-class Product (ProjectObject): # OK
-        """Provides business attributes related to Product
-        ATTRIBUTES
-        ----------
-        BusinessID: str, 
-        RelatedProject: int, 
-        Title: str, 
-        Purpose: str, 
-        Composition: str, 
-        Derivation: str, 
-        FormatPresentation: str, 
-        DevSkills: str, 
-        ID: int = None (Optional) - Provided only for records that already exist in the database table
-        ParentID: int = None (Optional) - Provided only for the records that have parent product
+class Product (ProjectObject):          # OK
+        """Project product or subproduct or interim product that is produced by the Project
+        Can be Product or related Subproducts
         
-        METHODS:
-        SUPERCLASS: Please refer to Superclass Methods for standard methods applied across all Project Classes
+        Attributes:
+            ID              (int): Item technical ID in database. 
+            ParentID        (int): Technical ID of subproduct's parent product in database.
+            BusinessID      (str): BusinessID in format accepted by Project Office.
+            RelatedProject  (int): Related Project primary key.
+            Title           (str): Short product name.
+            Description     (str): Product/subproduct detailed description.
+            Purpose         (str): What is the purpose of produced product or subproduct.
+            Composition     (str): From which parts product consists.
+            Derivation      (str): From what raw materials or other artifacts project should be produced.
+            FormatPresentation      (str): How product looks like, format, material etc.
+            DevSkills       (str): What skills are needed to develop the product. 
+            
+        
+        Methods:
+            Please refer to Superclass Methods for standard methods applied across all Project Classes
         """
         
         def __init__ (self,  
@@ -300,7 +501,35 @@ class Product (ProjectObject): # OK
                 self.ParentID = ParentID
         
 
-class ProjectBrief (ProjectObject):   # OK
+class ProjectBrief (ProjectObject):     # OK
+        """Brief formal justification of the Project during Initiation Stage
+        
+        Attributes:
+            ID                      (int): Item technical ID in database.
+            RelatedProject          (int): Related Project primary key.
+            Background              (str): ?
+            ObjectiveTime           (str): Target time constrains set for the project
+            ObjectiveCost           (str): Target cost/budget constrains set for the project
+            ObjectiveQuality        (str): Target quality constrains set for the project
+            ObjectiveScope          (str): Target scope constrains set for the project
+            ObjectiveBenefits       (str): Target benefits constrains set for the project
+            ObjectiveRisks          (str): Target risks constrains set for the project
+            Outcomes                (str): Descriptions of project outcomes that will realize stated benefits
+            Scope                   (str): Agreed scope under change control
+            ConstrainsAssumptions   (str): Assumptions 
+            ToleranceTime           (str): Defined tolerance for time constrains delegated to Project Manager
+            ToleranceCost           (str): Defined tolerance for cost/buget constrains delegated to Project Manager
+            ToleranceQuality        (str): Defined tolerance for quality constrains delegated to Project Manager
+            ToleranceScope          (str): Defined tolerance for scope constrains delegated to Project Manager
+            ToleranceBenefits       (str): Defined tolerance for benefits constrains delegated to Project Manager
+            ToleranceRisks          (str): Defined tolerance for risks constrains delegated to Project Manager
+            Stakeholders            (str): Description of major stakeholders for the Project
+            ProjectApproach         (str): General rules and concepts defining how the project will be organized and managed
+        
+        Methods:
+            Please refer to Superclass Methods for standard methods applied across all Project Classes    
+        """
+        
         def __init__ (self,
                       RelatedProject: int = None,
                       Background: str = None,
@@ -345,7 +574,24 @@ class ProjectBrief (ProjectObject):   # OK
                 self.ProjectApproach=ProjectApproach
                
 
-class QualityApproach (ProjectObject):   # OK
+class QualityApproach (ProjectObject):  # OK
+        """Applied policy to manage project quality
+        
+        Attributes:
+            ID              (int): Item technical ID in database.
+            RelatedProject  (int): Related Project primary key.
+            Introduction    (str): General introduction to Quality approach related to the Project
+            Procedure       (str): Procedure / Policy
+            ProjectQuality  (str): How quality of Project management is monitored and contrled. Responsibilities, events, controls
+            Techniques      (str): Quality check technics applied in the project
+            Records         (str): Records and Registers used to register Quality events, checks and issues
+            Reporting       (str): Organization of reporting related to Quality theme. Forms, schedule, responsibility
+            Timing          (str): Defined schedule for quality check events
+            RolesResponsibilities   (str): Defined responsibilities of Project team to perform Quality checks
+        
+        Methods:
+            Please refer to Superclass Methods for standard methods applied across all Project Classes    
+        """
         def __init__ (self,
                       RelatedProject: int = None,
                       Introduction: str = None,
@@ -369,7 +615,22 @@ class QualityApproach (ProjectObject):   # OK
                 self.Timing=Timing
                 self.RolesResponsibilities=RolesResponsibilities                
 
-class QualityRegister (ProjectObject):   # OK
+class QualityRegister (ProjectObject):  # OK
+        """List of quality acceptance event and its status
+        
+        Attributes:
+            ID                      (int): Item technical ID in database.
+            BusinessID              (str): BusinessID in format accepted by Project Office.
+            RelatedProject          (int): Related Project primary key.
+            RelatedProduct          (str): Which product or subproduct is verified
+            Method                  (str): How Quality check will be performed
+            RolesResponsibilities   (str): Who will perform quality check
+            Dates                   (str): Date of acceptance test
+            Result                  (str): Result of acceptance test
+            
+        Methods:
+            Please refer to Superclass Methods for standard methods applied across all Project Classes    
+        """
         def __init__ (self,
                       BusinessID: str = None,
                       RelatedProject: int = None,
@@ -389,7 +650,27 @@ class QualityRegister (ProjectObject):   # OK
                 self.Dates=Dates
                 self.Result=Result                
 
-class RiskApproach (ProjectObject):    # OK
+class RiskApproach (ProjectObject):     # to correct Attribute Proximity
+        """Applied policy to manage Project risks
+        
+        Attributes:
+            ID                      (int): Item technical ID in database.
+            RelatedProject          (int): Related Project primary key.
+            Introduction            (str): General introduction to the Policy
+            Procedure               (str): Organizational procedures to be followed 
+            Techniques              (str): What technics should be applied to follow the policy
+            Records                 (str): What records are to be set to register identified risks
+            Reporting               (str): What reporting should be established with regard to identified / processed risks
+            Timing                  (str): Schedule on communication regarding identified risks and related reporting
+            RolesResponsibilities   (str): Who is responsible to capture, record, monitor risks nd process actions
+            Scales                  (str): Risk Scale applied
+            Proxomity               (str): How risk proximity is calculated
+            Category                (str): Applied risk categories
+            EarlyWarningIndicator   (str): Are there any early indicator that will predict risk event
+        
+        Methods:
+            Please refer to Superclass Methods for standard methods applied across all Project Classes     
+        """
         def __init__ (self,
                       RelatedProject: int = None,
                       Introduction: str = None,
@@ -420,7 +701,31 @@ class RiskApproach (ProjectObject):    # OK
                 self.Category=Category
                 self.EarlyWarningIndicator=EarlyWarningIndicator                
 
-class RiskRegister (ProjectObject):   # OK
+class RiskRegister (ProjectObject):     # to add attr explanation
+        """List of identified risks
+        
+        Attributes:
+            ID                      (int): Item technical ID in database.
+            BusinessID              (str): BusinessID in format accepted by Project Office.
+            RelatedProject          (int): Related Project primary key.
+            Title                   (str): Short name for identified risk
+            Author                  (str): Name of person who raised the risk
+            RaisedDate              (str): Date when risk was raised
+            Category                (str): Risk category from the categories set in Risk Approach
+            Description             (str): Detailed description of risk
+            Probability             (str): Probability of risk event
+            Impact                  (str): Impact on project 
+            ExpectedValue           (str): ?
+            Proximity               (str): ?
+            ResponseCategory        (str): Response to the risk defined in Risk approach
+            Response                (str): Description of response
+            Status                  (str): Status {open, canceled, realised, closed}
+            Owner                   (str): Name of person responsible for the risk item monitoring 
+            Actionee                (str): Name of person responsible for mitigation action
+        
+        Methods:
+            Please refer to Superclass Methods for standard methods applied across all Project Classes    
+        """
         def __init__ (self,
                       BusinessID: str = None,
                       RelatedProject: int = None,
@@ -458,7 +763,21 @@ class RiskRegister (ProjectObject):   # OK
                 self.Owner=Owner
                 self.Actionee=Actionee                
 
-class Stakeholder (ProjectObject):   # OK
+class Stakeholder (ProjectObject):      # OK
+        """List of Project stakeholders
+        
+        Attributes:
+            ID                      (int): Item technical ID in database.
+            RelatedProject          (int): Related Project primary key.
+            CurrentRel              (str): Description of current relations with the stakeholder
+            Interfaces              (str): What points of joint interest is known, areas of interaction
+            KeyMessages             (str): Key messages to deliver to the Stakeholder
+            InfoToProject           (str): What kind of information is requered from the Stakeholder to the Project
+            InfoFromProject         (str): What kind of information Stakeholder requires from the Project
+        
+        Methods:
+            Please refer to Superclass Methods for standard methods applied across all Project Classes    
+        """
         def __self__ (self,
                       RelatedProject: int = None,
                       CurrentRel: str = None,
@@ -476,7 +795,29 @@ class Stakeholder (ProjectObject):   # OK
                 self.InfoToProject=InfoToProject
                 self.InfoFromProject=InfoFromProject                
 
-class WorkPackage (ProjectObject):  # OK
+class WorkPackage (ProjectObject):      # OK
+        """Specified amount of work and its output authorized during a stage
+        
+        Attributes:
+            ID                      (int): Item technical ID in database.
+            BusinessID              (str): BusinessID in format accepted by Project Office.
+            RelatedProject          (int): Related Project primary key.
+            DateAgreement           (str): Date when approval for work delivery was received
+            TeamManager             (str): Name of supplier team manager responsible for delivery
+            WP                      (str): ?
+            DevInterfaces           (str): ?
+            OpsInterfaces           (str): ?
+            ChangeControl           (str): ?
+            JointAgreements         (str): ?
+            Tolerances              (str): Agreed accepted tolerances
+            Constrains              (str): Constrains to be followed
+            ReportingRequirements   (str): How reporting regarding delivery should be organized 
+            ProblemHandlingEscalation      (str): Ways of escalation
+            ApprovalMethod                 (str): How workpackage should be / was approved
+        
+        Methods:
+            Please refer to Superclass Methods for standard methods applied across all Project Classes    
+        """
         def __init__ (self,
                       BusinessID: str = None,
                       RelatedProject: int = None,
@@ -511,7 +852,22 @@ class WorkPackage (ProjectObject):  # OK
                 self.ApprovalMethod=ApprovalMethod                
              
 
-class Stage (ProjectObject):   # OK
+class Stage (ProjectObject):            # OK
+        """Defined time horizont or project phase with a specified delivery
+        
+        Attributes:
+            
+            ID                      (int): Item technical ID in database.
+            RelatedProject          (int): Related Project primary key.
+            StartDate               (str): Start date of the Project Stage
+            EndDate                 (str): End date of the project stage
+            Status                  (str): Status of the stage {Scheduled, Active, Replaced, Closed}
+            Title                   (str): Short name for the stage
+            Category                (str): Stage category from {Initiation, Delivery}
+        
+        Methods:
+            Please refer to Superclass Methods for standard methods applied across all Project Classes    
+        """
         def __init__ (self,
                       RelatedProject: int = None,
                       StartDate: str = None,
@@ -529,7 +885,24 @@ class Stage (ProjectObject):   # OK
                 self.Title=Title
                 self.Category=Category                
 
-class CommunicationApproach (ProjectObject):
+class CommunicationApproach (ProjectObject):   # OK
+        """Applied policy to manage Project communications
+        
+        Attributes:
+        
+            ID                      (int): Item technical ID in database.
+            RelatedProject          (int): Related Project primary key.
+            Introduction            (str): Introduction to the Policy
+            Procedure               (str): Organizational procedure to be followed 
+            Techniques              (str): Thechnics used to communicate including communicational channels
+            Records                 (str): Records used to register major communication including reporting
+            Reporting               (str): What kind of reporting is produced by the project
+            Timing                  (str): Reporting schedule
+            RolesResponsibilities   (str): Who is responsible for the reporting production
+        
+        Methods:
+            Please refer to Superclass Methods for standard methods applied across all Project Classes    
+        """
         def __init__ (self,
                       RelatedProject: int = None,
                       Introduction: str = None,
@@ -551,7 +924,20 @@ class CommunicationApproach (ProjectObject):
                 self.Timing=Timing
                 self.RolesResponsibilities=RolesResponsibilities                
 
-class Team (ProjectObject):   # OK
+class Team (ProjectObject):             # OK
+        """List of project members
+        
+        Attributes:
+            
+            ID                      (int): Item technical ID in database.
+            RelatedProject          (int): Related Project primary key.
+            Person                  (str): Name of the person
+            Role                    (str): One of the Roles {Executive, Senior User, Senior Supplier, Project Manager, 
+                                                             User, Supplier, Sponsor, Quality Assurance, Project Office}
+        
+        Methods:
+            Please refer to Superclass Methods for standard methods applied across all Project Classes    
+        """
         def __init__ (self,
                       RelatedProject: int = None,
                       Person: str = None,
@@ -563,7 +949,22 @@ class Team (ProjectObject):   # OK
                 self.Person=Person
                 self.Role=Role                
 
-class ChangeApproach (ProjectObject):  # OK
+class ChangeApproach (ProjectObject):   # OK
+        """Applied approach to manage Project changes
+        
+        Attributes:
+            
+            ID                      (int): Item technical ID in database.
+            Introduction            (str): General introduction to the policy
+            RelatedProject          (int): Related Project primary key.
+            Procedure               (str): Organizational procedure followed to control changes
+            Techniques              (str): Applied technics to control changes
+            Records                 (str): Project records where changes are registered
+            Reporting               (str): What kind of reporting used to inform about requested and approved changes
+        
+        Methods:
+            Please refer to Superclass Methods for standard methods applied across all Project Classes    
+        """
         def __init__ (self,
                       Introduction: str = None,
                       RelatedProject: int = None,
@@ -581,7 +982,25 @@ class ChangeApproach (ProjectObject):  # OK
                 self.Records=Records
                 self.Reporting=Reporting  
                 
-class QualityCriteria (ProjectObject):  # OK
+class QualityCriteria (ProjectObject):  # to add attr explanation
+        """Quality requirement to be met by the project's product
+        
+        Attributes:
+        
+            ID                      (int): Item technical ID in database.
+            BusinessID              (str): BusinessID in format accepted by Project Office.
+            RelatedProject          (int): Related Project primary key.
+            RelatedProduct          (int): ?
+            Expectation             (str): Description of expectations from the User / Customer
+            Description             (str): ?
+            AcceptCriteria          (str): Expectations in terms of criteria
+            Tolerance               (str): Possible accepted tollerance around criteria
+            Method                  (str): Mthod of estimation of criteria compliance
+            Responsibility          (str): Who is responsible to verify criteria
+        
+        Methods:
+            Please refer to Superclass Methods for standard methods applied across all Project Classes    
+        """
         def __init__ (self,
                       BusinessID: str = None,
                       RelatedProject: int = None,
@@ -604,7 +1023,17 @@ class QualityCriteria (ProjectObject):  # OK
                 self.Method=Method
                 self.Responsibility=Responsibility
         
-class Project (ProjectObject):  # OK
+class Project (ProjectObject):          # OK
+        """Project class around which all other Project object are organized
+        
+        Attributes:
+            ID (int): Item technical ID in database.
+            Project (str): Short name
+            BusinessID: (str): BusinessID in format accepted by Project Office.
+            
+        Methods:
+            Please refer to Superclass Methods for standard methods applied across all Project Classes    
+        """
         def __init__ (self,
                       Project: str = None,
                       BusinessID: str = None,
@@ -615,7 +1044,7 @@ class Project (ProjectObject):  # OK
 
 
 def Main ():
-        #X = Product('BusinessID',123,'title-3','purpose','composition','derivation','format','devskill')
+        X = Product
         #X.ID = 1
         #X.update()
         
