@@ -3,3 +3,5 @@ Zoogie.wpr
 __pycache__/db.cpython-37.pyc
 __pycache__/db_constants.cpython-37.pyc
 ProjectApp.db
+.vscode/settings.json
+*.pyc

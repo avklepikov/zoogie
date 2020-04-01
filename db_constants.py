@@ -76,7 +76,7 @@ DB_FIELDS_MAPPING ={                                #Class attributes -> Db Fiel
                   'BusinessID': ['BusinessID', 'TEXT'],
                   'RelatedProject': ['RelatedProject', 'INTEGER'],
                   'Title': ['Title', 'TEXT'],
-                  'Description': ['Title', 'TEXT'],
+                  'Description': ['Description', 'TEXT'],
                   'Category': ['Category', 'TEXT'],
                   'Event': ['Event', 'TEXT'],
                   'Effect': ['Effect', 'TEXT'],

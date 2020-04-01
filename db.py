@@ -1,9 +1,22 @@
+"""This module is used to connect Zoogie model with SQLite database.
+
+"""
 import sqlite3
 import logging
-
+#import model   # ??? two ways import?
 import db_constants
 
 #PROJECT_OBJECTS = (model.ProjectObject.__subclasses__())
+#"""List of Class objects from the Model which should be transformed into Tables in database
+#"""
+
+#def get_classes():
+        #"""Method returns list of Classes used in Project
+        #"""
+        #class_list = []
+        #for _class in PROJECT_OBJECTS:
+                #class_list.append (_class.__name__)
+        #return class_list
 
 def sql_connection():
         try:
@@ -12,6 +25,7 @@ def sql_connection():
         
         except Error:
                 print(Error)
+                
 def executeSQL (SQL: str):
         con = sql_connection()
         cursorObj = con.cursor()
@@ -38,9 +52,33 @@ def get_class_attribute_fields(_class: str):
                 attr_list.append (db_constants.DB_FIELDS_MAPPING[_class][attr][0])
         return attr_list
 
+def get_class_attribute_field_and_type(_class: str):
+        """takes Project Class as an argument and through mapping thable from db_constants
+        returns list of attributes with its SQLLITE field type"""
+        attr_list=[]   
+        for attr in db_constants.DB_FIELDS_MAPPING[_class]:
+                attr_list.append (db_constants.DB_FIELDS_MAPPING[_class][attr][0] + 
+                                  " " + 
+                                  db_constants.DB_FIELDS_MAPPING[_class][attr][1])
+        return attr_list
+
+
 
 def get_class_PK(_class: str):
         return db_constants.DB_FIELDS_PK[_class]
+
+
+def compile_CREATE_TABLE_script (_class: str):
+        """based in _class argument (Class from Project related classes) 
+        creates SQL script for SQLLite that
+        creates new table, which structure is defined in db_constants"""
+        
+        table = get_class_table(_class)
+        attr_str_list = ', '.join(get_class_attribute_field_and_type(_class))
+        PK = get_class_PK(_class)
+        SQL = f"CREATE TABLE {table}({attr_str_list})" 
+        return SQL
+
 
 def complile_SELECT_ALL (_class: str, _attr_value_dict: dict):
         logging.info('complile_SELECT_ALL has been activated with parameters: ', _class, _attr_value_dict)
@@ -144,10 +182,18 @@ def compile_UPDATE_script (_class: str, _attr_value_dict: dict):
         
         return SQL
 
+#def initiateDB():
+        #"""creation of ProjectApp from scratch (even if there is no database file
+        #Method takes all Project Classes and usins db_constants identifies required database structure"""
+        #for _class in get_classes():
+                #executeSQL (compile_CREATE_TABLE_script(_class))
+                #print (f'... created table for {_class}')
+        #print ('done')
+
 
 
 def main():
-        pass
+        initiateDB()
 
 if __name__ == '__main__':
         main()
