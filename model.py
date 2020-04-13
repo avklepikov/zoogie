@@ -53,14 +53,26 @@ class ProjectObject():   # Unified methods are set in this SuperClass
             viewItem -> List of Tuples
             viewList -> List of Tuples
         """
+        def __str__(self):
+                #return (str(self.__dict__))
+                _Return =""
+                for _attr in self.__dict__:
+                        _st_attr = _attr + " "*(20 - len(_attr))
+                        if self.__dict__[_attr] != None:
+                                _Return = _Return + _st_attr + ' : ' +str(self.__dict__[_attr]) + '\n'# + '\n'
+                        else:
+                                _Return = _Return + _st_attr + ' : .....\n'# + '\n'
+                return _Return
+        
         def __init__(self):
-                print('done')
+                #print('done')
+                pass
         
         
         def append (self):
                 """Created a Database record and writes all Project Object attributes into it
                 """
-                print ('append: ', self.__class__.__name__, self.__dict__)
+                #print ('append: ', self.__class__.__name__, self.__dict__)
                 _sql = db.compile_INSERT_script(self.__class__.__name__, self.__dict__)
                 db.executeSQL(_sql)
 
@@ -88,6 +100,8 @@ class ProjectObject():   # Unified methods are set in this SuperClass
                     _dict   : attibute names
                     _data   : values
                 """
+                logging.info (f'    MODEL Starting viewItem (_id = {_id})')
+                
                 _sql = db.complile_SELECT_BY_ITEM_ID(self.__class__.__name__, self.__dict__,_id)
                 _data = db.executeSQLget(_sql)
                 _dict = {}
@@ -108,6 +122,7 @@ class ProjectObject():   # Unified methods are set in this SuperClass
                     _dict   : attibute names
                     _data   : values
                 """                
+                logging.info (f'    MODEL Starting viewProjectRelatedItems (_Project_id = {_Project_id})')
                 #print ('viewitem: ', self.__class__.__name__, self.__dict__)
                 _sql = db.complile_SELECT_BY_PROJECT_ID(self.__class__.__name__, self.__dict__,_Project_id)
                 _data = db.executeSQLget(_sql)
@@ -123,6 +138,7 @@ class ProjectObject():   # Unified methods are set in this SuperClass
         def viewList (self):
                 """Returns: Dictionary (attr: index in Datatable); DataTable
                 """
+                logging.info (f'    MODEL Starting viewList ()')
                 #print ('viewlist: ', self.__class__.__name__, self.__dict__)
                 _sql = db.complile_SELECT_ALL(self.__class__.__name__, self.__dict__)
                 _data = db.executeSQLget(_sql)
@@ -196,7 +212,7 @@ class BenefitApproach (ProjectObject):  # OK
                       ManagementActions: str = None,
                       Review: str = None,
                       ID: int = None):
-                uper().__init__()
+                super().__init__()
                 self.ID = ID
                 self.RelatedProject = RelatedProject
                 self.General = General
@@ -499,6 +515,8 @@ class Product (ProjectObject):          # OK
                 self.FormatPresentation = FormatPresentation
                 self.DevSkills = DevSkills
                 self.ParentID = ParentID
+                
+                
         
 
 class ProjectBrief (ProjectObject):     # OK
@@ -1012,6 +1030,7 @@ class QualityCriteria (ProjectObject):  # to add attr explanation
                       Method: str = None,
                       Responsibility  : str = None,  
                       ID: int = None):
+                super().__init__()
                 self.ID=ID
                 self.BusinessID=BusinessID
                 self.RelatedProject=RelatedProject
@@ -1038,9 +1057,22 @@ class Project (ProjectObject):          # OK
                       Project: str = None,
                       BusinessID: str = None,
                       ID: int = None):
+                super().__init__()
                 self.ID = ID
                 self.Project = Project
                 self.BusinessID = BusinessID
+                
+                #self.ProjectBrief = ProjectBrief()
+                
+                #self.BenefitApproach = BenefitApproach()
+                #self.BusinessCase = BusinessCase()
+                #self.QualityApproach=QualityApproach()
+                #self.RiskApproach=RiskApproach()
+                #self.CommunicationApproach = CommunicationApproach()
+                #self.ChangeApproach = ChangeApproach()
+                
+                
+                
 
 
 def Main ():

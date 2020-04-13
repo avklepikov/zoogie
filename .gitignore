@@ -5,3 +5,6 @@ __pycache__/db_constants.cpython-37.pyc
 ProjectApp.db
 .vscode/settings.json
 *.pyc
+logging.txt
+to delete
+manual_model_check.py
