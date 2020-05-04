@@ -1,7 +1,10 @@
 """GUI Part of Zoogie application
 
 TODO [ ] : Substitute standard Text widgets with new custom AppText
-TODO [ ] : Backgroud Colour across Frames
+TODO [x] : Backgroud Colour across Frames
+TODO [ ] : Reduce space to the left from text widgets 
+TODO [ ] : Change from _ActiveProject to _ID in OnDoubleClick methods - cosmetics of the code
+TODO [ ] : Implement _TextBoxSizes
 
 
 """
@@ -13,32 +16,103 @@ import logging
 
 import controller
 
+import vf_BusinessCase
+import vf_QualityApproach
+import vf_RiskApproach1
+import vf_RiskApproach2
+import vf_ChangeApproach
+import vf_CommunicationApproach
+import vf_RegisterRisk
+import vf_RegisterChange
+import vf_RegisterLessons
+
 _activeProject = None
 
 _BGC = '#abc4e7'
 """Background colour for Frames 
 use https://www.color-hex.com/ to find nice colour code"""
 
+_TextBoxSizes = {'small' : 1,
+                 'medium' : 12,
+                 'big' : 36}
+"""Parameters for Heights of customized text boxes AppTextBox"""
+
+
+
+
 # Custom Widgets
 class AppText (Text):
         """Custom 1-line Text widget with simplified update method to substiture Delete+Instert + Formatting"""
         def __init__(self, *args, **kwargs):
                 super().__init__(*args,**kwargs)
-                self.config(width = 60, height = 1)
+                self.config(width = 60, height = 1, state="disabled")
+                #self.bind ("<Double-1>", self.OnDoubleClick2)
         
         def TextUpdate(self, NewText):
+                
+                self.config(state="normal")
                 self.delete(1.0, END)
                 self.insert(1.0, NewText)
+                self.config (state="disabled")
+                
+        #def OnDoubleClick2 (self, Event):
+   
+
 
 class AppTextBox (Text):
-        """Custom many lines Text widget with simplified update method to substiture Delete+Instert + Formatting"""
-        def __init__(self, *args, **kwargs):
-                super().__init__(*args,**kwargs)
-                self.config(width = 60, height = 12)
+        """Custom Text widget with simplified update method to substiture Delete+Instert + Formatting + mapping to Class name and Attributes"""
+        def __init__(self, master, __class, __attribute, *args, **kwargs):
+            
+                super().__init__(master, *args,**kwargs)
+
+                self._class = __class
+                self._attribute = __attribute
+                self.config(width = 60, height = 12,state="disabled")
+                self.bind ("<Double-1>", self.OnDoubleClick2)
+
         
         def TextUpdate(self, NewText):
+                self.config(state="normal")
                 self.delete(1.0, END)
-                self.insert(1.0, NewText)                
+                self.insert(1.0, NewText)  
+                self.config (state="disabled")
+                
+        def OnDoubleClick2 (self, Event):
+                logging.info ('OnDoubleClick2 is aptured')
+                global _activeProject
+
+                top = Toplevel(self)
+                top.config(bg = _BGC)
+                #relatedProjectID = Label (top, text = _activeProject, bg = _BGC).grid(row=0, column = 0)
+                
+                self.relatedClass = Label(top, text = Event.widget._class, bg = _BGC).grid(row=0, column = 0, sticky=W+E+N+S)
+                self.relatedAttribute = Label(top, text = Event.widget._attribute, bg = _BGC).grid(row = 1, column = 0, sticky=W+E+N+S)
+                self.editableTextBox = Text(top, height = 30)
+                self.editableTextBox.insert (1.0, Event.widget.get (1.0, END))
+                self.editableTextBox.grid(row=2, column =0, columnspan=2)
+                
+                self.CommentaryLabel = Label(top, text = 'Change related commentaries:', bg = _BGC).grid(row=3, column =0)
+                self.CommentaryText = Text(top, height = 3).grid(row=4, column =0)
+                
+                self.buttonEdit = Button(top, text = 'Edit', command = abc).grid(row=5, column =0, sticky=W+E+N+S)
+                self.buttonEdit = Button(top, text = 'Save Changes', command = self.SaveChangaes).grid(row=6, column =0, sticky=W+E+N+S)
+                self.buttonEdit = Button(top, text = 'Close without changes', command = abc).grid(row=7, column =0, sticky=W+E+N+S)
+                
+                
+                
+                top.mainloop()
+                
+        def SaveChangaes (self):
+                #logging.info ('VIEW SAVING NEW ATTR VALUE')
+                __class =  self._class
+                __attr = self._attribute
+                __value = self.editableTextBox.get (1.0, END)
+                controller.UpdateAttribute(__class, __attr, _activeProject, __value)
+
+
+
+def abc():  #NOT USED TextBox Click event General. To accept TextBox Value, class and attribute names to run SQL
+        print ("ABC")
 
 # Building GUI                
 class ProjectApp (Tk):
@@ -108,15 +182,19 @@ class PortfolioTree (ttk.Treeview):
 class mainFrame_Project(Frame):
         def __init__ (self, master):
                 super().__init__(master)
+                self.ProjectPack = controller.GetProjectPack(_activeProject)
                 self.config (bg = _BGC)
                 project_head = ProjectHead(self)
                 tab_control = ProjectTabControl(self)
                 project_head.pack()
                 tab_control.pack()
                 
+                
 class ProjectHead(Frame):
         def __init__ (self, master):
                 super().__init__(master)
+                
+        
                 self.Label_ProjectID = Label(self, text = 'Project ID:')
                 self.Entry_ProjectID = Entry(self)
                 
@@ -124,7 +202,12 @@ class ProjectHead(Frame):
                 self.Entry_ProjectBusinessID = Entry(self)                
                 
                 self.Label_ProjectName = Label(self, text = 'Project Name:')
-                self.Entry_ProjectName = Entry(self)                      
+                self.Entry_ProjectName = Entry(self)   
+                
+                self.Label_ProjectStatus = Label(self, text = 'Status:')
+                self.Entry_ProjectStatus = Entry(self)                   
+                
+                
                 
                 self.Label_ProjectID.pack(side=LEFT)
                 self.Entry_ProjectID.pack(side=LEFT)
@@ -132,18 +215,22 @@ class ProjectHead(Frame):
                 self.Entry_ProjectBusinessID.pack(side=LEFT)
                 self.Label_ProjectName.pack(side=LEFT)
                 self.Entry_ProjectName.pack(side=LEFT)
+                self.Label_ProjectStatus.pack(side=LEFT)
+                self.Entry_ProjectStatus.pack(side=LEFT)
+                
                 self.Refresh()
                 
         def Refresh(self):
                 global _activeProject
                 logging.info ('VIEW Starting Project Head Refresh')
                 
-                Keys, Data = controller.RefreshProjectHead(_activeProject)
 
+
+                self.Entry_ProjectID.insert(0, self.master.ProjectPack.Project.ID)
+                self.Entry_ProjectBusinessID.insert(0, self.master.ProjectPack.Project.BusinessID)   
+                self.Entry_ProjectName.insert(0, self.master.ProjectPack.Project.Project)
+                self.Entry_ProjectStatus.insert(0,self.master.ProjectPack.Project.TechStatus )
                 
-                self.Entry_ProjectID.insert(0,Data[0][Keys['ID']])
-                self.Entry_ProjectBusinessID.insert(0,Data[0][Keys['BusinessID']])   
-                self.Entry_ProjectName.insert(0,Data[0][Keys['Project']])
                 logging.info ('VIEW Finished Project Head Refresh')
                 
 class ProjectTabControl (ttk.Notebook):
@@ -163,8 +250,9 @@ class ProjectTabControl (ttk.Notebook):
                 frame_Change.config(bg = _BGC)
                 frame_Communication = Frame_Communication(self)
                 frame_Communication.config(bg = _BGC)
-                frame_Lessons = Frame_Lessons(self)
-                frame_Lessons.config(bg = _BGC)
+                #frame_Lessons = Frame_Lessons(self)
+                frame_Lessons = vf_RegisterLessons.MainFrame(self, _BGC)
+                #frame_Lessons.config(bg = _BGC)
                 
                 frame_DailyLog = Frame_DailyLog(self)
                 frame_DailyLog.config(bg = _BGC)
@@ -258,7 +346,10 @@ class Lessons_Register_TreeFrame (Frame):
 class LessonsTree (ttk.Treeview):
         def __init__ (self, master):
                 super().__init__(master)
+                
+                
                 self['columns'] = ('Title', 'Category')#, 'Event', 'Effect')
+                
                 #self.width = 100
                 #self.height = 200
                 #self.master=master
@@ -266,20 +357,14 @@ class LessonsTree (ttk.Treeview):
                 #self.heading ('BusinessCode', text = 'Business Code', anchor = 'w')
                 self.heading ('Title', text = 'Title', anchor = 'w')
                 self.heading ('Category', text = 'Category', anchor = 'w')
-                #self.heading ('Event', text = 'Event', anchor = 'w')
-                #self.heading ('Effect', text = 'Effect', anchor = 'w')
-                #self.heading ('Status', text = 'Status', anchor = 'w')
-                #self.heading ('Owner', text = 'Owner', anchor = 'w')
+
 
 
                 self.column('#0', width = 60)
                 #self.column('BusinessCode', width = 100)            
                 self.column('Title', width = 250)
                 self.column('Category', width = 150)
-                #self.column('Event', width = 350)
-                #self.column('Effect', width = 350)
-                #self.column('ResourseRequirements', width = 200)
-                #self.column('Baseline', width = 200)
+
 
 
                 self.pack(anchor=W)
@@ -309,93 +394,92 @@ class LessonsTree (ttk.Treeview):
                 global _activeProject
                 item = self.identify('item', event.x, event.y)
                 _activeProject = self.item(item, 'text')
-                #print (_activeProject)
-                #self.master.master.switch_frame(mainFrame_Project)        
+       
                 Keys, Data = controller.RefreshBusinessObject_byID('Lesson', _activeProject)#  - change id to project id    !!!
                 #print (Keys) 
                 #print (Data)
                 
                 ModifiedFrame=self.master.master.LessonsRegisterBreakDownFrame
                 
-                ModifiedFrame.tx_Title.delete(1.0, END)
-                #ModifiedFrame.tx_Title.insert (1.0, Data[0][Keys['Title']])
-                ModifiedFrame.tx_Title.TextUpdate(Data[0][Keys['Title']])                   #  <---------
-                ModifiedFrame.tx_Category.delete(1.0, END)
-                ModifiedFrame.tx_Category.insert (1.0, Data[0][Keys['Category']])
-                ModifiedFrame.tx_BusinessCode.delete(1.0, END)
-                ModifiedFrame.tx_BusinessCode.insert (1.0, Data[0][Keys['BusinessID']])
-                ModifiedFrame.tx_Priority.delete(1.0, END)
-                ModifiedFrame.tx_Priority.insert (1.0, Data[0][Keys['Priority']])
-                #ModifiedFrame.tx_Description.delete(1.0, END)
-                #ModifiedFrame.tx_Description.insert (1.0, Data[0][Keys['Description']])
-                ModifiedFrame.tx_Description.TextUpdate(Data[0][Keys['Description']])         #  <=========
-                ModifiedFrame.tx_Event.delete(1.0, END)
-                ModifiedFrame.tx_Event.insert (1.0, Data[0][Keys['Event']])
-                ModifiedFrame.tx_Cause.delete(1.0, END)
-                ModifiedFrame.tx_Cause.insert (1.0, Data[0][Keys['CauseTrigger']])
-                ModifiedFrame.tx_Recommendation.delete(1.0, END)
-                ModifiedFrame.tx_Recommendation.insert (1.0, Data[0][Keys['Recommendations']])
-                ModifiedFrame.tx_Effect.delete(1.0, END)
-                ModifiedFrame.tx_Effect.insert (1.0, Data[0][Keys['Effect']])
-                ModifiedFrame.tx_Indicator.delete(1.0, END)
-                ModifiedFrame.tx_Indicator.insert (1.0, Data[0][Keys['EarlyWarningIndicator']])
-                ModifiedFrame.tx_DateLogged.delete(1.0, END)
-                ModifiedFrame.tx_DateLogged.insert (1.0, Data[0][Keys['DateLogged']])
-                ModifiedFrame.tx_LoggedBy.delete(1.0, END)
-                ModifiedFrame.tx_LoggedBy.insert (1.0, Data[0][Keys['LoggedBy']])
+
+                ModifiedFrame.tx_Title.TextUpdate(Data[0][Keys['Title']])                   
+
+                ModifiedFrame.tx_Category.TextUpdate (Data[0][Keys['Category']])
+
+                ModifiedFrame.tx_BusinessCode.TextUpdate (Data[0][Keys['BusinessID']])
+
+                ModifiedFrame.tx_Priority.TextUpdate (Data[0][Keys['Priority']])
+
+                ModifiedFrame.tx_Description.TextUpdate(Data[0][Keys['Description']])         
+
+                ModifiedFrame.tx_Event.TextUpdate (Data[0][Keys['Event']])
+
+                ModifiedFrame.tx_Cause.TextUpdate (1.0, Data[0][Keys['CauseTrigger']])
+
+                ModifiedFrame.tx_Recommendation.TextUpdate (Data[0][Keys['Recommendations']])
+
+                ModifiedFrame.tx_Effect.TextUpdate (Data[0][Keys['Effect']])
+
+                ModifiedFrame.tx_Indicator.TextUpdate (Data[0][Keys['EarlyWarningIndicator']])
+
+                ModifiedFrame.tx_DateLogged.TextUpdate (Data[0][Keys['DateLogged']])
+
+                ModifiedFrame.tx_LoggedBy.TextUpdate (Data[0][Keys['LoggedBy']])
 
 
 
                 
         
 class Lessons_Register_BreakDown (Frame):
+        
+        
         def __init__(self, master):
                 super().__init__(master)
                 #lb_LessonsReg_BreakDown = Label(self, text = 'Lesson Details').pack(anchor=W)   
                 
                 self.lb_Title = Label(self, text = 'Title', width = 60, justify = LEFT, anchor = W, bg = _BGC)
-                #self.tx_Title=Text(self, width = 60, height = 1)
-                self.tx_Title = AppText(self) #, width = 60, height = 1)   #  <-----
+                
+                self.tx_Title = AppText(self) 
                 
                 self.lb_Category = Label(self, text = 'Category', width = 60, justify = LEFT, anchor = W, bg = _BGC)
-                self.tx_Category = Text(self, width = 60, height = 1)
+                self.tx_Category = AppText(self)
                 
                 self.lb_BusinessCode = Label(self, text = 'Business Case', width = 60, justify = LEFT, anchor = W, bg = _BGC)
-                self.tx_BusinessCode = Text(self, width = 60, height = 1)               
+                self.tx_BusinessCode = AppText(self)               
                 
                 self.lb_Priority = Label(self, text = 'Priority', width = 60, justify = LEFT, anchor = W, bg = _BGC)
-                self.tx_Priority = Text(self, width = 60, height = 1)               
+                self.tx_Priority = AppText(self)               
                 
                 self.lb_Description = Label(self, text='Description', width = 60, justify = LEFT, anchor = W, bg = _BGC)
-                #self.tx_Description = Text(self, width = 60, height = 12)
-                self.tx_Description = AppTextBox(self)                    #  <============
+                
+                self.tx_Description = AppTextBox(self,'Lesson','Description')                    
                 
                 self.lb_Event = Label(self, text = 'Event', width = 60, justify = LEFT, anchor = W, bg = _BGC)
-                self.tx_Event = Text (self, width = 60, height = 12)               
+                self.tx_Event = AppTextBox (self,'Lesson','Event')              
                 
                 self.lb_Cause = Label(self, text = 'Cause Trigger', width = 60, justify = LEFT, anchor = W, bg = _BGC)
-                self.tx_Cause = Text(self, width = 60, height = 12)             
+                self.tx_Cause = AppTextBox(self,'Lesson','CauseTrigger')             
                 
                 
                 # RIGHT LONGS
                                
                 
                 self.lb_Recommendation = Label (self, text = 'Recommendation', width = 60, justify = LEFT, anchor = W, bg = _BGC)
-                self.tx_Recommendation = Text (self, width = 60, height = 12)
+                self.tx_Recommendation = AppTextBox (self,'Lesson','Description')
                 
                 self.lb_Effect = Label(self, text = 'Effect', width = 60, justify = LEFT, anchor = W, bg = _BGC)
-                self.tx_Effect = Text(self, width = 60, height = 12)
+                self.tx_Effect = AppTextBox(self,'Lesson','Effect')
                 
                 self.lb_Indicator = Label(self, text = 'Indicator', width = 60, justify = LEFT, anchor = W, bg = _BGC)
-                self.tx_Indicator = Text (self, width = 60, height = 12)
+                self.tx_Indicator = AppTextBox (self,'Lesson','EarlyWarningIndicator')
                 
                 # Foots Left
                 self.lb_DateLogged = Label(self, text = 'Date Logged', width = 60, justify = LEFT, anchor = W, bg = _BGC)
-                self.tx_DateLogged = Text(self, width = 60, height = 1)
+                self.tx_DateLogged = AppText(self)
                 
                 #Foot Right
                 self.lb_LoggedBy = Label(self, text = 'Logged by', width = 60, justify = LEFT, anchor = W, bg = _BGC)
-                self.tx_LoggedBy = Text(self, width = 60, height = 1)               
+                self.tx_LoggedBy = AppText(self)             
                 
                 
                 #---------
@@ -458,7 +542,10 @@ class BusinessCaseTabControl (ttk.Notebook):
                 super().__init__(master)
                 
                 Mandate = subFrame_Mandate(self)
-                BusinessCase = subFrame_BusinessCase(self)
+                
+                BusinessCase = vf_BusinessCase.MainFrame(self, self.master.master.master.ProjectPack.BusinessCase.ID)
+                BusinessCase.Refresh()
+                
                 Benefits = subFrame_Benefits(self)
                 ProjectProduct = subFrame_ProjectProduct(self)
                 
@@ -474,6 +561,7 @@ class subFrame_Mandate(Frame):
                 self.config (bg = _BGC)
                 self.MandateLabel = Label(self, text = 'Mandate provided by Sponsor:')
                 self.MandateText = Text (self, width = 150, height = 50)
+                self.MandateText.config(state="disabled" )
                 #MandateText.insert(1.0, 'HERE IS THE TEXT')               
                 self.MandateLabel.pack()
                 self.MandateText.pack ()
@@ -484,68 +572,11 @@ class subFrame_Mandate(Frame):
                 logging.info ('VIEW Starting Mandate Refresh')
                 #logging.info (_activeProject)
                 Keys, Data = controller.RefreshBusinessObject('Mandate', _activeProject)#  - change id to project id    !!!
-                self.MandateText.insert(1.0, Data[0][1])
+                if (len(Data)) != 0:
+                        self.MandateText.config(state="normal" )
+                        self.MandateText.insert(1.0, Data[0][1])
+                        self.MandateText.config(state="disabled" )
                 logging.info ('VIEW Finished Mandate Refresh')
-                
-class subFrame_BusinessCase (Frame):
-        def __init__ (self, master):
-                super().__init__(master)
-                self.config (bg = _BGC)
-                #  не работает ширина и выравнивание лейблов ((
-                
-                self.lb_ExecSummary = Label(self, text = 'Executive Summary:', width = 90, justify = LEFT, anchor = W, bg = _BGC)
-                self.lb_Reasons = Label(self, text = 'Reasons:', width = 90, justify = LEFT, anchor = W, bg = _BGC)
-                self.lb_Options = Label(self, text = 'BusinessOptions:', width = 90, justify = LEFT, anchor = W, bg = _BGC)
-                self.lb_Time = Label(self, text = 'Time Scale:', width = 90, justify = LEFT, anchor = W, bg = _BGC)
-                self.lb_Benefits = Label(self, text = 'Expected Benefits:', width = 90, justify = LEFT, anchor = W, bg = _BGC)
-                self.lb_DisBenefits = Label(self, text = 'Expected Dis-Benefits:', width = 90, justify = LEFT, anchor = W, bg = _BGC)
-                self.lb_DisCosts = Label(self, text = 'Costs:', width = 90, justify = LEFT, anchor = W, bg = _BGC)
-                self.lb_Investment = Label(self, text = 'InvestmentAppraisal:', width = 90, justify = LEFT, anchor = W, bg = _BGC)
-                
-                self.txt_ExecSummary = Text(self, width = 90, height = 12)
-                self.txt_Reasons = Text(self, width = 90, height = 12)
-                self.txt_Options = Text(self, width = 90, height = 12)
-                self.txt_Time = Text(self, width = 90, height = 12)
-                self.txt_Benefits = Text(self, width = 90, height = 12)
-                self.txt_DisBenefits = Text(self, width = 90, height = 12)
-                self.txt_Costs = Text(self, width = 90, height = 12)
-                self.txt_Investment = Text(self, width = 90, height = 12)
-                
-                self.lb_ExecSummary.grid(row = 0, column = 0)
-                self.txt_ExecSummary.grid(row=1, column = 0)
-                self.lb_Reasons.grid(row=2, column = 0)
-                self.txt_Reasons.grid (row=3, column = 0)
-                self.lb_Options.grid (row=4, column = 0)
-                self.txt_Options.grid (row=5, column = 0)
-                self.lb_Time.grid (row=6, column = 0)
-                self.txt_Time.grid (row=7, column = 0)
-                
-                self.lb_Benefits.grid(row = 0, column = 1)
-                self.txt_Benefits.grid(row = 1, column = 1)
-                self.lb_DisBenefits.grid(row = 2, column = 1)
-                self.txt_DisBenefits.grid(row = 3, column = 1)
-                self.lb_DisCosts.grid(row = 4, column = 1)
-                self.txt_Costs.grid(row = 5, column = 1)
-                self.lb_Investment.grid(row = 6, column = 1)
-                self.txt_Investment.grid(row = 7, column = 1)
-                
-                self.Refresh()
-                
-        def Refresh(self):
-                global _activeProject
-                logging.info ('VIEW Starting Business Case Refresh')
-                Keys, Data = controller.RefreshBusinessObject('BusinessCase', _activeProject)    
-                
-                self.txt_ExecSummary.insert (1.0, Data[0][Keys['ExecutiveSummary']])
-                self.txt_Reasons.insert (1.0, Data[0][Keys['Reasons']])
-                self.txt_Options.insert (1.0, Data[0][Keys['Options']])
-                self.txt_Time.insert (1.0, Data[0][Keys['Timescale']])
-                
-                self.txt_Benefits.insert (1.0, Data[0][Keys['ExpectedBenefits']])
-                self.txt_DisBenefits.insert (1.0, Data[0][Keys['ExpectedDisBenefits']])
-                self.txt_Costs.insert (1.0, Data[0][Keys['Costs']])
-                self.txt_Investment.insert (1.0, Data[0][Keys['InvestmentArraisal']])
-                logging.info ('VIEW Finished Business Case Refresh')
                 
                 
 class subFrame_Benefits(Frame):
@@ -670,7 +701,7 @@ class ProjectProductTree (ttk.Treeview):
                 global _activeProject
                 item = self.identify('item', event.x, event.y)
                 _activeProject = self.item(item, 'text')
-                #print ('selected ID: ' , _activeProject)
+                
       
                 Keys, Data = controller.RefreshBusinessObject_byID('Product', _activeProject)    
                 #print (Keys) 
@@ -802,474 +833,70 @@ class subFrame_WBS(Frame):
 class RiskTabControl (ttk.Notebook):
         def __init__(self, master):
                 super().__init__(master)
+                print (self.master.master.master)
+                #RiskApproach1 = subFrame_RiskApproach1(self)
+                RiskApproach1 = vf_RiskApproach1.MainFrame(self)
+                RiskApproach1.Refresh(self.master.master.master.ProjectPack.RiskApproach.ID)
+                #RiskApproach2 = subFrame_RiskApproach2(self)
                 
-                RiskApproach1 = subFrame_RiskApproach1(self)
-                RiskApproach2 = subFrame_RiskApproach2(self)
-                RiskRegister = subFrame_RiskRegister(self)
-                #ProjectProduct = subFrame_ProjectProduct(self)
+                RiskApproach2 = vf_RiskApproach2.MainFrame(self)
+                RiskApproach2.Refresh(self.master.master.master.ProjectPack.RiskApproach.ID)
+                
+                
+                RiskRegister = vf_RegisterRisk.MainFrame(self, _BGC)
+                
                 
                 self.add(RiskApproach1, text = 'Risk Approach (1)')
                 self.add(RiskApproach2, text = 'Risk Approach (2)')
                 self.add(RiskRegister, text = 'Risk Register')
-                #self.add(ProjectProduct, text = 'Project Product')
-                #pass
+                
 
-class subFrame_RiskApproach1(Frame):
-        def __init__(self, master):
-                super().__init__(master)
-                self.config (bg = _BGC)
-                self.lb_Introduction = Label(self, text = 'Introduction:', width = 90, justify = LEFT, bg = _BGC)
-                self.lb_Procedure = Label(self, text = 'Procedure:', width = 90, justify = LEFT, bg = _BGC)
-                self.lb_Techniques = Label(self, text = 'Techniques:', width = 90, justify = LEFT, bg = _BGC)
-                self.lb_Records = Label(self, text = 'Records:', width = 90, justify = LEFT, bg = _BGC)
-                self.lb_Reporting = Label(self, text = 'Reporting:', width = 90, justify = LEFT, bg = _BGC)
-                self.lb_Timing = Label(self, text = 'Timing:', width = 90, justify = LEFT, bg = _BGC)
-                                                                                                
-                
-                self.txt_Introduction = Text(self, width = 90, height = 12)
-                self.txt_Procedure = Text(self, width = 90, height = 12)
-                self.txt_Techniques = Text(self, width = 90, height = 12)
-                self.txt_Records = Text(self, width = 90, height = 12)
-                self.txt_Reporting = Text(self, width = 90, height = 12)
-                self.txt_Timing = Text(self, width = 90, height = 12)
-                
-                self.lb_Introduction.grid(row = 0, column = 0)
-                self.txt_Introduction.grid(row = 1, column = 0)
-                self.lb_Procedure.grid(row = 2, column = 0)
-                self.txt_Procedure.grid(row = 3, column = 0)
-                self.lb_Techniques.grid(row = 4, column = 0)
-                self.txt_Techniques.grid(row = 5, column = 0)
-                
-                self.lb_Records.grid(row = 0, column = 1)
-                self.txt_Records.grid(row = 1, column = 1)
-                self.lb_Reporting.grid(row = 2, column = 1)
-                self.txt_Reporting.grid(row = 3, column = 1)
-                self.lb_Timing.grid(row = 4, column = 1)
-                self.txt_Timing.grid(row = 5, column = 1)
-                
-                self.Refresh()
-                      
-        def Refresh(self):
-                global _activeProject
-                
-                logging.info('VIEW Starting Risk Approach Refresh')
-                
-                Keys, Data = controller.RefreshBusinessObject('RiskApproach', _activeProject)#  - change id to project id    !!!
-                
-                self.txt_Introduction.insert (1.0, Data[0][Keys['Introduction']])
-                self.txt_Procedure.insert (1.0, Data[0][Keys['Procedure']])
-                self.txt_Techniques.insert (1.0, Data[0][Keys['Techniques']])
-                self.txt_Records.insert (1.0, Data[0][Keys['Records']])
-                self.txt_Reporting.insert (1.0, Data[0][Keys['Reporting']])
-                self.txt_Timing.insert (1.0, Data[0][Keys['Timing']])
-                logging.info ('VIEW Finished Risk Approach Refresh')
-                
-                
-                #print ('BusinessCase: ', Keys)
-                
-class subFrame_RiskApproach2(Frame):
-        def __init__(self, master):  
-                super().__init__(master)
-                self.config (bg = _BGC)
-                self.lb_RolesResponsibilities = Label(self, text = 'Roles and Responsibilities:', width = 90, justify = LEFT, bg = _BGC)
-                self.lb_Scales = Label(self, text = 'Scales:', width = 90, justify = LEFT, bg = _BGC)
-                self.lb_Proxomity = Label(self, text = 'Proxomity:', width = 90, justify = LEFT, bg = _BGC)
-                self.lb_RiskCategory = Label(self, text = 'Risk Category:', width = 90, justify = LEFT, bg = _BGC)
-                self.lb_ResponseCategory = Label(self, text = 'Response Category:', width = 90, justify = LEFT, bg = _BGC)
-                self.lb_EarlyWarningIndicator = Label(self, text = 'Early Warning Indicator:', width = 90, justify = LEFT, bg = _BGC)
-                
-                self.txt_RolesResponsibilities = Text(self, width = 90, height = 12)
-                self.txt_Scales = Text(self, width = 90, height = 12)
-                self.txt_Proxomity = Text(self, width = 90, height = 12)
-                self.txt_RiskCategory = Text(self, width = 90, height = 12)
-                self.txt_ResponseCategory = Text(self, width = 90, height = 12)
-                self.txt_EarlyWarningIndicator = Text(self, width = 90, height = 12)                
-                
-                self.lb_RolesResponsibilities.grid(row = 0, column = 0)
-                self.txt_RolesResponsibilities.grid(row = 1, column = 0)
-                self.lb_Scales.grid(row = 2, column = 0)
-                self.txt_Scales.grid(row = 3, column = 0)
-                self.lb_Proxomity.grid(row = 4, column = 0)
-                self.txt_Proxomity.grid(row = 5, column = 0)
-                
-                self.lb_RiskCategory.grid(row = 0, column = 1)
-                self.txt_RiskCategory.grid(row = 1, column = 1)
-                self.lb_ResponseCategory.grid(row = 2, column = 1)
-                self.txt_ResponseCategory.grid(row = 3, column = 1)
-                self.lb_EarlyWarningIndicator.grid(row = 4, column = 1)
-                self.txt_EarlyWarningIndicator.grid(row = 5, column = 1)  
-                
-                self.Refresh()
-        
-        def Refresh(self):  # Correct risk and response categories in model and in db
-                global _activeProject
-                
-                logging.info ('VIEW Starting Risk Approach Refresh')
-                
-                Keys, Data = controller.RefreshBusinessObject('RiskApproach', _activeProject)#  - change id to project id    !!!
-                #self.txt_ExecSummary.insert (1.0, Data[0][Keys['ExecutiveSummary']])
-                
-                self.txt_RolesResponsibilities.insert (1.0, Data[0][Keys['RolesResponsibilities']])
-                self.txt_Scales.insert (1.0, Data[0][Keys['Scales']])
-                self.txt_Proxomity.insert (1.0, Data[0][Keys['Proxomity']])
-                #self.txt_RiskCategory.insert (1.0, Data[0][Keys['Records']])
-                #self.txt_ResponseCategory.insert (1.0, Data[0][Keys['Reporting']])
-                self.txt_EarlyWarningIndicator.insert (1.0, Data[0][Keys['EarlyWarningIndicator']])  
-                
-                logging.info ('VIEW Finished Risk Approach Refresh')
-                
-class subFrame_RiskRegister (Frame):
-        def __init__(self, master):
-                super().__init__(master)
-                self.config (bg = _BGC)
-                RiskRegisterTreeFrame = Risk_Register_TreeFrame(self)
-                RiskRegisterBreakDownFrame = Risk_Register_Breakdown(self)
-                RiskRegisterTreeFrame.pack()
-                RiskRegisterBreakDownFrame.pack()                   
-                
-                
-                
-        #Risk - Register - Tree
-        
-class Risk_Register_TreeFrame (Frame):
-        def __init__(self, master):
-                super().__init__(master)
-                self.config (bg = _BGC)
-                lb_RiskReg_Tree = Label(self, text = 'Risk Register', bg = _BGC).pack()        
-        
-        
-        #Risk - Register - BreakdownFrame
-class Risk_Register_Breakdown (Frame):
-        def __init__(self, master):
-                super().__init__(master)
-                self.config (bg = _BGC)
-                lb_RiskReg_BreakDown = Label(self, text = 'Risk Details', bg = _BGC).pack()                
-                tr_RiskTree = RisksTree(self).pack()
-        
-class RisksTree (ttk.Treeview):
-        def __init__ (self, master):
-                super().__init__(master)
-                self['columns'] = ('BusinessCode', 'Title', 'Category', 'Impact', 'ResponseCategory', 'Status', 'Owner')
-                #self.width = 100
-                #self.height = 200
-                #self.master=master
-                self.heading ('#0', text = 'Code', anchor = 'w')
-                self.heading ('BusinessCode', text = 'Business Code', anchor = 'w')
-                self.heading ('Title', text = 'Title', anchor = 'w')
-                self.heading ('Category', text = 'Category', anchor = 'w')
-                self.heading ('Impact', text = 'Impact', anchor = 'w')
-                self.heading ('ResponseCategory', text = 'ResponseCategory', anchor = 'w')
-                self.heading ('Status', text = 'Status', anchor = 'w')
-                self.heading ('Owner', text = 'Owner', anchor = 'w')
-
-
-
-
-                #self.column('#0', width = 60)
-                #self.column('BusinessCode', width = 100)            
-                #self.column('Title', width = 250)
-                #self.column('Category', width = 250)
-                #self.column('Measurement', width = 350)
-                #self.column('Responsibility', width = 350)
-                #self.column('ResourseRequirements', width = 200)
-                #self.column('Baseline', width = 200)
-
-
-
-
-
-                self.pack()
-                self.Refresh()
-                #self.bind("<Double-1>", self.OnDoubleClick)
-        
-                #Business Case - ProjectProduct - BreakdownFrame        
-        def Refresh (self):
-                #print ('Portfolio tree method refresh')
-                global _activeProject
-                
-                logging.info ('VIEW Starting Risk Register Refresh')
-                
-                Keys, Data = controller.RefreshBusinessObject('RiskRegister', _activeProject)#  - change id to project id    !!!
-                #print (Keys) 
-                #print (Data)
-
-                for item in Data:
-                        self.insert('',item[0], text=item[0], values=[
-                                item[Keys['BusinessID']],
-                                item[Keys['Title']],
-                                item[Keys['Category']],
-                                item[Keys['Impact']],
-                                item[Keys['ResponseCategory']],
-                                item[Keys['Status']],
-                                item[Keys['Owner']]
-                        ]) 
-                logging.info ('VIEW Finished Risk Register Refresh')
 
 
 # TAB   :   Change
 class ChangeTabControl (ttk.Notebook):
         def __init__(self, master):
                 super().__init__(master)
-                ChangeApproach = subFrame_ChangeApproach(self)
-                ChangeRegister = subFrameChangeRegister(self)
+                
+                #print ('change approach: ', self.master.master.master) # LOOKUP
+                #print(self.master.master.master.__dict__)
+                
+                
+                ChangeApproach = vf_ChangeApproach.MainFrame(self)
+                
+                #print (self.master.master.master.ProjectPack.ChangeApproach.ID)
+                #print (self.master.master.master.ProjectPack.ChangeApproach.Introduction)
+                
+                ChangeApproach.Refresh(self.master.master.master.ProjectPack.ChangeApproach.ID)
+                
+                #ChangeRegister = subFrameChangeRegister(self)
+                ChangeRegister = vf_RegisterChange.MainFrame (self, _BGC)
                 self.add(ChangeApproach, text = 'Change Approach')
                 self.add(ChangeRegister, text = 'Issue Register')
                 
-                
-class subFrame_ChangeApproach(Frame):
-        def __init__(self, master):
-                super().__init__(master)
-                self.config (bg = _BGC)
-             
-                
-                self.lb_Introduction = Label(self, text = 'Introduction:', width = 90, justify = LEFT, bg = _BGC)
-                self.lb_Procedure = Label(self, text = 'Procedure:', width = 90, justify = LEFT, bg = _BGC)
-                self.lb_Techniques = Label(self, text = 'Techniques:', width = 90, justify = LEFT, bg = _BGC)
-                self.lb_Records = Label(self, text = 'Records:', width = 90, justify = LEFT, bg = _BGC)
-                self.lb_Reporting = Label(self, text = 'Reporting:', width = 90, justify = LEFT, bg = _BGC)
-                                
-                
-                self.txt_Introduction = Text(self, width = 90, height = 12)
-                self.txt_Procedure = Text(self, width = 90, height = 12)
-                self.txt_Techniques = Text(self, width = 90, height = 12)
-                self.txt_Records = Text(self, width = 90, height = 12)
-                self.txt_Reporting = Text(self, width = 90, height = 12)
-                
-                self.lb_Introduction.grid(row = 0, column = 0)
-                self.txt_Introduction.grid(row = 1, column = 0)
-                self.lb_Procedure.grid(row = 2, column = 0)
-                self.txt_Procedure.grid(row = 3, column = 0)
-                self.lb_Techniques.grid(row = 4, column = 0)
-                self.txt_Techniques.grid(row = 5, column = 0)
-                
-                self.lb_Records.grid(row = 0, column = 1)
-                self.txt_Records.grid(row = 1, column = 1)
-                self.lb_Reporting.grid(row = 2, column = 1)
-                self.txt_Reporting.grid(row = 3, column = 1)     
-                
-                self.Refresh()
-                
-        def Refresh(self):
-                global _activeProject
-                logging.info ('VIEW Starting Change Approach Refresh')
-                Keys, Data = controller.RefreshBusinessObject('ChangeApproach', _activeProject)#  - change id to project id    !!!
-                
-                self.txt_Introduction.insert (1.0, Data[0][Keys['Introduction']])
-                self.txt_Procedure.insert (1.0, Data[0][Keys['Procedure']])
-                self.txt_Techniques.insert (1.0, Data[0][Keys['Techniques']])
-                self.txt_Records.insert (1.0, Data[0][Keys['Records']])
-                self.txt_Reporting.insert (1.0, Data[0][Keys['Reporting']])
-                #self.txt_Timing.insert (1.0, Data[0][Keys['Timing']])
-                logging.info ('VIEW Finished Change Approach Refresh')
-                
-class subFrameChangeRegister(Frame):
-        def __init__(self, master):
-                super().__init__(master) 
-                self.config (bg = _BGC)
-                ChangeRegisterTreeFrame = Change_Register_TreeFrame(self)
-                ChangeRegisterBreakDownFrame = Change_Register_BreakDown(self)
-                ChangeRegisterTreeFrame.pack()
-                ChangeRegisterBreakDownFrame.pack()                            
-                
-        #Change - Register - Tree
-class Change_Register_TreeFrame (Frame):
-        def __init__(self, master):
-                super().__init__(master)
-                self.config (bg = _BGC)
-                lb_ChangeReg_Tree = Label(self, text = 'Issue Register').pack()   
-                tr_IssuesTree = IssuesTree(self).pack()
-                
-class IssuesTree (ttk.Treeview):
-        def __init__ (self, master):
-                super().__init__(master)
-                self['columns'] = ('BusinessCode', 'Title', 'Category', 'Status')
-                #self.width = 100
-                #self.height = 200
-                #self.master=master
-                self.heading ('#0', text = 'Code', anchor = 'w')
-                self.heading ('BusinessCode', text = 'Business Code', anchor = 'w')
-                self.heading ('Title', text = 'Title', anchor = 'w')
-                self.heading ('Category', text = 'Category', anchor = 'w')
-                self.heading ('Status', text = 'Status', anchor = 'w')
-                #self.heading ('Responsibility', text = 'Responsibility', anchor = 'w')
-                #self.heading ('ResourseRequirements', text = 'Resourse Requirements', anchor = 'w')
-                #self.heading ('Baseline', text = 'Baseline', anchor = 'w')
-                
-                
-                
-                
-                #self.column('#0', width = 60)
-                #self.column('BusinessCode', width = 100)            
-                #self.column('Title', width = 250)
-                #self.column('Category', width = 250)
-                #self.column('Measurement', width = 350)
-                #self.column('Responsibility', width = 350)
-                #self.column('ResourseRequirements', width = 200)
-                #self.column('Baseline', width = 200)
-                
-                
-                
-                
-                
-                self.pack()
-                self.Refresh()
-                #self.bind("<Double-1>", self.OnDoubleClick)
-
-        #Business Case - ProjectProduct - BreakdownFrame        
-        def Refresh (self):
-                logging.info ('VIEW Starting Issue tree refresh')
-                global _activeProject
-                Keys, Data = controller.RefreshBusinessObject('Issue', _activeProject)#  - change id to project id    !!!
-                #logging.debug ('Refresh Issue Keys: ', Keys) 
-                #logging.debug ('Refresh Issue Data: ', Data)
-                
-                for item in Data:
-                        self.insert('',item[0], text=item[0], values=[
-                                item[Keys['BusinessID']],
-                                item[Keys['Title']],
-                                item[Keys['Category']],
-                                item[Keys['Status']]
-                                #Data[0][Keys['Measurement']],
-                                #Data[0][Keys['Responsibility']]
-                        ])   
-                logging.info ('VIEW Finished Issue tree Refresh')
-                
-        #Change - Register - BreakdownFrame
-class Change_Register_BreakDown (Frame):
-        def __init__(self, master):
-                super().__init__(master)
-                self.config (bg = _BGC)
-                lb_ChangeReg_BreakDown = Label(self, text = 'Issue Details').pack()    
-                
-                
+              
 # TAB   :   Communication
 class CommunicationTabControl (ttk.Notebook):
         def __init__(self, master):
                 super().__init__(master)
-                CommunicationApproach = subFrame_CommunicationApproach(self)
+                #CommunicationApproach = subFrame_CommunicationApproach(self)
+                CommunicationApproach = vf_CommunicationApproach.MainFrame(self)
+                CommunicationApproach.Refresh(self.master.master.master.ProjectPack.CommunicationApproach.ID)
+                
+                
                 self.add(CommunicationApproach, text = 'Communication Approach')
                 #pass
                 
-class subFrame_CommunicationApproach(Frame):
-        def __init__(self, master):
-                super().__init__(master)
-                self.config (bg = _BGC)
-                self.lb_Introduction = Label(self, text = 'Introduction:', width = 90, justify = LEFT, bg = _BGC)
-                self.lb_Procedure = Label(self, text = 'Procedure:', width = 90, justify = LEFT, bg = _BGC)
-                self.lb_Techniques = Label(self, text = 'Techniques:', width = 90, justify = LEFT, bg = _BGC)
-                self.lb_Records = Label(self, text = 'Records:', width = 90, justify = LEFT, bg = _BGC)
-                self.lb_Reporting = Label(self, text = 'Reporting:', width = 90, justify = LEFT, bg = _BGC)
-                self.lb_Timing = Label(self, text = 'Timing:', width = 90, justify = LEFT, bg = _BGC)
-                                                                                                
-                
-                self.txt_Introduction = Text(self, width = 90, height = 12)
-                self.txt_Procedure = Text(self, width = 90, height = 12)
-                self.txt_Techniques = Text(self, width = 90, height = 12)
-                self.txt_Records = Text(self, width = 90, height = 12)
-                self.txt_Reporting = Text(self, width = 90, height = 12)
-                self.txt_Timing = Text(self, width = 90, height = 12)
-                
-                self.lb_Introduction.grid(row = 0, column = 0)
-                self.txt_Introduction.grid(row = 1, column = 0)
-                self.lb_Procedure.grid(row = 2, column = 0)
-                self.txt_Procedure.grid(row = 3, column = 0)
-                self.lb_Techniques.grid(row = 4, column = 0)
-                self.txt_Techniques.grid(row = 5, column = 0)
-                
-                self.lb_Records.grid(row = 0, column = 1)
-                self.txt_Records.grid(row = 1, column = 1)
-                self.lb_Reporting.grid(row = 2, column = 1)
-                self.txt_Reporting.grid(row = 3, column = 1)
-                self.lb_Timing.grid(row = 4, column = 1)
-                self.txt_Timing.grid(row = 5, column = 1)
-                
-                self.Refresh()
-                      
-        def Refresh(self):
-                global _activeProject
-                logging.info ('VIEW Starting Communication Approach Refresh')
-                Keys, Data = controller.RefreshBusinessObject('CommunicationApproach', _activeProject)#  - change id to project id    !!!
-                #logging.debug ('Refreshing 
-                self.txt_Introduction.insert (1.0, Data[0][Keys['Introduction']])
-                self.txt_Procedure.insert (1.0, Data[0][Keys['Procedure']])
-                self.txt_Techniques.insert (1.0, Data[0][Keys['Techniques']])
-                self.txt_Records.insert (1.0, Data[0][Keys['Records']])
-                self.txt_Reporting.insert (1.0, Data[0][Keys['Reporting']])
-                self.txt_Timing.insert (1.0, Data[0][Keys['Timing']])
-                logging.info ('VIEW Finished Communication Approach Refresh')
-                
-                
-                
-# TAB   :   DailyLog
 
 # TAB   :   Quality
 class QualityTabControl (ttk.Notebook):
         def __init__(self, master):
                 super().__init__(master)
-                QualityApproach = subFrame_QualityApproach(self)
+                #QualityApproach = subFrame_QualityApproach(self)
+                QualityApproach = vf_QualityApproach.MainFrame(self)
                 self.add(QualityApproach, text = 'Quality Approach')
                 #pass
                 
-class subFrame_QualityApproach(Frame):
-        def __init__(self, master):
-                super().__init__(master)
-                self.config (bg = _BGC)
-                
-                self.lb_Introduction = Label(self, text = 'Introduction:', width = 90, justify = LEFT, bg = _BGC)
-                self.lb_Procedure = Label(self, text = 'Procedure:', width = 90, justify = LEFT, bg = _BGC)
-                self.lb_ProjectQuality = Label(self, text = 'Project Quality:', width = 90, justify = LEFT, bg = _BGC)
-                self.lb_Techniques = Label(self, text = 'Techniques:', width = 90, justify = LEFT, bg = _BGC)
-                self.lb_Records = Label(self, text = 'Records:', width = 90, justify = LEFT, bg = _BGC)
-                self.lb_Reporting = Label(self, text = 'Reporting:', width = 90, justify = LEFT, bg = _BGC)
-                self.lb_Timing = Label(self, text = 'Timing:', width = 90, justify = LEFT, bg = _BGC)
-                self.lb_RolesResponsibilities = Label(self, text = 'Roles and Responsibilities:', width = 90, justify = LEFT, bg = _BGC)
-                                                                                                
-                
-                self.txt_Introduction = Text(self, width = 90, height = 12)
-                self.txt_Procedure = Text(self, width = 90, height = 12)
-                self.txt_ProjectQuality = Text(self, width = 90, height = 12)
-                self.txt_Techniques = Text(self, width = 90, height = 12)
-                self.txt_Records = Text(self, width = 90, height = 12)
-                self.txt_Reporting = Text(self, width = 90, height = 12)
-                self.txt_Timing = Text(self, width = 90, height = 12)
-                self.txt_RolesResponsibilities = Text(self, width = 90, height = 12)
-                
-                self.lb_Introduction.grid(row = 0, column = 0)
-                self.txt_Introduction.grid(row = 1, column = 0)
-                self.lb_Procedure.grid(row = 2, column = 0)
-                self.txt_Procedure.grid(row = 3, column = 0)
-                self.lb_ProjectQuality.grid(row = 4, column = 0)
-                self.txt_ProjectQuality.grid(row = 5, column = 0)
-                self.lb_Techniques.grid(row = 6, column = 0)
-                self.txt_Techniques.grid(row = 7, column = 0)
-                
-                self.lb_Records.grid(row = 0, column = 1)
-                self.txt_Records.grid(row = 1, column = 1)
-                self.lb_Reporting.grid(row = 2, column = 1)
-                self.txt_Reporting.grid(row = 3, column = 1)
-                self.lb_Timing.grid(row = 4, column = 1)
-                self.txt_Timing.grid(row = 5, column = 1)
-                self.lb_RolesResponsibilities.grid(row = 6, column = 1)
-                self.txt_RolesResponsibilities.grid(row = 7, column = 1)
-                
-                
-                self.Refresh()
-                      
-        def Refresh(self):
-                global _activeProject
-                logging.info ('VIEW Starting Quality Approach Refresh')
-                Keys, Data = controller.RefreshBusinessObject('QualityApproach', _activeProject)#  - change id to project id    !!!
-                #logging.debug ('Refresh Quality Approach Keys:', Keys)
-                #logging.debug ('Refresh Quality Approach Data:', Data)
-                self.txt_Introduction.insert (1.0, Data[0][Keys['Introduction']])
-                self.txt_Procedure.insert (1.0, Data[0][Keys['Procedure']])
-                self.txt_ProjectQuality.insert (1.0, Data[0][Keys['ProjectQuality']])
-                self.txt_Techniques.insert (1.0, Data[0][Keys['Techniques']])
-                self.txt_Records.insert (1.0, Data[0][Keys['Records']])
-                self.txt_Reporting.insert (1.0, Data[0][Keys['Reporting']])
-                self.txt_Timing.insert (1.0, Data[0][Keys['Timing']])
-                self.txt_RolesResponsibilities.insert (1.0, Data[0][Keys['RolesResponsibilities']])
-                logging.info ('VIEW Finished Quality Approach Refresh')
                 
                 
 def Main ():

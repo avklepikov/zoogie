@@ -145,6 +145,7 @@ DB_FIELDS_MAPPING ={                                #Class attributes -> Db Fiel
                         'Scales': ['Scales', 'TEXT'],
                         'Proxomity': ['Proxomity', 'TEXT'],
                         'Category': ['Category', 'TEXT'],
+                        'ResponseCategory': ['ResponseCategory', 'TEXT'],
                         'EarlyWarningIndicator': ['EarlyWarningIndicator', 'TEXT']}, 
         
         'RiskRegister':{'ID': ['ID', 'INTEGER PRIMARY KEY AUTOINCREMENT'],
@@ -222,7 +223,7 @@ DB_FIELDS_MAPPING ={                                #Class attributes -> Db Fiel
         
         'BenefitApproach':{'ID': ['ID', 'INTEGER PRIMARY KEY AUTOINCREMENT'],  
                            'RelatedProject': ['RelatedProject', 'INTEGER'],
-                           'General': ['General', 'TEXT'],
+                           'Introduction': ['Introduction', 'TEXT'],
                            'ManagementActions': ['ManagementActions', 'TEXT'],
                            'Review': ['Review', 'TEXT']},
         
@@ -239,7 +240,8 @@ DB_FIELDS_MAPPING ={                                #Class attributes -> Db Fiel
         
         'Project': {'ID': ['ID', 'INTEGER PRIMARY KEY AUTOINCREMENT'],
                     'Project': ['Project', 'TEXT'],
-                    'BusinessID': ['BusinessID', 'TEXT']}
+                    'BusinessID': ['BusinessID', 'TEXT'],
+                    'TechStatus': ['TechStatus', 'TEXT']}
         
         }
 """Converts (mapping) Class attribute name into database field name  

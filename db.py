@@ -133,7 +133,7 @@ def complile_SELECT_ALL (_class: str, _attr_value_dict: dict):
                 _fields_list.append ( db_constants.DB_FIELDS_MAPPING[_class][attr][0])
         _fields_list_str = ', '.join(_fields_list)
         SQL = f"SELECT {_fields_list_str} FROM {table}"
-        logging.debug('Resulting SQL: ', SQL)
+        #logging.debug('Resulting SQL: ', SQL)
         return SQL
 
 def complile_SELECT_BY_PROJECT_ID (_class: str, _attr_value_dict: dict, _Project_id: int):
@@ -149,6 +149,18 @@ def complile_SELECT_BY_PROJECT_ID (_class: str, _attr_value_dict: dict, _Project
         SQL = f"SELECT {_fields_list_str} FROM {table} WHERE RelatedProject = {_Project_id}"  
         #logging.debug('Resulting SQL: ', SQL)
         return SQL
+
+def compile_SET_ATTR_VALUE_BY_ITEM_ID (_class: str, _attr : str, _id: int, _attr_value):
+        """ INSERT COMMENTARY"""
+        #logging.info (f'      DB Starting compile_SET_ATTR_VALUE_BY_ITEM_ID (_class = {_class}, _attr = {_attr}, _id = {_id}, _attr_value = {_attr_value})')
+        #db_constants.DB_FIELDS_MAPPING[_class][attr][1] == "TEXT"
+        table = get_class_table(_class)
+        _value_to_set = _attr_value
+        if db_constants.DB_FIELDS_MAPPING[_class][_attr][1] == "TEXT":
+                _value_to_set = '"' + _value_to_set + '"'
+        SQL = f"UPDATE {table} SET {db_constants.DB_FIELDS_MAPPING[_class][_attr][0]} = {_value_to_set} WHERE RelatedProject = {_id}"  #{db_constants.DB_FIELDS_PK[_class]}
+        #logging.debug('Resulting SQL: ', SQL)
+        return SQL   
 
 def complile_SELECT_BY_ITEM_ID (_class: str, _attr_value_dict: dict, _id: int):    # why we use _attr_value_dict?
         """This method compiles SQL script to get from the database any project class record by its ID

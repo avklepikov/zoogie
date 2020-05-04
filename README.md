@@ -27,4 +27,6 @@ UI
 - Zoogie provides fully pack of functionality not only to resue model in different projects but also to be used as a full pack application.
 
 
+# Instruction How to START and GET FAMILIAR with ZOOGIE
+Just run VIEW.PY. Database already have some test records.
 

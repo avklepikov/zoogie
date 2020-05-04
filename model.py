@@ -40,6 +40,60 @@ import logging
 import db        #database connector to run the model on SQLLite DB
 
 
+class ProjectPack():
+        def __init__(self):
+                self.Project = Project()
+                self.Mandate = Mandate()
+                self.ProjectBrief = ProjectBrief()
+                self.BusinessCase = BusinessCase()
+                self.BenefitApproach = BenefitApproach()
+                self.QualityApproach = QualityApproach()
+                self.RiskApproach = RiskApproach()
+                self.CommunicationApproach = CommunicationApproach()
+                self.ChangeApproach = ChangeApproach()
+                #print ('ProjectPack')
+                
+        def Refresh (self, _ProjectID: int):
+                
+                ProjectObjectList = [self.Mandate, 
+                                     self.ProjectBrief, 
+                                     self.BusinessCase, 
+                                     self.BenefitApproach, 
+                                     self.QualityApproach, 
+                                     self.RiskApproach, 
+                                     self.CommunicationApproach, 
+                                     self.ChangeApproach
+                                     ]
+                
+                
+                dict_sql_result = self.Project.viewItem(_ProjectID)
+                #print (dict_project_data)
+                for item in self.Project.__dict__:
+                        _index = dict_sql_result[0][item]
+                        _value = dict_sql_result[1][0][_index]
+                        setattr (self.Project, item, _value)
+                
+                for ProjectObjectListItem in ProjectObjectList:
+                        dict_sql_result = ProjectObjectListItem.viewProjectRelatedItems(_ProjectID)
+                        ProjectObjectListItem
+                        
+                        #print ('Object:' , help(ProjectObjectListItem))
+                        #print (dict_sql_result[0])
+                        #print (dict_sql_result[1])
+                        #print ('dict: ', ProjectObjectListItem.__dict__)
+                        for item in ProjectObjectListItem.__dict__:
+                                #print (item)
+                                _index = dict_sql_result[0][item]
+                
+                                _value = dict_sql_result[1][0][_index]
+                
+                                setattr (ProjectObjectListItem, item, _value)
+                                
+                        
+                
+        
+        
+
 class ProjectObject():   # Unified methods are set in this SuperClass
         """Provides each Project Class with unified methods to read and update the database
         
@@ -66,6 +120,7 @@ class ProjectObject():   # Unified methods are set in this SuperClass
         
         def __init__(self):
                 #print('done')
+                
                 pass
         
         
@@ -83,6 +138,12 @@ class ProjectObject():   # Unified methods are set in this SuperClass
                 print ('update', self.__class__.__name__, self.__dict__)
                 _sql = db.compile_UPDATE_script (self.__class__.__name__, self.__dict__)
                 db.executeSQL(_sql)
+                
+        def update_attr (self, _class, _attr, _id, _attr_value):   # NOT COMPLETED
+                #logging.info (f'    MODEL Starting update_attr (_class = {_class}, _attr = {_attr}, _id = {_id}, _attr_value = {_attr_value})')
+                _sql  = db.compile_SET_ATTR_VALUE_BY_ITEM_ID (_class, _attr, _id, _attr_value)
+                db.executeSQL(_sql)
+                
                 
         def delete (self):
                 """Finds related Project Object record and delete it from database
@@ -155,17 +216,21 @@ class ProjectObject():   # Unified methods are set in this SuperClass
 class Benefit (ProjectObject):          # OK
         """Superclass object to manage general attributes and methods for all Project Objects (classes)
         
+        ===========
         ATTRIBUTES:
-            ID                   (int): Item technical ID in database
-            BusinessID           (str): BusinessID in format accepted by Project Office
-            RelatedProject       (str): Related Project primary key
-            Title                (str): Short name of the Benefit
-            Description          (str): Benefit description
-            Category             (str): Benefit category
-            Measurement          (str): How Benefit is measured: technics and units of measure
-            Responsibility       (str): Who is responsibles of Benefit measurement
-            ResourceRequirements (str): Resouce required to perform benefit measurement
-            Baseline             (str): Benefit baseline value defined in the begining of the project
+        ===========
+        
+            :ID:                   (int) Item technical ID in database
+            :BusinessID:           (str) BusinessID in format accepted by Project Office
+            :RelatedProject:       (str) Related Project primary key
+            :Title:                (str) Short name of the Benefit
+            :Description:          (str) Benefit description
+            :Category:             (str) Benefit category
+            :Measurement:          (str) How Benefit is measured: technics and units of measure
+            :Responsibility:       (str) Who is responsibles of Benefit measurement
+            :ResourceRequirements: (str) Resouce required to perform benefit measurement
+            :Baseline:             (str) Benefit baseline value defined in the begining of the project
+            
         
         Methods:
             Please refer to Superclass Methods for standard methods applied across all Project Classes    
@@ -193,13 +258,14 @@ class Benefit (ProjectObject):          # OK
                 self.ResourceRequirements = ResourceRequirements
                 self.Baseline = Baseline  
                 
-class BenefitApproach (ProjectObject):  # OK
+                
+class BenefitApproach (ProjectObject):  # OK +ProjectPack
         """BenefitApproach  : Applied policy by which benefits delivery is managed
         
         Attributes:
             ID                (int): Item technical ID in database
             RelatedProject    (str): Related Project primary key
-            General           (str): Policy text
+            Introduction      (str): Policy text
             ManagementActions (str): Management actions to support execution of stated policy
             Review            (str): 
            
@@ -208,18 +274,18 @@ class BenefitApproach (ProjectObject):  # OK
         """
         def __init__ (self,
                       RelatedProject: int = None,
-                      General: str = None,
+                      Introduction: str = None,
                       ManagementActions: str = None,
                       Review: str = None,
                       ID: int = None):
                 super().__init__()
                 self.ID = ID
                 self.RelatedProject = RelatedProject
-                self.General = General
+                self.Introduction = Introduction
                 self.Review = Review
         
 
-class BusinessCase (ProjectObject):     # OK
+class BusinessCase (ProjectObject):     # OK +ProjectPack
         """Justification to run the project
         
         Attributes:
@@ -447,7 +513,7 @@ class Lesson (ProjectObject):           # OK
                 self.LoggedBy=LoggedBy
                 self.Priority=Priority                
 
-class Mandate (ProjectObject):          # OK
+class Mandate (ProjectObject):          # OK +ProjectPack
         """Mandate from senior management to start the project
         
         Attributes:
@@ -519,7 +585,7 @@ class Product (ProjectObject):          # OK
                 
         
 
-class ProjectBrief (ProjectObject):     # OK
+class ProjectBrief (ProjectObject):     # OK +ProjectPack
         """Brief formal justification of the Project during Initiation Stage
         
         Attributes:
@@ -592,7 +658,7 @@ class ProjectBrief (ProjectObject):     # OK
                 self.ProjectApproach=ProjectApproach
                
 
-class QualityApproach (ProjectObject):  # OK
+class QualityApproach (ProjectObject):  # OK +ProjectPack
         """Applied policy to manage project quality
         
         Attributes:
@@ -668,7 +734,7 @@ class QualityRegister (ProjectObject):  # OK
                 self.Dates=Dates
                 self.Result=Result                
 
-class RiskApproach (ProjectObject):     # to correct Attribute Proximity
+class RiskApproach (ProjectObject):     # -- +ProjectPack             -> correct Attribute Proximity
         """Applied policy to manage Project risks
         
         Attributes:
@@ -701,6 +767,7 @@ class RiskApproach (ProjectObject):     # to correct Attribute Proximity
                       Scales: str = None,
                       Proxomity: str = None,
                       Category: str = None,
+                      ResponseCategory: str = None,
                       EarlyWarningIndicator: str = None,
                       ID: int = None):
                 super().__init__()
@@ -716,10 +783,10 @@ class RiskApproach (ProjectObject):     # to correct Attribute Proximity
                 self.Scales=Scales
                 self.Proxomity=Proxomity
                 self.Category=Category
-                self.Category=Category
+                self.ResponseCategory=ResponseCategory
                 self.EarlyWarningIndicator=EarlyWarningIndicator                
 
-class RiskRegister (ProjectObject):     # to add attr explanation
+class RiskRegister (ProjectObject):     # --                          -> add attr explanation
         """List of identified risks
         
         Attributes:
@@ -779,7 +846,9 @@ class RiskRegister (ProjectObject):     # to add attr explanation
                 self.Response=Response
                 self.Status=Status
                 self.Owner=Owner
-                self.Actionee=Actionee                
+                self.Actionee=Actionee    
+                #self.ShortListAttributes =[self.ID, self.BusinessID, self.Title, self.Category, self.RaisedDate, self.ResponseCategory, self.Owner, self.Status]
+                #"""List of attributes shown as lines in the Treeview register"""
 
 class Stakeholder (ProjectObject):      # OK
         """List of Project stakeholders
@@ -903,7 +972,7 @@ class Stage (ProjectObject):            # OK
                 self.Title=Title
                 self.Category=Category                
 
-class CommunicationApproach (ProjectObject):   # OK
+class CommunicationApproach (ProjectObject):   # OK +ProjectPack
         """Applied policy to manage Project communications
         
         Attributes:
@@ -967,7 +1036,7 @@ class Team (ProjectObject):             # OK
                 self.Person=Person
                 self.Role=Role                
 
-class ChangeApproach (ProjectObject):   # OK
+class ChangeApproach (ProjectObject):   # OK +ProjectPack
         """Applied approach to manage Project changes
         
         Attributes:
@@ -1000,7 +1069,7 @@ class ChangeApproach (ProjectObject):   # OK
                 self.Records=Records
                 self.Reporting=Reporting  
                 
-class QualityCriteria (ProjectObject):  # to add attr explanation
+class QualityCriteria (ProjectObject):  # --                          -> add attr explanation
         """Quality requirement to be met by the project's product
         
         Attributes:
@@ -1042,25 +1111,41 @@ class QualityCriteria (ProjectObject):  # to add attr explanation
                 self.Method=Method
                 self.Responsibility=Responsibility
         
-class Project (ProjectObject):          # OK
+class Project (ProjectObject):          # OK +ProjectPack
         """Project class around which all other Project object are organized
         
+        ===========
         Attributes:
-            ID (int): Item technical ID in database.
-            Project (str): Short name
-            BusinessID: (str): BusinessID in format accepted by Project Office.
+        ===========
+        
+            :ID:         (int) Item technical ID in database.
+            :Project:    (str) Short name
+            :BusinessID: (str) BusinessID in format accepted by Project Office.
+            :TechStatus: (str) Technical status tp indicate archived, active, draft and deleted versions of the Project
             
+            TechStatus Values:
+            
+            - Active
+            - Draft
+            - Deleted
+            - Archived
+            
+        ========
         Methods:
+        ========
+        
             Please refer to Superclass Methods for standard methods applied across all Project Classes    
         """
         def __init__ (self,
                       Project: str = None,
                       BusinessID: str = None,
-                      ID: int = None):
+                      ID: int = None,
+                      TechStatus: str = None):
                 super().__init__()
                 self.ID = ID
                 self.Project = Project
                 self.BusinessID = BusinessID
+                self.TechStatus = TechStatus
                 
                 #self.ProjectBrief = ProjectBrief()
                 
@@ -1076,12 +1161,16 @@ class Project (ProjectObject):          # OK
 
 
 def Main ():
-        X = Product
+        X = ProjectPack()
+        X.Refresh(1)
         #X.ID = 1
         #X.update()
         
-        Y = Mandate()
-        print (Y.viewItem(1))
+        #Y = Mandate()
+        print ('I am alive')
+        #print (X)
+        #print ('BenefitAppr: ', X.BenefitApproach)
+        print ('BC: ', X.Project)
 
 if __name__ == '__main__':
         Main()

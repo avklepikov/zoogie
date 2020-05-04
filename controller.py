@@ -3,6 +3,19 @@ import logging
 import model
 
 
+def GetProjectPack(_projectID):
+        ProjectPack = model.ProjectPack()
+        ProjectPack.Refresh(_projectID)
+        return ProjectPack
+
+def UpdateAttribute(_class, _attr, _id, _attr_value):
+        #logging.info(f'  CONTROLLER: Starting UpdateAttribute (_class = {_class}, _attr = {_attr}, _id = {_id}, _attr_value = {_attr_value})')
+        print('Controller UpdateAttribute: ', _class, _attr, _id, _attr_value)
+        ObjectClass = getattr(model, _class)
+        ObjectInstance = ObjectClass()
+        ObjectInstance.update_attr(_class, _attr, _id, _attr_value)        
+        #model.Project.update_attr(_class, _attr, _id, _attr_value)
+        
 
 def RefreshPortfolioList():
         """populates list of portfolio on the MainFrame Portfolio TreeView"""
