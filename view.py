@@ -753,28 +753,28 @@ class BusinessCase_ProjectProduct_BreakdownFrame (Frame):
                 self.config (bg = _BGC)
                 #lb_ProjectProductBreakDown = Label(self, text = 'Project Product Details').pack()
                 
-                self.lb_Title = Label(self, text = 'Title', width = 60, justify = LEFT, anchor = W, bg = _BGC)
+                self.lb_Title = Label(self, text = 'Title', width = 40, justify = LEFT, anchor = W, bg = _BGC)
                 self.tx_Title=Text(self, width = 60, height = 1)
                 
-                self.lb_Description = Label(self, text='Description', width = 60, justify = LEFT, anchor = W, bg = _BGC)
+                self.lb_Description = Label(self, text='Description', width = 40, justify = LEFT, anchor = W, bg = _BGC)
                 self.tx_Description = Text(self, width = 60, height = 12)
                 
-                self.lb_BusinessID = Label(self, text = 'Business Code', width = 60, justify = LEFT, anchor = W, bg = _BGC)
+                self.lb_BusinessID = Label(self, text = 'Business Code', width = 40, justify = LEFT, anchor = W, bg = _BGC)
                 self.tx_BusinessID = Text(self, width = 60, height = 1)
                 
-                self.lb_Purpose = Label (self, text = 'Purpose', width = 60, justify = LEFT, anchor = W, bg = _BGC)
+                self.lb_Purpose = Label (self, text = 'Purpose', width = 40, justify = LEFT, anchor = W, bg = _BGC)
                 self.tx_Purpose = Text (self, width = 60, height = 12)                             
                 
-                self.lb_Composition = Label(self, text = 'Composition', width = 60, justify = LEFT, anchor = W, bg = _BGC)
+                self.lb_Composition = Label(self, text = 'Composition', width = 40, justify = LEFT, anchor = W, bg = _BGC)
                 self.tx_Composition = Text(self, width = 60, height = 12)               
                 
-                self.lb_Derivation = Label(self, text = 'Derivation', width = 60, justify = LEFT, anchor = W, bg = _BGC)
+                self.lb_Derivation = Label(self, text = 'Derivation', width = 40, justify = LEFT, anchor = W, bg = _BGC)
                 self.tx_Derivation = Text(self, width = 60, height = 12)
                 
-                self.lb_FormatPresentation = Label(self, text = 'Format of Presentation', width = 60, justify = LEFT, anchor = W, bg = _BGC)
+                self.lb_FormatPresentation = Label(self, text = 'Format of Presentation', width = 40, justify = LEFT, anchor = W, bg = _BGC)
                 self.tx_FormatPresentation = Text (self, width = 60, height = 12)               
         
-                self.lb_DevSkills = Label(self, text = 'Development skills', width = 60, justify = LEFT, anchor = W, bg = _BGC)
+                self.lb_DevSkills = Label(self, text = 'Development skills', width = 40, justify = LEFT, anchor = W, bg = _BGC)
                 self.tx_DevSkills = Text (self, width = 60, height = 12)
                             
                 

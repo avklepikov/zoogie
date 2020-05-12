@@ -77,7 +77,7 @@ class AttributeValue (Text):
         def __init__(self, master):
                 super().__init__(master)
                 #self.insert (1.0, 'Long text')
-                self.config(width = 85, height = 10, state="disabled")
+                self.config(width = 82, height = 9, state="disabled")
                 self.bind ("<Double-1>", self.OnDoubleClick2)
 
         def OnDoubleClick2(self, Event):
@@ -179,9 +179,9 @@ class RegisterList (ttk.Treeview):
                 print ('1 Click')
                 item = self.identify('item', event.x, event.y)
                 bdRecordID = self.item(item, 'text')                
-                print (self)
-                print (self.master)
-                print (self.master.__dict__)
+                #print (self)
+                #print (self.master)
+                #print (self.master.__dict__)
                 self.master.Refresh(bdRecordID)
                 pass
         
