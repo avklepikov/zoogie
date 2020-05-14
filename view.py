@@ -25,6 +25,7 @@ import vf_CommunicationApproach
 import vf_RegisterRisk
 import vf_RegisterChange
 import vf_RegisterLessons
+import vf_RegisterProjectProduct
 
 _activeProject = None
 
@@ -251,6 +252,8 @@ class ProjectTabControl (ttk.Notebook):
                 frame_Communication = Frame_Communication(self)
                 frame_Communication.config(bg = _BGC)
                 #frame_Lessons = Frame_Lessons(self)
+                #print (self.master)
+                #print ('------')
                 frame_Lessons = vf_RegisterLessons.MainFrame(self, _BGC)
                 #frame_Lessons.config(bg = _BGC)
                 
@@ -324,216 +327,6 @@ class Frame_DashBoard (Frame):
 class Frame_Meetings (Frame):
         def __init__ (self, master):
                 super().__init__(master)
-# TAB LESSONS
-class Frame_Lessons (Frame):
-        def __init__ (self, master):
-                super().__init__(master)
-                self.afterLessonsRegisterTreeFrame = Lessons_Register_TreeFrame(self)
-                self.afterLessonsRegisterTreeFrame.config (bg = _BGC)
-                self.LessonsRegisterBreakDownFrame = Lessons_Register_BreakDown(self)
-                self.LessonsRegisterBreakDownFrame.config(bg = _BGC)
-                
-                self.afterLessonsRegisterTreeFrame.pack(side=LEFT, anchor=NW)
-                self.LessonsRegisterBreakDownFrame.pack(side=LEFT, anchor=NW)                            
-                
-        #Change - Register - Tree
-class Lessons_Register_TreeFrame (Frame):
-        def __init__(self, master):
-                super().__init__(master)
-                self.lb_LessonsReg_Tree = Label(self, text = 'Lessons Register', bg = _BGC).pack(anchor=W)   
-                self.tr_LessonsTree = LessonsTree(self).pack(anchor=W)
-        
-class LessonsTree (ttk.Treeview):
-        def __init__ (self, master):
-                super().__init__(master)
-                
-                
-                self['columns'] = ('Title', 'Category')#, 'Event', 'Effect')
-                
-                #self.width = 100
-                #self.height = 200
-                #self.master=master
-                self.heading ('#0', text = 'Code', anchor = 'w')
-                #self.heading ('BusinessCode', text = 'Business Code', anchor = 'w')
-                self.heading ('Title', text = 'Title', anchor = 'w')
-                self.heading ('Category', text = 'Category', anchor = 'w')
-
-
-
-                self.column('#0', width = 60)
-                #self.column('BusinessCode', width = 100)            
-                self.column('Title', width = 250)
-                self.column('Category', width = 150)
-
-
-
-                self.pack(anchor=W)
-                self.Refresh()
-                self.bind("<Double-1>", self.OnDoubleClick)
-        
-                #Business Case - ProjectProduct - BreakdownFrame        
-        def Refresh (self):
-                logging.info ('VIEW Starting Lesson tree Refresh')
-                global _activeProject
-                Keys, Data = controller.RefreshBusinessObject('Lesson', _activeProject)
-                #logging.debug ('Refresh Lesson Keys:', Keys) 
-                #logging.debug ('Refresh Lesson Data:', Data)
-
-                for item in Data:
-                        self.insert('',item[0], text=item[0], values=[
-                                #item[Keys['BusinessID']],
-                                item[Keys['Title']],
-                                item[Keys['Category']],
-                                #item[Keys['Event']],
-                                #item[Keys['Effect']]
-                        ]) 
-                logging.info ('VIEW Finished Lesson tree Refresh')
-                        
-                        
-        def OnDoubleClick(self, event):
-                global _activeProject
-                item = self.identify('item', event.x, event.y)
-                _activeProject = self.item(item, 'text')
-       
-                Keys, Data = controller.RefreshBusinessObject_byID('Lesson', _activeProject)#  - change id to project id    !!!
-                #print (Keys) 
-                #print (Data)
-                
-                ModifiedFrame=self.master.master.LessonsRegisterBreakDownFrame
-                
-
-                ModifiedFrame.tx_Title.TextUpdate(Data[0][Keys['Title']])                   
-
-                ModifiedFrame.tx_Category.TextUpdate (Data[0][Keys['Category']])
-
-                ModifiedFrame.tx_BusinessCode.TextUpdate (Data[0][Keys['BusinessID']])
-
-                ModifiedFrame.tx_Priority.TextUpdate (Data[0][Keys['Priority']])
-
-                ModifiedFrame.tx_Description.TextUpdate(Data[0][Keys['Description']])         
-
-                ModifiedFrame.tx_Event.TextUpdate (Data[0][Keys['Event']])
-
-                ModifiedFrame.tx_Cause.TextUpdate (1.0, Data[0][Keys['CauseTrigger']])
-
-                ModifiedFrame.tx_Recommendation.TextUpdate (Data[0][Keys['Recommendations']])
-
-                ModifiedFrame.tx_Effect.TextUpdate (Data[0][Keys['Effect']])
-
-                ModifiedFrame.tx_Indicator.TextUpdate (Data[0][Keys['EarlyWarningIndicator']])
-
-                ModifiedFrame.tx_DateLogged.TextUpdate (Data[0][Keys['DateLogged']])
-
-                ModifiedFrame.tx_LoggedBy.TextUpdate (Data[0][Keys['LoggedBy']])
-
-
-
-                
-        
-class Lessons_Register_BreakDown (Frame):
-        
-        
-        def __init__(self, master):
-                super().__init__(master)
-                #lb_LessonsReg_BreakDown = Label(self, text = 'Lesson Details').pack(anchor=W)   
-                
-                self.lb_Title = Label(self, text = 'Title', width = 60, justify = LEFT, anchor = W, bg = _BGC)
-                
-                self.tx_Title = AppText(self) 
-                
-                self.lb_Category = Label(self, text = 'Category', width = 60, justify = LEFT, anchor = W, bg = _BGC)
-                self.tx_Category = AppText(self)
-                
-                self.lb_BusinessCode = Label(self, text = 'Business Case', width = 60, justify = LEFT, anchor = W, bg = _BGC)
-                self.tx_BusinessCode = AppText(self)               
-                
-                self.lb_Priority = Label(self, text = 'Priority', width = 60, justify = LEFT, anchor = W, bg = _BGC)
-                self.tx_Priority = AppText(self)               
-                
-                self.lb_Description = Label(self, text='Description', width = 60, justify = LEFT, anchor = W, bg = _BGC)
-                
-                self.tx_Description = AppTextBox(self,'Lesson','Description')                    
-                
-                self.lb_Event = Label(self, text = 'Event', width = 60, justify = LEFT, anchor = W, bg = _BGC)
-                self.tx_Event = AppTextBox (self,'Lesson','Event')              
-                
-                self.lb_Cause = Label(self, text = 'Cause Trigger', width = 60, justify = LEFT, anchor = W, bg = _BGC)
-                self.tx_Cause = AppTextBox(self,'Lesson','CauseTrigger')             
-                
-                
-                # RIGHT LONGS
-                               
-                
-                self.lb_Recommendation = Label (self, text = 'Recommendation', width = 60, justify = LEFT, anchor = W, bg = _BGC)
-                self.tx_Recommendation = AppTextBox (self,'Lesson','Description')
-                
-                self.lb_Effect = Label(self, text = 'Effect', width = 60, justify = LEFT, anchor = W, bg = _BGC)
-                self.tx_Effect = AppTextBox(self,'Lesson','Effect')
-                
-                self.lb_Indicator = Label(self, text = 'Indicator', width = 60, justify = LEFT, anchor = W, bg = _BGC)
-                self.tx_Indicator = AppTextBox (self,'Lesson','EarlyWarningIndicator')
-                
-                # Foots Left
-                self.lb_DateLogged = Label(self, text = 'Date Logged', width = 60, justify = LEFT, anchor = W, bg = _BGC)
-                self.tx_DateLogged = AppText(self)
-                
-                #Foot Right
-                self.lb_LoggedBy = Label(self, text = 'Logged by', width = 60, justify = LEFT, anchor = W, bg = _BGC)
-                self.tx_LoggedBy = AppText(self)             
-                
-                
-                #---------
-                #LEFT SHORTS (ROWS 0 - 3)
-                
-                self.lb_Title.grid(row = 0, column = 0)
-                self.tx_Title.grid(row = 1, column = 0)
-                
-                self.lb_Category.grid(row = 2, column = 0)
-                self.tx_Category.grid(row = 3, column = 0) 
-                
-                
-                #RIGHT SHORTS  (ROWS 0 - 3)
-                
-                self.lb_BusinessCode.grid(row = 0, column = 1)
-                self.tx_BusinessCode.grid(row = 1, column = 1)                 
-                
-                self.lb_Priority.grid(row = 2, column = 1)
-                self.tx_Priority.grid(row = 3, column = 1)                
-                
-                
-                # LEFT LONGS
-                
-                self.lb_Description.grid(row = 4, column = 0)
-                self.tx_Description.grid(row = 5, column = 0)
-                
-                self.lb_Event.grid(row = 6, column = 0)
-                self.tx_Event.grid(row = 7, column = 0)                
-                
-                self.lb_Cause.grid(row = 8, column = 0)
-                self.tx_Cause.grid(row = 9, column = 0)                
-
-                
-                # RIGHT LONGS
-                               
-                
-                self.lb_Recommendation.grid(row = 4, column = 1)
-                self.tx_Recommendation.grid(row = 5, column = 1)
-                
-                self.lb_Effect.grid(row = 6, column = 1)
-                self.tx_Effect.grid(row = 7, column = 1)
-                
-                self.lb_Indicator.grid(row = 8, column = 1)
-                self.tx_Indicator.grid(row = 9, column = 1)
-                
-                # Foots Left
-                self.lb_DateLogged.grid(row = 10, column = 0)
-                self.tx_DateLogged.grid(row = 11, column = 0)
-                
-                #Foot Right
-                self.lb_LoggedBy.grid(row = 10, column = 1)
-                self.tx_LoggedBy.grid(row = 11, column = 1)
-                
-
 
 
 # TAB   :  Business Case             
@@ -547,7 +340,9 @@ class BusinessCaseTabControl (ttk.Notebook):
                 BusinessCase.Refresh()
                 
                 Benefits = subFrame_Benefits(self)
-                ProjectProduct = subFrame_ProjectProduct(self)
+                              
+                ProjectProduct = vf_RegisterProjectProduct.MainFrame (self, self.master.master.master.ProjectPack.BusinessCase.ID, _BGC)
+                
                 
                 self.add(Mandate, text = 'Mandate')
                 self.add(BusinessCase, text = 'Business Case')
@@ -620,8 +415,7 @@ class BenefitsTree (ttk.Treeview):
                 self.column('Category', width = 250)
                 self.column('Measurement', width = 350)
                 self.column('Responsibility', width = 350)
-                #self.column('ResourseRequirements', width = 200)
-                #self.column('Baseline', width = 200)
+
                 
                 
                 
@@ -659,154 +453,6 @@ class BusinessCase_Benefits_BreakdownFrame (Frame):
                 self.config (bg = _BGC)
                 lb_BenefitBreakDown = Label(self, text = 'Benefit Details').pack()
         
-class subFrame_ProjectProduct(Frame):
-        def __init__ (self, master):
-                super().__init__(master)  
-                self.config (bg = _BGC)
-                self.ProjectProductTreeFrame = BusinessCase_ProjectProduct_TreeFrame(self)
-                self.ProjectProductBreakDownFrame = BusinessCase_ProjectProduct_BreakdownFrame(self)
-                self.ProjectProductTreeFrame.pack(side= LEFT, anchor = NW)
-                self.ProjectProductBreakDownFrame.pack(side= LEFT, anchor = NW)                
-               
-
-        #Business Case - ProjectProduct - TreeFrame
-
-class BusinessCase_ProjectProduct_TreeFrame (Frame):
-        def __init__(self, master):
-                super().__init__(master)
-                self.config (bg = _BGC)
-                lb_ProjectProduct_Tree = Label(self, text = 'Project Product List', bg = _BGC).pack()
-                tr_ProductTree = ProjectProductTree(self).pack()
-                
-class ProjectProductTree (ttk.Treeview):
-        def __init__ (self, master):
-                super().__init__(master)
-                self['columns'] = ('BusinessCode', 'Title')#, 'Purpose')
-
-                self.heading ('#0', text = 'Code', anchor = 'w')
-                self.heading ('BusinessCode', text = 'Business Code', anchor = 'w')
-                self.heading ('Title', text = 'Product Name', anchor = 'w')
-
-                
-                self.column('#0', width = 60)
-                self.column('BusinessCode', width = 100)            
-                self.column('Title', width = 250)
-
-                
-                self.pack()
-                self.Refresh()
-                self.bind("<Double-1>", self.OnDoubleClick)
-                
-        def OnDoubleClick(self, event):
-                global _activeProject
-                item = self.identify('item', event.x, event.y)
-                _activeProject = self.item(item, 'text')
-                
-      
-                Keys, Data = controller.RefreshBusinessObject_byID('Product', _activeProject)    
-                #print (Keys) 
-                #print (Data)
-                
-                ModifiedFrame = self.master.master.ProjectProductBreakDownFrame
-                
-                ModifiedFrame.tx_Title.delete(1.0, END)
-                ModifiedFrame.tx_Title.insert (1.0, Data[0][Keys['Title']])
-                ModifiedFrame.tx_Description.delete(1.0, END)
-                ModifiedFrame.tx_Description.insert (1.0, Data[0][Keys['Description']])
-                ModifiedFrame.tx_BusinessID.delete(1.0, END)
-                ModifiedFrame.tx_BusinessID.insert (1.0, Data[0][Keys['BusinessID']])
-                ModifiedFrame.tx_Purpose.delete(1.0, END)
-                ModifiedFrame.tx_Purpose.insert (1.0, Data[0][Keys['Purpose']])
-                ModifiedFrame.tx_Composition.delete(1.0, END)
-                ModifiedFrame.tx_Composition.insert (1.0, Data[0][Keys['Composition']])
-                ModifiedFrame.tx_Derivation.delete(1.0, END)
-                ModifiedFrame.tx_Derivation.insert (1.0, Data[0][Keys['Derivation']])
-                ModifiedFrame.tx_FormatPresentation.delete(1.0, END)
-                ModifiedFrame.tx_FormatPresentation.insert (1.0, Data[0][Keys['FormatPresentation']])
-                ModifiedFrame.tx_DevSkills.delete(1.0, END)
-                ModifiedFrame.tx_DevSkills.insert (1.0, Data[0][Keys['DevSkills']])
-
-        
-
-                
-        def Refresh (self):
-                #print ('Portfolio tree method refresh')
-                global _activeProject
-                logging.info ('VIEW Starting Product Refresh')
-                Keys, Data = controller.RefreshBusinessObject('Product', _activeProject)#  - change id to project id    !!!
-                #logging.debug ('Refresh Product Keys: ', Keys) 
-                #logging.debug ('Refresh Product Data: ', Data)
-                
-                for item in Data:
-                        self.insert('',item[0], text=item[0], values=[
-                                item[Keys['BusinessID']],
-                                item[Keys['Title']],
-                                #item[Keys['Purpose']],
-                                #Data[0][Keys['Measurement']],
-                                #Data[0][Keys['Responsibility']]
-                        ]) 
-                logging.info ('VIEW Finished Product Refresh')
-        
-class BusinessCase_ProjectProduct_BreakdownFrame (Frame):
-        def __init__(self, master):
-                super().__init__(master)
-                self.config (bg = _BGC)
-                #lb_ProjectProductBreakDown = Label(self, text = 'Project Product Details').pack()
-                
-                self.lb_Title = Label(self, text = 'Title', width = 40, justify = LEFT, anchor = W, bg = _BGC)
-                self.tx_Title=Text(self, width = 60, height = 1)
-                
-                self.lb_Description = Label(self, text='Description', width = 40, justify = LEFT, anchor = W, bg = _BGC)
-                self.tx_Description = Text(self, width = 60, height = 12)
-                
-                self.lb_BusinessID = Label(self, text = 'Business Code', width = 40, justify = LEFT, anchor = W, bg = _BGC)
-                self.tx_BusinessID = Text(self, width = 60, height = 1)
-                
-                self.lb_Purpose = Label (self, text = 'Purpose', width = 40, justify = LEFT, anchor = W, bg = _BGC)
-                self.tx_Purpose = Text (self, width = 60, height = 12)                             
-                
-                self.lb_Composition = Label(self, text = 'Composition', width = 40, justify = LEFT, anchor = W, bg = _BGC)
-                self.tx_Composition = Text(self, width = 60, height = 12)               
-                
-                self.lb_Derivation = Label(self, text = 'Derivation', width = 40, justify = LEFT, anchor = W, bg = _BGC)
-                self.tx_Derivation = Text(self, width = 60, height = 12)
-                
-                self.lb_FormatPresentation = Label(self, text = 'Format of Presentation', width = 40, justify = LEFT, anchor = W, bg = _BGC)
-                self.tx_FormatPresentation = Text (self, width = 60, height = 12)               
-        
-                self.lb_DevSkills = Label(self, text = 'Development skills', width = 40, justify = LEFT, anchor = W, bg = _BGC)
-                self.tx_DevSkills = Text (self, width = 60, height = 12)
-                            
-                
-                
-                #---------
-
-                
-                self.lb_Title.grid(row = 0, column = 0)
-                self.tx_Title.grid(row = 1, column = 0)
-                
-                self.lb_BusinessID.grid(row = 0, column = 1)
-                self.tx_BusinessID.grid(row = 1, column = 1)                 
-                
-                self.lb_Description.grid(row = 2, column = 0)
-                self.tx_Description.grid(row = 3, column = 0)                
-                
-                
-                self.lb_Purpose.grid(row = 2, column = 1)
-                self.tx_Purpose.grid(row = 3, column = 1)                   
-                
-                self.lb_Composition.grid(row = 4, column = 0)
-                self.tx_Composition.grid(row = 5, column = 0)                 
-                
-                self.lb_Derivation.grid(row = 4, column = 1)
-                self.tx_Derivation.grid(row = 5, column = 1)                
-                
-                self.lb_FormatPresentation.grid(row = 6, column = 0)
-                self.tx_FormatPresentation.grid(row = 7, column = 0)                
-   
-                self.lb_DevSkills.grid(row = 6, column = 1)
-                self.tx_DevSkills.grid(row = 7, column = 1)
-                
                 
 # TAB   :   Organization
 class subFrame_Team(Frame):
@@ -833,17 +479,16 @@ class subFrame_WBS(Frame):
 class RiskTabControl (ttk.Notebook):
         def __init__(self, master):
                 super().__init__(master)
-                print (self.master.master.master)
-                #RiskApproach1 = subFrame_RiskApproach1(self)
-                RiskApproach1 = vf_RiskApproach1.MainFrame(self)
-                RiskApproach1.Refresh(self.master.master.master.ProjectPack.RiskApproach.ID)
-                #RiskApproach2 = subFrame_RiskApproach2(self)
                 
-                RiskApproach2 = vf_RiskApproach2.MainFrame(self)
-                RiskApproach2.Refresh(self.master.master.master.ProjectPack.RiskApproach.ID)
+                RiskApproach1 = vf_RiskApproach1.MainFrame(self, self.master.master.master.ProjectPack.BusinessCase.ID)
+                RiskApproach1.Refresh()
                 
                 
-                RiskRegister = vf_RegisterRisk.MainFrame(self, _BGC)
+                RiskApproach2 = vf_RiskApproach2.MainFrame(self, self.master.master.master.ProjectPack.BusinessCase.ID)
+                RiskApproach2.Refresh()
+                
+                
+                RiskRegister = vf_RegisterRisk.MainFrame(self, self.master.master.master.ProjectPack.BusinessCase.ID, _BGC)
                 
                 
                 self.add(RiskApproach1, text = 'Risk Approach (1)')
@@ -858,19 +503,17 @@ class ChangeTabControl (ttk.Notebook):
         def __init__(self, master):
                 super().__init__(master)
                 
-                #print ('change approach: ', self.master.master.master) # LOOKUP
-                #print(self.master.master.master.__dict__)
                 
                 
-                ChangeApproach = vf_ChangeApproach.MainFrame(self)
                 
-                #print (self.master.master.master.ProjectPack.ChangeApproach.ID)
-                #print (self.master.master.master.ProjectPack.ChangeApproach.Introduction)
+                ChangeApproach = vf_ChangeApproach.MainFrame(self, self.master.master.master.ProjectPack.BusinessCase.ID)
                 
-                ChangeApproach.Refresh(self.master.master.master.ProjectPack.ChangeApproach.ID)
                 
-                #ChangeRegister = subFrameChangeRegister(self)
-                ChangeRegister = vf_RegisterChange.MainFrame (self, _BGC)
+                
+                ChangeApproach.Refresh()
+                
+                
+                ChangeRegister = vf_RegisterChange.MainFrame (self, self.master.master.master.ProjectPack.BusinessCase.ID, _BGC)
                 self.add(ChangeApproach, text = 'Change Approach')
                 self.add(ChangeRegister, text = 'Issue Register')
                 
@@ -879,23 +522,24 @@ class ChangeTabControl (ttk.Notebook):
 class CommunicationTabControl (ttk.Notebook):
         def __init__(self, master):
                 super().__init__(master)
-                #CommunicationApproach = subFrame_CommunicationApproach(self)
-                CommunicationApproach = vf_CommunicationApproach.MainFrame(self)
-                CommunicationApproach.Refresh(self.master.master.master.ProjectPack.CommunicationApproach.ID)
+                
+                CommunicationApproach = vf_CommunicationApproach.MainFrame(self, self.master.master.master.ProjectPack.BusinessCase.ID)
+                CommunicationApproach.Refresh()
                 
                 
                 self.add(CommunicationApproach, text = 'Communication Approach')
-                #pass
+                
                 
 
 # TAB   :   Quality
 class QualityTabControl (ttk.Notebook):
         def __init__(self, master):
                 super().__init__(master)
-                #QualityApproach = subFrame_QualityApproach(self)
-                QualityApproach = vf_QualityApproach.MainFrame(self)
+                
+                QualityApproach = vf_QualityApproach.MainFrame(self, self.master.master.master.ProjectPack.BusinessCase.ID)
+                QualityApproach.Refresh()
                 self.add(QualityApproach, text = 'Quality Approach')
-                #pass
+                
                 
                 
                 
