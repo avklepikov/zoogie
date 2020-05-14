@@ -24,19 +24,20 @@ import controller
 colorCode = '#abc4e7'
 
 class MainFrame (Frame):
-        def __init__ (self, master, dbRecordID):
+        def __init__ (self, master, dbProjectRecordID):
                 super().__init__(master)
-                self.dbRecordID=dbRecordID
+                self.dbProjectRecordID=dbProjectRecordID
+                #self.dbRecordID = -1
                 self.className = 'BusinessCase'
                 
-                self.Attr1 = CE.AttributeBlockFrame(self, dbRecordID, self.className, 'ExecutiveSummary', 'Executive Summary', colorCode)
-                self.Attr2 = CE.AttributeBlockFrame(self, dbRecordID, self.className, 'Reasons', 'Reasons', colorCode)
-                self.Attr3 = CE.AttributeBlockFrame(self, dbRecordID, self.className, 'Options', 'BusinessOptions', colorCode)
-                self.Attr4 = CE.AttributeBlockFrame(self, dbRecordID, self.className, 'Timescale', 'Time Scale', colorCode)
-                self.Attr5 = CE.AttributeBlockFrame(self, dbRecordID, self.className, 'ExpectedBenefits', 'Expected Benefits', colorCode)
-                self.Attr6 = CE.AttributeBlockFrame(self, dbRecordID, self.className, 'ExpectedDisBenefits', 'Expected Dis-benefits', colorCode)
-                self.Attr7 = CE.AttributeBlockFrame(self, dbRecordID, self.className, 'Costs', 'Costs', colorCode)
-                self.Attr8 = CE.AttributeBlockFrame(self, dbRecordID, self.className, 'InvestmentArraisal', 'Investment Appriasal', colorCode)
+                self.Attr1 = CE.AttributeBlockFrame(self, -1, self.className, 'ExecutiveSummary', 'Executive Summary', colorCode)
+                self.Attr2 = CE.AttributeBlockFrame(self, -1, self.className, 'Reasons', 'Reasons', colorCode)
+                self.Attr3 = CE.AttributeBlockFrame(self, -1, self.className, 'Options', 'BusinessOptions', colorCode)
+                self.Attr4 = CE.AttributeBlockFrame(self, -1, self.className, 'Timescale', 'Time Scale', colorCode)
+                self.Attr5 = CE.AttributeBlockFrame(self, -1, self.className, 'ExpectedBenefits', 'Expected Benefits', colorCode)
+                self.Attr6 = CE.AttributeBlockFrame(self, -1, self.className, 'ExpectedDisBenefits', 'Expected Dis-benefits', colorCode)
+                self.Attr7 = CE.AttributeBlockFrame(self, -1, self.className, 'Costs', 'Costs', colorCode)
+                self.Attr8 = CE.AttributeBlockFrame(self, -1, self.className, 'InvestmentArraisal', 'Investment Appriasal', colorCode)
                 
         
                 self.Attr1.grid(row=0, column = 0)
@@ -64,8 +65,10 @@ class MainFrame (Frame):
         def Refresh (self):        # ? move to separate superclass
                 
                 #_activeProject = 1
-                Keys, Data = controller.RefreshBusinessObject(self.className, self.dbRecordID)
+                Keys, Data = controller.RefreshBusinessObject(self.className, self.dbProjectRecordID)
+                #print (Keys, Data)
                 for eachAttributeObject in self.attributesObjects:
                         eachAttributeObject.valueUpdate (Data[0][Keys[eachAttributeObject.attributeName]])
+                        eachAttributeObject.dbRecordID = Data[0][Keys['ID']]
         
 

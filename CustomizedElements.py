@@ -42,8 +42,17 @@ class AttributeBlockFrame (Frame):
                 self.attributeLabel = attributeLabel
                 self.colorCode = colorCode
                 self.config (bg = colorCode,padx=10, pady = 10)
+                #self.configure ('Style1', background = 'white') #,padx=10, pady = 10)
+                
                 self.AttributeLabel = AttributeLabel(self, attributeLabel, colorCode)
+                
+                scrollbar = Scrollbar(self)
+                scrollbar.grid(row=1, column = 1, sticky=W+E+N+S) #.pack( side = RIGHT, fill = Y )                
+                
+                
                 self.AttributeValue = AttributeValue(self)
+                self.AttributeValue.config (yscrollcommand = scrollbar.set)
+                scrollbar.config(command=self.AttributeValue.yview)
                 
                 self.AttributeLabel.grid(row=0, column = 0, sticky=W+E+N+S)
                 self.AttributeValue.grid(row=1, column = 0, sticky=W+E+N+S)
@@ -77,12 +86,15 @@ class AttributeValue (Text):
         def __init__(self, master):
                 super().__init__(master)
                 #self.insert (1.0, 'Long text')
-                self.config(width = 82, height = 9, state="disabled")
+                #scrollbar = Scrollbar(self)
+                #scrollbar.pack( side = RIGHT, fill = Y )
+                
+                self.config(width = 75, height = 9, state="disabled")#, yscrollcommand = scrollbar.set)
                 self.bind ("<Double-1>", self.OnDoubleClick2)
 
         def OnDoubleClick2(self, Event):
-                print ('double click')
-                print (self.master.attributeName)
+                #print ('double click')
+                #print (self.master.attributeName)
                 #print ('label: ', self.master.AttributeLabel)
                 top = ChangeTopLevel.ChangeTopLevel(self, 
                                                     self.master.dbRecordID, 
@@ -129,7 +141,7 @@ class RegisterList (ttk.Treeview):
                 self['columns'] = (ArgList)
                 self.heading ('#0', text = 'Code', anchor = 'w')
                 self.column('#0', width = 30)
-                self.config(height = 20)
+                self.config(height = 15)
                 self.bind("<Button-1>", self.OnClick)
                 self.bind("<Double-1>", self.OnDoubleClick)
                 i=0
@@ -144,7 +156,7 @@ class RegisterList (ttk.Treeview):
         
         def Refresh (self):
                 
-                print ('.......................')
+                #print ('.......................')
                 #print (self.master.__dict__)
                 
                 Keys, Data = controller.RefreshBusinessObject(self.ObjectName, self.ProjectID)
@@ -158,16 +170,16 @@ class RegisterList (ttk.Treeview):
 
                 for item in Data:
                         insert_list = []
-                        print ('item: ', item)
+                        #print ('item: ', item)
                         
                         for arg in self.ArgList:
-                                print ('Arg ', arg)
+                                #print ('Arg ', arg)
                                 insert_list.append(item[Keys[arg]])
                         
                         
                         self.insert('',item[0], text=item[0], values=insert_list)
 
-                        print (insert_list)
+                        #print (insert_list)
                         del insert_list[:]
                 #pass
 
@@ -176,7 +188,7 @@ class RegisterList (ttk.Treeview):
                 
                 pass
         def OnClick(self, event):
-                print ('1 Click')
+                #print ('1 Click')
                 item = self.identify('item', event.x, event.y)
                 bdRecordID = self.item(item, 'text')                
                 #print (self)

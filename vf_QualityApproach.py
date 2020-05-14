@@ -24,19 +24,20 @@ import controller
 colorCode = '#abc4e7'
 
 class MainFrame (Frame):
-        def __init__ (self, master):
+        def __init__ (self, master, dbProjectRecordID):
                 super().__init__(master)
-                dbRecordID=0
+                #dbRecordID=0
+                self.dbProjectRecordID = dbProjectRecordID
                 self.className = 'QualityApproach'
                 
-                self.Attr1 = CE.AttributeBlockFrame(self, dbRecordID, self.className, 'Introduction', 'Introduction', colorCode)
-                self.Attr2 = CE.AttributeBlockFrame(self, dbRecordID, self.className, 'Procedure', 'Procedure', colorCode)
-                self.Attr3 = CE.AttributeBlockFrame(self, dbRecordID, self.className, 'ProjectQuality', 'ProjectQuality', colorCode)
-                self.Attr4 = CE.AttributeBlockFrame(self, dbRecordID, self.className, 'Techniques', 'Techniques', colorCode)
-                self.Attr5 = CE.AttributeBlockFrame(self, dbRecordID, self.className, 'Records', 'Records', colorCode)
-                self.Attr6 = CE.AttributeBlockFrame(self, dbRecordID, self.className, 'Reporting', 'Reporting', colorCode)
-                self.Attr7 = CE.AttributeBlockFrame(self, dbRecordID, self.className, 'Timing', 'Timing', colorCode)
-                self.Attr8 = CE.AttributeBlockFrame(self, dbRecordID, self.className, 'RolesResponsibilities', 'Rolesa and Responsibilities', colorCode)
+                self.Attr1 = CE.AttributeBlockFrame(self, -1, self.className, 'Introduction', 'Introduction', colorCode)
+                self.Attr2 = CE.AttributeBlockFrame(self, -1, self.className, 'Procedure', 'Procedure', colorCode)
+                self.Attr3 = CE.AttributeBlockFrame(self, -1, self.className, 'ProjectQuality', 'ProjectQuality', colorCode)
+                self.Attr4 = CE.AttributeBlockFrame(self, -1, self.className, 'Techniques', 'Techniques', colorCode)
+                self.Attr5 = CE.AttributeBlockFrame(self, -1, self.className, 'Records', 'Records', colorCode)
+                self.Attr6 = CE.AttributeBlockFrame(self, -1, self.className, 'Reporting', 'Reporting', colorCode)
+                self.Attr7 = CE.AttributeBlockFrame(self, -1, self.className, 'Timing', 'Timing', colorCode)
+                self.Attr8 = CE.AttributeBlockFrame(self, -1, self.className, 'RolesResponsibilities', 'Rolesa and Responsibilities', colorCode)
                 
         
                 self.Attr1.grid(row=0, column = 0)
@@ -61,11 +62,12 @@ class MainFrame (Frame):
                 self.Button.grid (row=4, column = 0)
                 
                         
-        def Refresh (self, _id):        # ? move to separate superclass
+        def Refresh (self):        # ? move to separate superclass
                 
                 #_activeProject = 1
-                Keys, Data = controller.RefreshBusinessObject(self.className, _id)
+                Keys, Data = controller.RefreshBusinessObject(self.className, self.dbProjectRecordID)
                 for eachAttributeObject in self.attributesObjects:
                         eachAttributeObject.valueUpdate (Data[0][Keys[eachAttributeObject.attributeName]])
+                        eachAttributeObject.dbRecordID = Data[0][Keys['ID']]
         
 

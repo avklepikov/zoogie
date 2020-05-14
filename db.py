@@ -152,14 +152,15 @@ def complile_SELECT_BY_PROJECT_ID (_class: str, _attr_value_dict: dict, _Project
 
 def compile_SET_ATTR_VALUE_BY_ITEM_ID (_class: str, _attr : str, _id: int, _attr_value):
         """ INSERT COMMENTARY"""
-        #logging.info (f'      DB Starting compile_SET_ATTR_VALUE_BY_ITEM_ID (_class = {_class}, _attr = {_attr}, _id = {_id}, _attr_value = {_attr_value})')
+        logging.info (f'      DB Starting compile_SET_ATTR_VALUE_BY_ITEM_ID (_class = {_class}, _attr = {_attr}, _id = {_id}, _attr_value = {_attr_value})')
         #db_constants.DB_FIELDS_MAPPING[_class][attr][1] == "TEXT"
         table = get_class_table(_class)
         _value_to_set = _attr_value
         if db_constants.DB_FIELDS_MAPPING[_class][_attr][1] == "TEXT":
                 _value_to_set = '"' + _value_to_set + '"'
-        SQL = f"UPDATE {table} SET {db_constants.DB_FIELDS_MAPPING[_class][_attr][0]} = {_value_to_set} WHERE RelatedProject = {_id}"  #{db_constants.DB_FIELDS_PK[_class]}
-        #logging.debug('Resulting SQL: ', SQL)
+        SQL = f"UPDATE {table} SET {db_constants.DB_FIELDS_MAPPING[_class][_attr][0]} = {_value_to_set} WHERE {db_constants.DB_FIELDS_PK[_class]} = {_id}"  #{db_constants.DB_FIELDS_PK[_class]}
+        logging.debug (db_constants.DB_FIELDS_PK[_class])
+        logging.debug('Resulting SQL: ', SQL)
         return SQL   
 
 def complile_SELECT_BY_ITEM_ID (_class: str, _attr_value_dict: dict, _id: int):    # why we use _attr_value_dict?

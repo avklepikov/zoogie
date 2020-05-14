@@ -1,5 +1,6 @@
 from tkinter import *
 from tkinter import ttk
+import controller
 
 class ChangeTopLevel (Toplevel):
         def __init__(self, master: object, dbRecordID: int, objectName: str, attributeName: str, attributeLabel: str, attributeValue: str, colorCode: str):
@@ -51,7 +52,13 @@ class ChangeTopLevel (Toplevel):
                 
         def saveChanges(self):
                 print ('saveChanges method')
-                pass
+                print(self.ChangeText.get(1.0, END))
+                controller.UpdateAttribute(self.objectName, self.attributeName, self.dbRecordID, self.ChangeText.get(1.0, END))
+                #self.master.master.Refresh()
+                
+                self.destroy()
+                
+                # pass
                 
                 #print (self.dbRecordID, self.objectName, self.attributeName, attributeLabel, attributeValue)
         

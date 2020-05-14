@@ -3,42 +3,43 @@ import CustomizedElements
 import controller
 
 class MainFrame (Frame):
-        def __init__ (self, master, colorCode):
+        def __init__ (self, master, dbProjectRecordID, colorCode):
                 super().__init__(master)
                 self.config (bg = colorCode)
-                self.dbProjectRecordID = 1
+                self.dbProjectRecordID = dbProjectRecordID
                 #self.label = Label(self, text = 'label')
                 #self.label.pack()
                 
                 self.Register = CustomizedElements.RegisterList(self, 
                                                                 self.dbProjectRecordID,
-                                                                'Lesson', 
-                                                                ['BusinessID', 'Title', 'Category', 'Priority', 'LoggedBy', 'DateLogged'],
-                                                                [80, 250, 120,120, 120, 120])
+                                                                'Product', 
+                                                                ['BusinessID', 'Title'],
+                                                                [80, 250])
                 
-                self.Register.pack()
+                self.Register.pack(side=LEFT)
                 
                 self.BD = Breakdown(self, colorCode)
-                self.BD.pack()
+                self.BD.pack(side=LEFT)
                 
         def Refresh (self, dbRecordID):
-                self.BD.Refresh(dbRecordID)                
+                self.BD.Refresh(dbRecordID)                    
 
 
 class Breakdown (Frame):
         def __init__ (self, master, colorCode):
                 super().__init__(master)
-                self.className = 'Lesson'
+                self.className = 'Product'
                 #dbRecordID = '1'
                 #colorCode = 'gray'
                 
                 self.Attr1 = CustomizedElements.AttributeBlockFrame(self, -1, self.className, 'Title', 'Title', colorCode)
                 self.Attr2 = CustomizedElements.AttributeBlockFrame(self, -1, self.className, 'Description', 'Description', colorCode)
-                self.Attr3 = CustomizedElements.AttributeBlockFrame(self, -1, self.className, 'Recommendations', 'Recommendations', colorCode)
-                self.Attr4 = CustomizedElements.AttributeBlockFrame(self, -1, self.className, 'Event', 'Event', colorCode)
-                self.Attr5 = CustomizedElements.AttributeBlockFrame(self, -1, self.className, 'Effect', 'Effect', colorCode)
-                self.Attr6 = CustomizedElements.AttributeBlockFrame(self, -1, self.className, 'CauseTrigger', 'Cause Trigger', colorCode)
-                self.Attr7 = CustomizedElements.AttributeBlockFrame(self, -1, self.className, 'EarlyWarningIndicator', 'Early Warning Indicator', colorCode)
+                self.Attr3 = CustomizedElements.AttributeBlockFrame(self, -1, self.className, 'Composition', 'Composition', colorCode)
+                self.Attr4 = CustomizedElements.AttributeBlockFrame(self, -1, self.className, 'Derivation', 'Derivation', colorCode)
+                self.Attr5 = CustomizedElements.AttributeBlockFrame(self, -1, self.className, 'Purpose', 'Purpose', colorCode)
+                self.Attr6 = CustomizedElements.AttributeBlockFrame(self, -1, self.className, 'FormatPresentation', 'Format of Presentation', colorCode)
+                self.Attr7 = CustomizedElements.AttributeBlockFrame(self, -1, self.className, 'DevSkills', 'Development Skills', colorCode)
+
 
                 
         
@@ -49,19 +50,20 @@ class Breakdown (Frame):
                 self.Attr5.grid(row=2, column = 0)
                 self.Attr6.grid(row=2, column = 1)
                 self.Attr7.grid(row=3, column = 0)
+                
+
 
                 
                 self.attributesObjects = (self.Attr1, 
-                                          self.Attr2, 
-                                          self.Attr3, 
+                                          self.Attr2,
+                                          self.Attr3,
                                           self.Attr4,
                                           self.Attr5,
                                           self.Attr6,
                                           self.Attr7)
                 
                 #self.Button = Button(self, text = 'Refresh', command = self.Refresh)
-                #self.Button.grid (row=4, column = 0)    
-                
+                #self.Button.grid (row=4, column = 0)          
         def Refresh (self, dbRecordID):
 
                 Keys, Data = controller.RefreshBusinessObject_byID(self.className, dbRecordID)
@@ -71,6 +73,8 @@ class Breakdown (Frame):
                         #print (item.attributeName)
                         item.valueUpdate(Data[0][Keys[item.attributeName]])
                         item.dbRecordID = Data[0][Keys['ID']]
+                        
+                
                 
 def Main():
         app = Tk()

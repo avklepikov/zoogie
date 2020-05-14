@@ -3,15 +3,15 @@ import CustomizedElements
 import controller
 
 class MainFrame (Frame):
-        def __init__ (self, master, colorCode):
+        def __init__ (self, master, dbProjectRecordID ,colorCode):
                 super().__init__(master)
                 self.config (bg = colorCode)
-                self.ProjectID = 1
+                self.dbProjectRecordID = dbProjectRecordID
                 #self.label = Label(self, text = 'label')
                 #self.label.pack()
                 
                 self.Register = CustomizedElements.RegisterList(self, 
-                                                                self.ProjectID,
+                                                                self.dbProjectRecordID,
                                                                 'RiskRegister', 
                                                                 ['BusinessID', 'Title', 'Category', 'Probability', 'RaisedDate', 'ResponseCategory', 'Owner', 'Actionee', 'Status'],
                                                                 [80, 250, 120,120, 120, 120, 120, 120, 80])
@@ -29,13 +29,13 @@ class Breakdown (Frame):
         def __init__ (self, master, colorCode):
                 super().__init__(master)
                 self.className = 'RiskRegister'
-                dbRecordID = '1'
+                #dbRecordID = '1'
                 #colorCode = 'gray'
                 
-                self.Attr1 = CustomizedElements.AttributeBlockFrame(self, dbRecordID, self.className, 'Title', 'Title', colorCode)
-                self.Attr2 = CustomizedElements.AttributeBlockFrame(self, dbRecordID, self.className, 'Description', 'Description', colorCode)
-                self.Attr3 = CustomizedElements.AttributeBlockFrame(self, dbRecordID, self.className, 'Impact', 'Impact', colorCode)
-                self.Attr4 = CustomizedElements.AttributeBlockFrame(self, dbRecordID, self.className, 'Response', 'Response', colorCode)
+                self.Attr1 = CustomizedElements.AttributeBlockFrame(self, -1, self.className, 'Title', 'Title', colorCode)
+                self.Attr2 = CustomizedElements.AttributeBlockFrame(self, -1, self.className, 'Description', 'Description', colorCode)
+                self.Attr3 = CustomizedElements.AttributeBlockFrame(self, -1, self.className, 'Impact', 'Impact', colorCode)
+                self.Attr4 = CustomizedElements.AttributeBlockFrame(self, -1, self.className, 'Response', 'Response', colorCode)
 
                 
         
@@ -60,9 +60,9 @@ class Breakdown (Frame):
 
                 
                 for item in self.attributesObjects:
-                        print (item.attributeName)
+                        #print (item.attributeName)
                         item.valueUpdate(Data[0][Keys[item.attributeName]])
-                        
+                        item.dbRecordID = Data[0][Keys['ID']]
         
                 
 def Main():

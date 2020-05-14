@@ -43,13 +43,13 @@ def RefreshProjectHead(_projectID):
         #logging.debug(Data)
         return Keys, Data     
 
-def RefreshBusinessObject(_class, _ID):
+def RefreshBusinessObject(_class, _dbProjectRecordID):
         """retrievs table records related to the specified project ID """
-        logging.info(f'  CONTROLLER: Starting RefreshBusinessObject (_class = {_class}, _ID = {_ID})')
+        logging.info(f'  CONTROLLER: Starting RefreshBusinessObject (_class = {_class}, _ID = {_dbProjectRecordID})')
         
         ObjectClass = getattr(model, _class)
         ObjectInstance = ObjectClass()
-        Keys, Data = ObjectInstance.viewProjectRelatedItems(_ID)
+        Keys, Data = ObjectInstance.viewProjectRelatedItems(_dbProjectRecordID)
         #logging.debug('Keys:')
         #logging.debug(Keys)
         #logging.debug('Data:')
