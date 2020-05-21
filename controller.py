@@ -2,11 +2,16 @@ import logging
 
 import model
 
+def GetPredefinedListValues(_class, _attr):
+        return model.PREDEFINED_LISTS_OF_VALUES[_class][_attr]
 
 def GetProjectPack(_projectID):
         ProjectPack = model.ProjectPack()
         ProjectPack.Refresh(_projectID)
         return ProjectPack
+
+def GetRegisterItemClass(_class):
+        return getattr(model, _class)
 
 def UpdateAttribute(_class, _attr, _id, _attr_value):
         #logging.info(f'  CONTROLLER: Starting UpdateAttribute (_class = {_class}, _attr = {_attr}, _id = {_id}, _attr_value = {_attr_value})')
@@ -72,9 +77,7 @@ def RefreshBusinessObject_byID(_class, _ID):
 
 # --- TESTING PART --- #
 def Main ():
-        K, D = RefreshBusinessObject ('Mandate',1)
-        print (K)       
-        print (D)
+        print (GetPredefinedListValues('RiskRegister', 'Impact'))
 
 if __name__ == '__main__':
         Main ()

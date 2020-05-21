@@ -2,6 +2,12 @@ from tkinter import *
 from tkinter import ttk
 import ChangeTopLevel
 import controller
+import logging
+import vf_Top_RegisterCard
+
+    
+                
+                
 
 class AttributeBlockFrame (Frame):
         """Block for visualization of Object class attribute
@@ -12,6 +18,7 @@ class AttributeBlockFrame (Frame):
         
         AttributeBlockFrame represents a customized widget which realizes Project Class Attribute visualization 
         with explicit link to class and attribute.
+        This widget has a functionality to update each attribute value individually with double-click on value textbox
         
         ===========
         ATTRIBUTES:
@@ -61,6 +68,7 @@ class AttributeBlockFrame (Frame):
         def valueUpdate (self, newValue):
                 #print ('block valueUpdate')
                 #help (self.AttributeValue)
+                logging.info (f' CUSTOMIZED ELEMENT REFRESH - for {self.objectName} : {self.attributeName}')
                 self.AttributeValue.valueUpdate (newValue)
         
     
@@ -107,10 +115,13 @@ class AttributeValue (Text):
         
         def valueUpdate(self, newValue):
                         
-                self.config(state="normal")
-                self.delete(1.0, END)
-                self.insert(1.0, newValue)
-                self.config (state="disabled")        
+                if newValue != None:
+                        self.config(state="normal")
+                        self.delete(1.0, END)
+                        self.insert(1.0, newValue)
+                        self.config (state="disabled") 
+                else:
+                        print ('please update Customized Elements for Empty insert')
 
 
 
@@ -184,7 +195,12 @@ class RegisterList (ttk.Treeview):
                 #pass
 
         def OnDoubleClick(self, event):
-                print ('2-click')
+                item = self.identify('item', event.x, event.y)
+                bdRecordID = self.item(item, 'text')      
+                #iskRegisterTopWindow = Toplevel()
+                print ('Toplevel Risk: ', self.ObjectName, item)
+                registerItemCard = vf_Top_RegisterCard.MainFrame(self, bdRecordID, self.ObjectName,  'gray')
+                registerItemCard.mainloop()
                 
                 pass
         def OnClick(self, event):

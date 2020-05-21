@@ -137,7 +137,23 @@ def complile_SELECT_ALL (_class: str, _attr_value_dict: dict):
         return SQL
 
 def complile_SELECT_BY_PROJECT_ID (_class: str, _attr_value_dict: dict, _Project_id: int):
-        """his is a target function to be used to retrived any Project record by related Project ID"""
+        """his is a target function to be used to retrived any Project related record from any table by related Project ID
+        
+        ===================
+        Attributes
+        ===================
+        
+            :_class: Name of Class for which table to run SELECT
+            :_attr_value_dict: List of Class attributes to return with values
+            :_Project_id: ID of Project
+            
+        ===================
+        Return
+        ===================    
+        
+            :SQL: string with compiled SQL statement ready for execution 
+        
+        """
         logging.info (f'      DB Starting complile_SELECT_BY_PROJECT_ID (_class = {_class}, _attr_value_dict = {_attr_value_dict}, _Project_id = {_Project_id})')
         
         table = get_class_table(_class)
@@ -149,6 +165,41 @@ def complile_SELECT_BY_PROJECT_ID (_class: str, _attr_value_dict: dict, _Project
         SQL = f"SELECT {_fields_list_str} FROM {table} WHERE RelatedProject = {_Project_id}"  
         #logging.debug('Resulting SQL: ', SQL)
         return SQL
+
+def compile_SELECT_BY_ATTR_VAL (_class: str, _attr_value_dict: dict, _attr: str, _attr_val: str):
+        """his is a target function to be used to retrived any table record by value of any of its field
+        
+        ===================
+        Attributes
+        ===================
+        
+            :_class: Name of Class for which table to run SELECT
+            :_attr_value_dict: List of Class attributes to return with values
+            :_attr: name of Class Attribute which should be used as Filter
+            :_attr_val: value to filter under Class Attribute
+            
+        ===================
+        Return
+        ===================    
+        
+            :SQL: string with compiled SQL statement ready for execution 
+        """
+        logging.info (f'      DB Starting compile_SELECT_BY_ATTR_VAL (_class = {_class}, _attr_value_dict = {_attr_value_dict}, _attr = {_attr}), _attr_val = {_attr}')
+        table = get_class_table(_class)
+        _fields_list = []
+        for attr in _attr_value_dict:
+                _fields_list.append ( db_constants.DB_FIELDS_MAPPING[_class][attr][0])
+        _fields_list_str = ', '.join(_fields_list)
+        _id_field = db_constants.DB_FIELDS_PK[_class]
+        
+        if db_constants.DB_FIELDS_MAPPING[_class][_attr][1] == "TEXT":
+                _attr_val = "'" + _attr_val + "'"  
+        
+        
+        SQL = f"SELECT {_fields_list_str} FROM {table} WHERE {_attr} = {_attr_val}"  
+        #logging.debug('Resulting SQL: ', SQL)
+        return SQL        
+
 
 def compile_SET_ATTR_VALUE_BY_ITEM_ID (_class: str, _attr : str, _id: int, _attr_value):
         """ INSERT COMMENTARY"""

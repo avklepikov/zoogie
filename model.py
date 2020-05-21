@@ -40,6 +40,19 @@ import logging
 import db        #database connector to run the model on SQLLite DB
 
 
+PREDEFINED_LISTS_OF_VALUES = {
+        'RiskRegister' : {
+                'Status' : ['Open', 'Canceled', 'Realised', 'Closed'],
+                'Probability': ['High', 'Medium', 'Low'],
+                'ResponseCategory' : ['Avoid', 'Expolot', 'Reduce', 'Enhance',  'Share', 'Accept', 'Plan'],
+                'Impact': ['High', 'Medium', 'Low'],
+                'Category': ['Time', 'Cost', 'Quality', 'Benefits', 'Scope']},
+        'Issue': {
+                'Category' : ['change request (CR)', 'problem', 'Off-spec'],
+                'Priority': ['High', 'Medium', 'Low'],
+                'Status': ['Open problem', 'Solved problem', 'CR Awaiting Approval', 'CR Approved by Board', 'CR Approved by PM', 'Open Off-spec', 'Solved Off-Spec', 'Canceled']
+        }}       
+
 class ProjectPack():
         def __init__(self):
                 self.Project = Project()
@@ -90,7 +103,108 @@ class ProjectPack():
                                 setattr (ProjectObjectListItem, item, _value)
                                 
                         
+        def Create (self, ProjectName: str):
+                self.Project.Project=ProjectName
+                self.Project.TechStatus='Active'
+                success = self._createProjectRecord()
+                if success == 1:
+                        self._createProjectParts()
+                else:
+                        pass
                 
+        
+        def _createProjectRecord(self):        
+                SQL = db.compile_SELECT_BY_ATTR_VAL('Project', ['ID'], 'Project', self.Project.Project)
+                SQL_return = db.executeSQLget(SQL)
+
+                if  len(SQL_return) == 0:
+                        
+                        self.Project.append()
+                        SQL_return = db.executeSQLget(SQL)
+
+                        self.Project.ID = SQL_return[0][0]
+                        self.BenefitApproach.RelatedProject = self.Project.ID
+                        self.BusinessCase.RelatedProject = self.Project.ID
+                        self.ChangeApproach.RelatedProject = self.Project.ID
+                        self.CommunicationApproach.RelatedProject = self.Project.ID
+                        self.Mandate.RelatedProject = self.Project.ID
+                        self.ProjectBrief.RelatedProject = self.Project.ID
+                        self.QualityApproach.RelatedProject = self.Project.ID
+                        self.RiskApproach.RelatedProject = self.Project.ID
+                        return 1
+                        
+                else:
+                        print ('There is an Existing Project with provided Name')
+                        return 0
+        
+        def _createProjectParts(self):
+                
+                PartsList = [self.BenefitApproach, 
+                             self.BusinessCase, 
+                             self.ChangeApproach, 
+                             self.CommunicationApproach, 
+                             self.Mandate, 
+                             self.ProjectBrief, 
+                             self.QualityApproach,
+                             self.RiskApproach
+                             ]
+                
+                for item in PartsList:
+                        
+                        SQL = db.compile_SELECT_BY_ATTR_VAL(item.__class__.__name__, ['ID'], 'RelatedProject', self.Project.ID)
+                        SQL_return = db.executeSQLget(SQL)
+                        #print (item.__class__.__name__, SQL_return)
+                        if  len(SQL_return) == 0:
+                                
+                                print (item.__class__.__name__)
+                                
+                                item.RelatedProject= self.Project.ID
+                                item.append()
+                                SQL_return = db.executeSQLget(SQL)
+                                item.ID = SQL_return[0][0]
+                                
+                
+                
+                        
+                
+        
+        def __str__(self):
+                print ('=============================')
+                print ('     PROJECT DESCRIPTION     ')
+                print ('=============================')
+                
+                print ('\n==========GENERAL===========\n')
+                print (self.Project)
+                
+                print ('\n--------Mandate--------')
+                print (self.Mandate)
+                
+                print ('\n-----Project Brief-----')
+                print(self.ProjectBrief)                
+                
+                print ('\n-----Business Case-----')
+                print (self.BusinessCase)
+                
+                
+                
+                print ('\n========APPROACHES=========\n')
+                print ('-----Benefits Approach-----')
+                print (self.BenefitApproach)
+                
+                
+                print ('\n-----Quality Approach-----')
+                print(self.QualityApproach)
+                
+                print ('\n-----Change Approach-----')
+                print(self.ChangeApproach)
+                
+                print ('\n-----Communication Approach-----')
+                print (self.CommunicationApproach)  
+                
+                print ('\n-----Risk Approach-----')
+                print (self.RiskApproach)    
+                print ('----------')                
+                return ('===================================')
         
         
 
@@ -789,32 +903,42 @@ class RiskApproach (ProjectObject):     # -- +ProjectPack             -> correct
 class RiskRegister (ProjectObject):     # --                          -> add attr explanation
         """List of identified risks
         
+        ===========
         Attributes:
-            ID                      (int): Item technical ID in database.
-            BusinessID              (str): BusinessID in format accepted by Project Office.
-            RelatedProject          (int): Related Project primary key.
-            Title                   (str): Short name for identified risk
-            Author                  (str): Name of person who raised the risk
-            RaisedDate              (str): Date when risk was raised
-            Category                (str): Risk category from the categories set in Risk Approach
-            Description             (str): Detailed description of risk
-            Probability             (str): Probability of risk event
-            Impact                  (str): Impact on project 
-            ExpectedValue           (str): ?
-            Proximity               (str): ?
-            ResponseCategory        (str): Response to the risk defined in Risk approach
-            Response                (str): Description of response
-            Status                  (str): Status {open, canceled, realised, closed}
-            Owner                   (str): Name of person responsible for the risk item monitoring 
-            Actionee                (str): Name of person responsible for mitigation action
+        ===========
         
+            :ID:                      (int) Item technical ID in database.
+            :BusinessID:              (str) BusinessID in format accepted by Project Office.
+            :RelatedProject:          (int) Related Project primary key.
+            :Title:                   (str) Short name for identified risk
+            :RiskEvent:               (str) Risk Event  <--
+            :RiskEffect:              (str) Risk Effect <--
+            :Author:                  (str) Name of person who raised the risk
+            :RaisedDate:              (str) Date when risk was raised
+            :Category:                (str) Risk category from the categories set in Risk Approach
+            :Description:             (str) Detailed description of risk
+            :Probability:             (str) Probability of risk event
+            :Impact:                  (str) Impact on project 
+            :ExpectedValue:           (str) ?
+            :Proximity:               (str) ?
+            :ResponseCategory:        (str) Response to the risk defined in Risk approach
+            :Response:                (str) Description of response
+            :Status:                  (str) Status {open, canceled, realised, closed}
+            :Owner:                   (str) Name of person responsible for the risk item monitoring 
+            :Actionee:                (str) Name of person responsible for mitigation action
+        
+        ========
         Methods:
+        ========
+        
             Please refer to Superclass Methods for standard methods applied across all Project Classes    
         """
         def __init__ (self,
                       BusinessID: str = None,
                       RelatedProject: int = None,
                       Title: str = None,
+                      RiskEvent: str = None,
+                      RiskEffect: str = None,
                       Author: str = None,
                       RaisedDate: str = None,
                       Category: str = None,
@@ -834,6 +958,8 @@ class RiskRegister (ProjectObject):     # --                          -> add att
                 self.BusinessID=BusinessID
                 self.RelatedProject=RelatedProject
                 self.Title = Title
+                self.RiskEvent = RiskEvent
+                self.RiskEffect = RiskEffect
                 self.Author=Author
                 self.RaisedDate=RaisedDate
                 self.Category=Category
@@ -1161,16 +1287,21 @@ class Project (ProjectObject):          # OK +ProjectPack
 
 
 def Main ():
+        
+        logging.basicConfig(filename='logging.txt',level=logging.DEBUG, format='%(asctime)s %(name)-12s %(levelname)-8s %(message)s', datefmt='%m-%d %H:%M', filemode='w')
+        
         X = ProjectPack()
-        X.Refresh(1)
+        #X.Refresh(1)
+        X.Create('KISPL PROJECT XX4')
+        
         #X.ID = 1
         #X.update()
         
         #Y = Mandate()
-        print ('I am alive')
+        #print ('I am alive')
         #print (X)
         #print ('BenefitAppr: ', X.BenefitApproach)
-        print ('BC: ', X.Project)
+        print (X)
 
 if __name__ == '__main__':
         Main()

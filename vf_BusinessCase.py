@@ -65,10 +65,15 @@ class MainFrame (Frame):
         def Refresh (self):        # ? move to separate superclass
                 
                 #_activeProject = 1
-                Keys, Data = controller.RefreshBusinessObject(self.className, self.dbProjectRecordID)
+                Keys, Data = controller.RefreshBusinessObject_byID(self.className, self.dbProjectRecordID)
+                #print ('Business Case')
+                #print (self.dbProjectRecordID)
                 #print (Keys, Data)
                 for eachAttributeObject in self.attributesObjects:
-                        eachAttributeObject.valueUpdate (Data[0][Keys[eachAttributeObject.attributeName]])
+                        
+                        
                         eachAttributeObject.dbRecordID = Data[0][Keys['ID']]
+                        if Data[0][Keys[eachAttributeObject.attributeName]] != None:
+                                eachAttributeObject.valueUpdate (Data[0][Keys[eachAttributeObject.attributeName]])
         
 

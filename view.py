@@ -184,6 +184,7 @@ class mainFrame_Project(Frame):
         def __init__ (self, master):
                 super().__init__(master)
                 self.ProjectPack = controller.GetProjectPack(_activeProject)
+                print(self.ProjectPack)
                 self.config (bg = _BGC)
                 project_head = ProjectHead(self)
                 tab_control = ProjectTabControl(self)
@@ -228,7 +229,8 @@ class ProjectHead(Frame):
 
 
                 self.Entry_ProjectID.insert(0, self.master.ProjectPack.Project.ID)
-                self.Entry_ProjectBusinessID.insert(0, self.master.ProjectPack.Project.BusinessID)   
+                if self.master.ProjectPack.Project.BusinessID != None:
+                        self.Entry_ProjectBusinessID.insert(0, self.master.ProjectPack.Project.BusinessID)   
                 self.Entry_ProjectName.insert(0, self.master.ProjectPack.Project.Project)
                 self.Entry_ProjectStatus.insert(0,self.master.ProjectPack.Project.TechStatus )
                 
@@ -253,8 +255,13 @@ class ProjectTabControl (ttk.Notebook):
                 frame_Communication.config(bg = _BGC)
                 #frame_Lessons = Frame_Lessons(self)
                 #print (self.master)
-                #print ('------')
-                frame_Lessons = vf_RegisterLessons.MainFrame(self, _BGC)
+                #print ('@@@@  LESSONS @@@@')
+                #print (self.master.ProjectPack.Project.ID)
+                #print('')
+                #print (self.master.master.__dict__)
+                #print('')
+                #print (self.master.__dict__)
+                frame_Lessons = vf_RegisterLessons.MainFrame(self, self.master.ProjectPack.Project.ID, _BGC)
                 #frame_Lessons.config(bg = _BGC)
                 
                 frame_DailyLog = Frame_DailyLog(self)
@@ -341,7 +348,7 @@ class BusinessCaseTabControl (ttk.Notebook):
                 
                 Benefits = subFrame_Benefits(self)
                               
-                ProjectProduct = vf_RegisterProjectProduct.MainFrame (self, self.master.master.master.ProjectPack.BusinessCase.ID, _BGC)
+                ProjectProduct = vf_RegisterProjectProduct.MainFrame (self, self.master.master.master.ProjectPack.Project.ID, _BGC)
                 
                 
                 self.add(Mandate, text = 'Mandate')
@@ -367,7 +374,9 @@ class subFrame_Mandate(Frame):
                 logging.info ('VIEW Starting Mandate Refresh')
                 #logging.info (_activeProject)
                 Keys, Data = controller.RefreshBusinessObject('Mandate', _activeProject)#  - change id to project id    !!!
-                if (len(Data)) != 0:
+                #print ('Mandate:')
+                #print (Data)
+                if (len(Data)) != 0 and Data[0][1]!= None:
                         self.MandateText.config(state="normal" )
                         self.MandateText.insert(1.0, Data[0][1])
                         self.MandateText.config(state="disabled" )
@@ -480,15 +489,15 @@ class RiskTabControl (ttk.Notebook):
         def __init__(self, master):
                 super().__init__(master)
                 
-                RiskApproach1 = vf_RiskApproach1.MainFrame(self, self.master.master.master.ProjectPack.BusinessCase.ID)
+                RiskApproach1 = vf_RiskApproach1.MainFrame(self, self.master.master.master.ProjectPack.RiskApproach.ID)
                 RiskApproach1.Refresh()
                 
                 
-                RiskApproach2 = vf_RiskApproach2.MainFrame(self, self.master.master.master.ProjectPack.BusinessCase.ID)
+                RiskApproach2 = vf_RiskApproach2.MainFrame(self, self.master.master.master.ProjectPack.RiskApproach.ID)
                 RiskApproach2.Refresh()
                 
                 
-                RiskRegister = vf_RegisterRisk.MainFrame(self, self.master.master.master.ProjectPack.BusinessCase.ID, _BGC)
+                RiskRegister = vf_RegisterRisk.MainFrame(self, self.master.master.master.ProjectPack.Project.ID, _BGC)  #<--- TODO CHECK
                 
                 
                 self.add(RiskApproach1, text = 'Risk Approach (1)')
@@ -506,14 +515,14 @@ class ChangeTabControl (ttk.Notebook):
                 
                 
                 
-                ChangeApproach = vf_ChangeApproach.MainFrame(self, self.master.master.master.ProjectPack.BusinessCase.ID)
+                ChangeApproach = vf_ChangeApproach.MainFrame(self, self.master.master.master.ProjectPack.ChangeApproach.ID)
                 
                 
                 
                 ChangeApproach.Refresh()
                 
                 
-                ChangeRegister = vf_RegisterChange.MainFrame (self, self.master.master.master.ProjectPack.BusinessCase.ID, _BGC)
+                ChangeRegister = vf_RegisterChange.MainFrame (self, self.master.master.master.ProjectPack.Project.ID, _BGC) # <- TODO Check
                 self.add(ChangeApproach, text = 'Change Approach')
                 self.add(ChangeRegister, text = 'Issue Register')
                 
@@ -523,7 +532,7 @@ class CommunicationTabControl (ttk.Notebook):
         def __init__(self, master):
                 super().__init__(master)
                 
-                CommunicationApproach = vf_CommunicationApproach.MainFrame(self, self.master.master.master.ProjectPack.BusinessCase.ID)
+                CommunicationApproach = vf_CommunicationApproach.MainFrame(self, self.master.master.master.ProjectPack.CommunicationApproach.ID)
                 CommunicationApproach.Refresh()
                 
                 
@@ -536,7 +545,7 @@ class QualityTabControl (ttk.Notebook):
         def __init__(self, master):
                 super().__init__(master)
                 
-                QualityApproach = vf_QualityApproach.MainFrame(self, self.master.master.master.ProjectPack.BusinessCase.ID)
+                QualityApproach = vf_QualityApproach.MainFrame(self, self.master.master.master.ProjectPack.QualityApproach.ID)
                 QualityApproach.Refresh()
                 self.add(QualityApproach, text = 'Quality Approach')
                 

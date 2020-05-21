@@ -3,10 +3,10 @@ import CustomizedElements
 import controller
 
 class MainFrame (Frame):
-        def __init__ (self, master, colorCode):
+        def __init__ (self, master, dbProjectRecordID, colorCode):
                 super().__init__(master)
                 self.config (bg = colorCode)
-                self.dbProjectRecordID = 1
+                self.dbProjectRecordID = dbProjectRecordID
                 #self.label = Label(self, text = 'label')
                 #self.label.pack()
                 
