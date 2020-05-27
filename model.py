@@ -263,7 +263,10 @@ class ProjectObject():   # Unified methods are set in this SuperClass
                 #logging.info (f'    MODEL Starting update_attr (_class = {_class}, _attr = {_attr}, _id = {_id}, _attr_value = {_attr_value})')
                 _sql  = db.compile_SET_ATTR_VALUE_BY_ITEM_ID (_class, _attr, _id, _attr_value)
                 db.executeSQL(_sql)
-                
+        def update_attr_list (self, _class, _attr_list, _id, _attr_value_list):
+                #compile_SET_ATTR_VALUE_BY_ITEM_ID_LIST
+                _sql  = db.compile_SET_ATTR_VALUE_BY_ITEM_ID_LIST (_class, _attr_list, _id, _attr_value_list)
+                db.executeSQL(_sql)
                 
         def delete (self):
                 """Finds related Project Object record and delete it from database

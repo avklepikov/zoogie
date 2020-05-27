@@ -202,7 +202,9 @@ def compile_SELECT_BY_ATTR_VAL (_class: str, _attr_value_dict: dict, _attr: str,
 
 
 def compile_SET_ATTR_VALUE_BY_ITEM_ID (_class: str, _attr : str, _id: int, _attr_value):
-        """ INSERT COMMENTARY"""
+        """ INSERT COMMENTARY
+        Might make sence to use compile_SET_ATTR_VALUE_BY_ITEM_ID_LIST istead as more general method"""
+        
         logging.info (f'      DB Starting compile_SET_ATTR_VALUE_BY_ITEM_ID (_class = {_class}, _attr = {_attr}, _id = {_id}, _attr_value = {_attr_value})')
         #db_constants.DB_FIELDS_MAPPING[_class][attr][1] == "TEXT"
         table = get_class_table(_class)
@@ -210,8 +212,31 @@ def compile_SET_ATTR_VALUE_BY_ITEM_ID (_class: str, _attr : str, _id: int, _attr
         if db_constants.DB_FIELDS_MAPPING[_class][_attr][1] == "TEXT":
                 _value_to_set = '"' + _value_to_set + '"'
         SQL = f"UPDATE {table} SET {db_constants.DB_FIELDS_MAPPING[_class][_attr][0]} = {_value_to_set} WHERE {db_constants.DB_FIELDS_PK[_class]} = {_id}"  #{db_constants.DB_FIELDS_PK[_class]}
-        logging.debug (db_constants.DB_FIELDS_PK[_class])
-        logging.debug('Resulting SQL: ', SQL)
+        #logging.debug (db_constants.DB_FIELDS_PK[_class])
+        logging.debug(f'      DB Resulting SQL: {SQL}')
+        return SQL   
+
+
+def compile_SET_ATTR_VALUE_BY_ITEM_ID_LIST (_class: str, _attr_list, _id: int, _attr_value_list):
+        """ INSERT COMMENTARY"""
+        logging.info (f'      DB Starting compile_SET_ATTR_VALUE_BY_ITEM_ID_LIST (_class = {_class}, _attr_list = {_attr_list}, _id = {_id}, _attr_value_list = {_attr_value_list})')
+        
+        table = get_class_table(_class)
+        
+        set_expression = []
+        for item in _attr_list:
+                
+                if db_constants.DB_FIELDS_MAPPING[_class][item][1] == "TEXT":
+                        set_expression.append (item + " = '" + str(_attr_value_list[_attr_list.index(item)])+"'")
+                else:
+                        set_expression.append (item + " = " + str(_attr_value_list[_attr_list.index(item)]))
+        set_expression = ', '.join(set_expression)
+        print (set_expression)        
+        
+        
+        SQL = f"UPDATE {table} SET {set_expression} WHERE {db_constants.DB_FIELDS_PK[_class]} = {_id}"  #{db_constants.DB_FIELDS_PK[_class]}
+        
+        logging.debug(f'      DB Resulting SQL: {SQL}')
         return SQL   
 
 def complile_SELECT_BY_ITEM_ID (_class: str, _attr_value_dict: dict, _id: int):    # why we use _attr_value_dict?
@@ -299,7 +324,9 @@ def compile_UPDATE_script (_class: str, _attr_value_dict: dict):
 
 
 def main():
-        initiateDB()
+        #initiateDB()
+        logging.basicConfig(filename='logging.txt',level=logging.DEBUG, format='%(asctime)s %(name)-12s %(levelname)-8s %(message)s', datefmt='%m-%d %H:%M', filemode='w')        
+        print(compile_SET_ATTR_VALUE_BY_ITEM_ID_LIST ('Project', ['ID', 'BusinessID'],1, [1, 'B_1']))
 
 if __name__ == '__main__':
         main()

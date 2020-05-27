@@ -54,7 +54,7 @@ REGISTER_BLOCKS = {
                 'Description': ['TEXT_BOX', 2, 1],
                 'DateLogged':['TEXT_LINE', 4, 1],
                 'EarlyWarningIndicator':['TEXT_LINE', 2, 2],
-                'LoogedBy':['TEXT_LINE', 4, 0],
+                'LoggedBy':['TEXT_LINE', 4, 0],
                 'Priority':['TEXT_LINE', 5, 0],
                 'Recommendations': ['TEXT_BOX', 5, 1],
                 'Title':['TEXT_LINE', 3, 0],
@@ -97,7 +97,7 @@ REGISTER_BLOCKS = {
                 'Category':['TEXT_LINE', 1, 1],
                 'Measurement': ['TEXT_BOX', 2, 1],
                 'Baseline': ['TEXT_BOX', 3, 1],
-                'ResourseRequirement': ['TEXT_BOX', 2, 2],
+                'ResourceRequirements': ['TEXT_BOX', 2, 2],
                 'Responsibility': ['TEXT_BOX', 3, 0]
                 },
         'Stakeholder':{
@@ -180,7 +180,7 @@ class MainFrame (Toplevel):
         
         def SaveChanges (self):
                 _class = controller (self.objectName)
-                print (_class)
+                print ('saving: ', _class)
                 pass
         
         
@@ -213,11 +213,25 @@ class ControlFrame (Frame):
                 
         def saveChanges(self):
                 print ('saveChanges method')
-                print(self.ChangeText.get(1.0, END))
-                controller.UpdateAttribute(self.objectName, self.attributeName, self.dbRecordID, self.ChangeText.get(1.0, END))
-                #self.master.master.Refresh()
                 
-                self.destroy()                
+                _attr_list=[]
+                _attr_val_list = []
+                for item in self.master.cardFrame.FrameObjects:
+                        if type(item) in self.master.cardFrame.editableClasses2:
+                                if type(item) == AttributeCombo:
+                                        
+                                        _attr_list.append(item.attributeName)
+                                        _attr_val_list.append(item.get())
+                                else:
+                                        
+                                        _attr_list.append(item.attributeName)
+                                        _attr_val_list.append(item.get(1.0, END+"-1c"))
+                                        
+
+                print (_attr_list, _attr_val_list)
+                controller.UpdateAttributeList(self.objectName, _attr_list, self.dbRecordID, _attr_val_list)
+                self.master.destroy()  
+                pass
                 
 class CardFrame (Frame):
         """Frame with all Register attributes"""
@@ -230,14 +244,16 @@ class CardFrame (Frame):
                 #LBL = Label (self, text = 'Card').pack()
                 print('-->', self.objectName)
                 RR_Blocks = REGISTER_BLOCKS[self.objectName]
-                self.editableClasses = [AttributeTextBox, AttributeTextLine, AttributeCombo, AttributeTextLineBlocked]
+                self.editableClasses = [AttributeTextBox, AttributeTextLine, AttributeCombo, AttributeTextLineBlocked] # Actually all object excl Labels
+                
+                self.editableClasses2 = [AttributeTextBox, AttributeTextLine, AttributeCombo] # really editable objects
                         
                 for item in RR_Blocks:
                         #print (RR_Blocks[item])
                         #print (item)
                         self.FrameObjects.append(AttributeLabel(self, item, colorCode))
                         self.FrameObjects[-1].grid(row = RR_Blocks[item][1]*2, column = RR_Blocks[item][2], sticky=W+E+N+S)
-                        if RR_Blocks[item][0] == 'TEXT_BOX':
+                        if RR_Blocks[item][0] == 'TEXT_BOX': # Can be simplified with OR or in []
                                 
                                 #print (RR_Blocks[item])
                                 self.FrameObjects.append(AttributeTextBox(self, self.objectName, item))

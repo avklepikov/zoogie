@@ -53,7 +53,7 @@ class ChangeTopLevel (Toplevel):
         def saveChanges(self):
                 print ('saveChanges method')
                 print(self.ChangeText.get(1.0, END))
-                controller.UpdateAttribute(self.objectName, self.attributeName, self.dbRecordID, self.ChangeText.get(1.0, END))
+                controller.UpdateAttribute(self.objectName, self.attributeName, self.dbRecordID, self.ChangeText.get(1.0, END+"-1c"))
                 #self.master.master.Refresh()
                 
                 self.destroy()
