@@ -27,6 +27,7 @@ import vf_RegisterChange
 import vf_RegisterLessons
 import vf_RegisterProjectProduct
 import vf_Register
+import CustomizedElements
 
 _activeProject = None
 
@@ -366,26 +367,13 @@ class subFrame_Mandate(Frame):
         def __init__(self, master):
                 super().__init__(master)
                 self.config (bg = _BGC)
-                self.MandateLabel = Label(self, text = 'Mandate provided by Sponsor:')
-                self.MandateText = Text (self, width = 150, height = 50)
-                self.MandateText.config(state="disabled" )
-                #MandateText.insert(1.0, 'HERE IS THE TEXT')               
-                self.MandateLabel.pack()
-                self.MandateText.pack ()
-                self.Refresh()
-        
-        def Refresh(self):
-                global _activeProject
-                logging.info ('VIEW Starting Mandate Refresh')
-                #logging.info (_activeProject)
-                Keys, Data = controller.RefreshBusinessObject('Mandate', _activeProject)#  - change id to project id    !!!
-                #print ('Mandate:')
-                #print (Data)
-                if (len(Data)) != 0 and Data[0][1]!= None:
-                        self.MandateText.config(state="normal" )
-                        self.MandateText.insert(1.0, Data[0][1])
-                        self.MandateText.config(state="disabled" )
-                logging.info ('VIEW Finished Mandate Refresh')
+                
+                
+                mandate = CustomizedElements.AttributeBlockFrame(self, self.master.master.master.master.ProjectPack.Mandate.ID, 'Mandate', 'Mandate', 'Mandate text', _BGC)
+                
+                mandate.AttributeValue.config(width = 130, height = 30)
+                mandate.pack()
+                mandate.valueUpdate(self.master.master.master.master.ProjectPack.Mandate.Mandate)
                 
                 
                 
