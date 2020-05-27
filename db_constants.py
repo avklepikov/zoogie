@@ -222,7 +222,8 @@ DB_FIELDS_MAPPING ={                                #Class attributes -> Db Fiel
         'Team':{'ID': ['ID', 'INTEGER PRIMARY KEY AUTOINCREMENT'],
                 'RelatedProject': ['RelatedProject', 'INTEGER'],
                 'Person': ['Person', 'TEXT'],
-                'Role': ['Role', 'TEXT']}, 
+                'Role': ['Role', 'TEXT'],
+                'Responsibilities': ['Responsibilities', 'TEXT']}, 
         
         'ChangeApproach':{'ID': ['ID', 'INTEGER PRIMARY KEY AUTOINCREMENT'],
                           'Introduction': ['Introduction', 'TEXT'],

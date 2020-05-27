@@ -295,6 +295,9 @@ class Frame_BusinessCase (Frame):
 class Frame_Organization (Frame):
         def __init__ (self, master):
                 super().__init__(master)
+                teamRegister = vf_Register.MainFrame(self, self.master.master.ProjectPack.Project.ID, 'Team', _BGC)
+                teamRegister.pack()
+                
 
 class Frame_Plan (Frame):
         def __init__ (self, master):

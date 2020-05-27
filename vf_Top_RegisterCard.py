@@ -116,7 +116,13 @@ REGISTER_BLOCKS = {
                 'InfoFromProject': ['TEXT_BOX', 4, 0],
                 'InfoToProject': ['TEXT_BOX', 4, 1],
                 'KeyMessages': ['TEXT_BOX', 4, 1]
-                }
+                },
+        'Team':{
+                'ID': ['TEXT_LINE_BLOCKED', 0, 0],
+                'RelatedProject': ['TEXT_LINE_BLOCKED', 1, 0],
+                'Person': ['TEXT_BOX', 2, 0],
+                'Role': ['COMBO', 3, 0],
+        'Responsibilities': ['TEXT_BOX', 4, 0]}
         }
         
 

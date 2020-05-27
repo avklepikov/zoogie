@@ -55,8 +55,9 @@ PREDEFINED_LISTS_OF_VALUES = {
                 'Status': ['Scheduled', 'In progress', 'Passed', 'Not Passed', 'Canceled']},
         'Stakeholder':{
                 'InfluenceLevel': ['High', 'Medim', 'Low'],
-                'SupportLevel': ['High', 'Medim', 'Low']}
-}       
+                'SupportLevel': ['High', 'Medim', 'Low']},
+        'Team':{
+                'Role':['Corporate Management (project mandate)', 'Programme Magager (project mandate)', 'Customer (project mandate)', 'Executive', 'Senior User', 'Senior Supplier', 'Quality Assurance', 'Project Office']}}   
 
 class ProjectPack():
         def __init__(self):
@@ -1188,12 +1189,14 @@ class Team (ProjectObject):             # OK
                       RelatedProject: int = None,
                       Person: str = None,
                       Role: str = None,
+                      Responsibilities: str = None,
                       ID: int = None):
                 super().__init__()
                 self.ID=ID
                 self.RelatedProject=RelatedProject
                 self.Person=Person
-                self.Role=Role                
+                self.Role=Role   
+                self.Responsibilities = Responsibilities
 
 class ChangeApproach (ProjectObject):   # OK +ProjectPack
         """Applied approach to manage Project changes
