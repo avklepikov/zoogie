@@ -25,16 +25,23 @@ REGISTER_BLOCKS = {
                 'ResponseCategory': ['COMBO', 5, 0],
                 'Status': ['COMBO', 2, 2],
                 'Actionee': ['TEXT_LINE', 5, 2],
-                'Risk Identification': ['LABEL', 8,0],
+                'Risk Identification': ['LABEL', 8, 0],
                 'Risk Assessment':['LABEL', 8, 1],
                 'Risk Evaluation':['LABEL', 8, 2],
                 'Risk Planing': ['LABEL', 8, 3]
                 },
         'QualityRegister':{
-                'ID':['TEXT_LINE_BLOCKED', 0, 1],
+                'ID':['TEXT_LINE_BLOCKED', 0, 0],
                 'RelatedProject':['TEXT_LINE_BLOCKED', 7, 0],
-                'BusinessID':['TEXT_LINE', 0 , 2],
-                'Dates': ['TEXT_LINE', 0, 3]
+                'BusinessID':['TEXT_LINE', 0 , 1],
+                'Dates': ['TEXT_LINE', 0, 2],
+                'Title':['TEXT_LINE', 1, 0],
+                'Result': ['TEXT_BOX', 2, 0],
+                'RolesResponsibilities': ['TEXT_BOX', 2, 1],
+                'Method': ['TEXT_LINE', 1, 1],
+                'RelatedProduct': ['TEXT_LINE', 7, 1],
+                'Status': ['COMBO', 1, 2]
+                
                 },
         'Lesson':{
                 'ID': ['TEXT_LINE_BLOCKED', 0, 0],
@@ -74,13 +81,43 @@ REGISTER_BLOCKS = {
                 'Description': ['TEXT_BOX', 1, 0],
                 'Category':['COMBO', 2, 0],
                 'Priority': ['COMBO', 2, 1],
-                'Severity': ['TEXT_LINE_BLOCKED', 2, 2],
-                'ClosureDate': ['TEXT_LINE_BLOCKED', 4, 0],
-                'DateRaised': ['TEXT_LINE_BLOCKED', 3, 2],
-                'IssueAuthor': ['TEXT_LINE_BLOCKED', 3, 1],
-                'RaisedBy': ['TEXT_LINE_BLOCKED', 3, 0],
+                'Severity': ['TEXT_LINE', 2, 2],
+                'ClosureDate': ['TEXT_LINE', 4, 0],
+                'DateRaised': ['TEXT_LINE', 3, 2],
+                'IssueAuthor': ['TEXT_LINE', 3, 1],
+                'RaisedBy': ['TEXT_LINE', 3, 0],
                 'Status': ['COMBO', 5, 0]
-                }}
+                },
+        'Benefit':{
+                'ID': ['TEXT_LINE_BLOCKED', 0, 0],
+                'BusinessID': ['TEXT_BOX', 0, 1],
+                'RelatedProject': ['TEXT_LINE_BLOCKED', 0, 2],
+                'Title': ['TEXT_LINE', 1, 0],
+                'Description': ['TEXT_BOX', 2, 0],
+                'Category':['TEXT_LINE', 1, 1],
+                'Measurement': ['TEXT_BOX', 2, 1],
+                'Baseline': ['TEXT_BOX', 3, 1],
+                'ResourseRequirement': ['TEXT_BOX', 2, 2],
+                'Responsibility': ['TEXT_BOX', 3, 0]
+                },
+        'Stakeholder':{
+                'ID': ['TEXT_LINE_BLOCKED', 0, 0],
+                #'BusinessID': ['TEXT_LINE', 0, 1],
+                'RelatedProject': ['TEXT_LINE_BLOCKED', 0, 2],
+                'Name': ['TEXT_LINE', 1, 0],
+                'Phone': ['TEXT_LINE', 1, 1],
+                'EMail': ['TEXT_LINE', 1, 2],
+                'Interfaces': ['TEXT_BOX', 2, 1],
+                'Interests': ['TEXT_BOX', 2, 1],
+                'CurrentRel': ['TEXT_BOX', 2, 1],
+                'Birthday': ['TEXT_LINE', 3, 0],
+                'InfluenceLevel': ['COMBO', 3, 1],
+                'SupportLevel': ['COMBO', 3, 2],
+                'InfoFromProject': ['TEXT_BOX', 4, 0],
+                'InfoToProject': ['TEXT_BOX', 4, 1],
+                'KeyMessages': ['TEXT_BOX', 4, 1]
+                }
+        }
         
 
 

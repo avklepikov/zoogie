@@ -50,8 +50,13 @@ PREDEFINED_LISTS_OF_VALUES = {
         'Issue': {
                 'Category' : ['change request (CR)', 'problem', 'Off-spec'],
                 'Priority': ['High', 'Medium', 'Low'],
-                'Status': ['Open problem', 'Solved problem', 'CR Awaiting Approval', 'CR Approved by Board', 'CR Approved by PM', 'Open Off-spec', 'Solved Off-Spec', 'Canceled']
-        }}       
+                'Status': ['Open problem', 'Solved problem', 'CR Awaiting Approval', 'CR Approved by Board', 'CR Approved by PM', 'Open Off-spec', 'Solved Off-Spec', 'Canceled']},
+        'QualityRegister':{
+                'Status': ['Scheduled', 'In progress', 'Passed', 'Not Passed', 'Canceled']},
+        'Stakeholder':{
+                'InfluenceLevel': ['High', 'Medim', 'Low'],
+                'SupportLevel': ['High', 'Medim', 'Low']}
+}       
 
 class ProjectPack():
         def __init__(self):
@@ -298,7 +303,7 @@ class ProjectObject():   # Unified methods are set in this SuperClass
                     _data   : values
                 """                
                 logging.info (f'    MODEL Starting viewProjectRelatedItems (_Project_id = {_Project_id})')
-                #print ('viewitem: ', self.__class__.__name__, self.__dict__)
+                print ('viewitem: ', self.__class__.__name__, self.__dict__)
                 _sql = db.complile_SELECT_BY_PROJECT_ID(self.__class__.__name__, self.__dict__,_Project_id)
                 _data = db.executeSQLget(_sql)
                 _dict = {}
@@ -344,6 +349,7 @@ class Benefit (ProjectObject):          # OK
             :Responsibility:       (str) Who is responsibles of Benefit measurement
             :ResourceRequirements: (str) Resouce required to perform benefit measurement
             :Baseline:             (str) Benefit baseline value defined in the begining of the project
+            
             
         
         Methods:
@@ -817,14 +823,16 @@ class QualityRegister (ProjectObject):  # OK
         """List of quality acceptance event and its status
         
         Attributes:
-            ID                      (int): Item technical ID in database.
-            BusinessID              (str): BusinessID in format accepted by Project Office.
-            RelatedProject          (int): Related Project primary key.
-            RelatedProduct          (str): Which product or subproduct is verified
-            Method                  (str): How Quality check will be performed
-            RolesResponsibilities   (str): Who will perform quality check
-            Dates                   (str): Date of acceptance test
-            Result                  (str): Result of acceptance test
+            :ID:                      (int) Item technical ID in database.
+            :BusinessID:              (str) BusinessID in format accepted by Project Office.
+            :RelatedProject:          (int) Related Project primary key.
+            :RelatedProduct:          (str) Which product or subproduct is verified
+            :Title:                   (str) Title 
+            :Method:                  (str) How Quality check will be performed
+            :RolesResponsibilities:   (str) Who will perform quality check
+            :Dates:                   (str) Date of acceptance test
+            :Result:                  (str) Result of acceptance test
+            :Status:                  (str) Status of Quality event [Scheduled, In progress, Passed, Not Passed, Canceled]
             
         Methods:
             Please refer to Superclass Methods for standard methods applied across all Project Classes    
@@ -833,20 +841,24 @@ class QualityRegister (ProjectObject):  # OK
                       BusinessID: str = None,
                       RelatedProject: int = None,
                       RelatedProduct: str = None,
+                      Title: str = None,
                       Method: str = None,
                       RolesResponsibilities: str = None,
                       Dates: str = None,
                       Result: str = None,
+                      Status: str = None,
                       ID: int = None):
                 super().__init__()
                 self.ID=ID
                 self.BusinessID=BusinessID
                 self.RelatedProject=RelatedProject
                 self.RelatedProduct=RelatedProduct
+                self.Title=Title
                 self.Method=Method
                 self.RolesResponsibilities=RolesResponsibilities
                 self.Dates=Dates
-                self.Result=Result                
+                self.Result=Result    
+                self.Status = Status
 
 class RiskApproach (ProjectObject):     # -- +ProjectPack             -> correct Attribute Proximity
         """Applied policy to manage Project risks
@@ -980,19 +992,33 @@ class Stakeholder (ProjectObject):      # OK
         """List of Project stakeholders
         
         Attributes:
-            ID                      (int): Item technical ID in database.
-            RelatedProject          (int): Related Project primary key.
-            CurrentRel              (str): Description of current relations with the stakeholder
-            Interfaces              (str): What points of joint interest is known, areas of interaction
-            KeyMessages             (str): Key messages to deliver to the Stakeholder
-            InfoToProject           (str): What kind of information is requered from the Stakeholder to the Project
-            InfoFromProject         (str): What kind of information Stakeholder requires from the Project
-        
+            :ID:                      (int) Item technical ID in database.
+            :RelatedProject:          (int) Related Project primary key.
+            :Name:                    (str) 
+            :EMail:                   (str)
+            :Phone:                   (str)
+            :Birthday:                (str)
+            :SupportLevel:            (str)
+            :InfluenceLevel:          (str)
+            :Interests:               (str)
+            :CurrentRel:              (str) Description of current relations with the stakeholder
+            :Interfaces:              (str) What points of joint interest is known, areas of interaction
+            :KeyMessages:             (str) Key messages to deliver to the Stakeholder
+            :InfoToProject:           (str) What kind of information is requered from the Stakeholder to the Project
+            :InfoFromProject:         (str) What kind of information Stakeholder requires from the Project
+            
         Methods:
             Please refer to Superclass Methods for standard methods applied across all Project Classes    
         """
-        def __self__ (self,
+        def __init__ (self,
                       RelatedProject: int = None,
+                      Name: str = None,
+                      EMail: str = None,
+                      Phone: str = None,
+                      Birthday: str = None,
+                      SupportLevel: str = None,
+                      InfluenceLevel: str = None,
+                      Interests: str = None,
                       CurrentRel: str = None,
                       Interfaces: str = None,
                       KeyMessages: str = None,
@@ -1002,6 +1028,13 @@ class Stakeholder (ProjectObject):      # OK
                 super().__init__()
                 self.ID=ID
                 self.RelatedProject=RelatedProject
+                self.Name = Name
+                self.EMail = EMail
+                self.Phone = Phone
+                self.Birthday = Birthday
+                self.SupportLevel = SupportLevel
+                self.InfluenceLevel = InfluenceLevel
+                self.Interests = Interests
                 self.CurrentRel=CurrentRel
                 self.Interfaces=Interfaces
                 self.KeyMessages=KeyMessages

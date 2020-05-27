@@ -26,6 +26,7 @@ import vf_RegisterRisk
 import vf_RegisterChange
 import vf_RegisterLessons
 import vf_RegisterProjectProduct
+import vf_Register
 
 _activeProject = None
 
@@ -346,7 +347,8 @@ class BusinessCaseTabControl (ttk.Notebook):
                 BusinessCase = vf_BusinessCase.MainFrame(self, self.master.master.master.ProjectPack.BusinessCase.ID)
                 BusinessCase.Refresh()
                 
-                Benefits = subFrame_Benefits(self)
+                #Benefits = subFrame_Benefits(self)
+                Benefits = vf_Register.MainFrame(self,self.master.master.master.ProjectPack.Project.ID, 'Benefit', _BGC)
                               
                 ProjectProduct = vf_RegisterProjectProduct.MainFrame (self, self.master.master.master.ProjectPack.Project.ID, _BGC)
                 
@@ -383,85 +385,6 @@ class subFrame_Mandate(Frame):
                 logging.info ('VIEW Finished Mandate Refresh')
                 
                 
-class subFrame_Benefits(Frame):
-        def __init__ (self, master):
-                super().__init__(master)   
-                self.config (bg = _BGC)
-                BenefitsTreeFrame = BusinessCase_Benefits_TreeFrame(self)
-                BenefitsBreakDownFrame = BusinessCase_Benefits_BreakdownFrame(self)
-                BenefitsTreeFrame.pack()
-                BenefitsBreakDownFrame.pack()
-        #Business Case - Benefits - TreeFrame
-class BusinessCase_Benefits_TreeFrame (Frame):
-        def __init__(self, master):
-                super().__init__(master)
-                lb_Benefits_Tree = Label(self, text = 'Project Benefit List', bg = _BGC).pack()
-                tr_Benefits_Tree = BenefitsTree(self)
-                
-                
-class BenefitsTree (ttk.Treeview):
-        def __init__ (self, master):
-                super().__init__(master)
-                self['columns'] = ('BusinessCode', 'Title', 'Category', 'Measurement', 'Responsibility') #, 'ResourseRequirements', 'Baseline')
-                #self.width = 100
-                #self.height = 200
-                self.master=master
-                self.heading ('#0', text = 'Code', anchor = 'w')
-                self.heading ('BusinessCode', text = 'Business Code', anchor = 'w')
-                self.heading ('Title', text = 'Title', anchor = 'w')
-                self.heading ('Category', text = 'Category', anchor = 'w')
-                self.heading ('Measurement', text = 'Measurement', anchor = 'w')
-                self.heading ('Responsibility', text = 'Responsibility', anchor = 'w')
-                #self.heading ('ResourseRequirements', text = 'Resourse Requirements', anchor = 'w')
-                #self.heading ('Baseline', text = 'Baseline', anchor = 'w')
-                
-                
-                
-                
-                self.column('#0', width = 60)
-                self.column('BusinessCode', width = 100)            
-                self.column('Title', width = 250)
-                self.column('Category', width = 250)
-                self.column('Measurement', width = 350)
-                self.column('Responsibility', width = 350)
-
-                
-                
-                
-                
-                
-                self.pack()
-                self.Refresh()
-                #self.bind("<Double-1>", self.OnDoubleClick)
-
-                
-        def Refresh (self):
-                #print ('Portfolio tree method refresh')
-                global _activeProject
-                logging.info ('VIEW Starting Benefit tree Refresh')
-                Keys, Data = controller.RefreshBusinessObject('Benefit', _activeProject)#  - change id to project id    !!!
-                #print (Keys) 
-                #print (Data)
-                
-                for item in Data:
-                        self.insert('',item[0], text=item[0], values=[
-
-                                item[Keys['BusinessID']],
-                                item[Keys['Title']],
-                                item[Keys['Category']],
-                                item[Keys['Measurement']],
-                                item[Keys['Responsibility']]                                
-                        ])
-                logging.info ('VIEW Finished Benefit tree Refresh')
-        
-                
-        #Business Case - Benefits - BreakdownFrame
-class BusinessCase_Benefits_BreakdownFrame (Frame):
-        def __init__(self, master):
-                super().__init__(master)
-                self.config (bg = _BGC)
-                lb_BenefitBreakDown = Label(self, text = 'Benefit Details').pack()
-        
                 
 # TAB   :   Organization
 class subFrame_Team(Frame):
@@ -534,9 +457,10 @@ class CommunicationTabControl (ttk.Notebook):
                 
                 CommunicationApproach = vf_CommunicationApproach.MainFrame(self, self.master.master.master.ProjectPack.CommunicationApproach.ID)
                 CommunicationApproach.Refresh()
-                
-                
                 self.add(CommunicationApproach, text = 'Communication Approach')
+                
+                stakeholders = vf_Register.MainFrame(self, self.master.master.master.ProjectPack.Project.ID, 'Stakeholder', _BGC)
+                self.add(stakeholders, text = 'Stakeholders')
                 
                 
 
@@ -548,6 +472,9 @@ class QualityTabControl (ttk.Notebook):
                 QualityApproach = vf_QualityApproach.MainFrame(self, self.master.master.master.ProjectPack.QualityApproach.ID)
                 QualityApproach.Refresh()
                 self.add(QualityApproach, text = 'Quality Approach')
+                
+                QualityRegister = vf_Register.MainFrame(self, self.master.master.master.ProjectPack.Project.ID, 'QualityRegister', _BGC)
+                self.add(QualityRegister, text = 'Quality Register')
                 
                 
                 
