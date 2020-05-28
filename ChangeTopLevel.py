@@ -35,7 +35,7 @@ class ChangeTopLevel (Toplevel):
                 
                 self.ChangeText = Text(self)
                 self.ChangeText.insert (1.0, attributeValue)
-                self.ChangeText.config (width = 150, height = 35, state="disabled")
+                self.ChangeText.config (width = 150, height = 35, state="disabled", wrap=WORD)
                 self.ChangeText.grid(row = 1, column =2, rowspan = 35)
                 
                 

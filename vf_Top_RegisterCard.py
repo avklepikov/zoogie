@@ -330,7 +330,7 @@ class AttributeTextBox (Text):
                 super().__init__(master)
                 self.objectName = objectName
                 self.attributeName = attributeName
-                self.config(width = 30, height = 9, state="disabled")#, yscrollcommand = scrollbar.set)
+                self.config(width = 30, height = 9, state="disabled", wrap=WORD)#, yscrollcommand = scrollbar.set)
                 
         def lockField (self):
                 self.config(state="disabled")
