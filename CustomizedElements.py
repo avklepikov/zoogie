@@ -165,6 +165,11 @@ class RegisterList (ttk.Treeview):
                         i+=1
                 
                 self.pack()
+                
+                self.popup_menu = Menu (self, tearoff=0)
+                self.popup_menu.add_command(label='Add new register item', command = self._addNewRegisterItem)
+                self.popup_menu.add_command(label='Delete selected item', command = self._deleteRegisterItem)
+                self.bind ('<Button-2>', self._do_popup)
                 self.Refresh()
         
         def Refresh (self):
@@ -203,8 +208,6 @@ class RegisterList (ttk.Treeview):
         def OnDoubleClick(self, event):
                 item = self.identify('item', event.x, event.y)
                 bdRecordID = self.item(item, 'text')      
-                #iskRegisterTopWindow = Toplevel()
-                #print ('Toplevel Risk: ', self.ObjectName, item)
                 registerItemCard = vf_Top_RegisterCard.MainFrame(self, bdRecordID, self.ObjectName,  'gray')
                 registerItemCard.mainloop()
                 
@@ -218,6 +221,30 @@ class RegisterList (ttk.Treeview):
                 #print (self.master.__dict__)
                 self.master.Refresh(bdRecordID)
                 pass
+        
+        def _addNewRegisterItem (self):
+                
+                controller.appendProjectObject(self.ObjectName, self.ProjectID)
+                self._registerRefresh()
+                
+        def _deleteRegisterItem(self):
+
+                curItem = self.focus()
+                dbRecordID = self.item(curItem, 'text') 
+                if dbRecordID != '':
+                        controller.deleteProjectObject(self.ObjectName, dbRecordID)
+                        self.Refresh()
+                
+                
+        def _do_popup (self, event):
+                try:
+                        self.popup_menu.tk_popup(event.x_root, event.y_root, 0)
+                finally:
+                        # make sure to release the grab (Tk 8.0a1 only)
+                        self.popup_menu.grab_release()   
+        
+        def _registerRefresh (self):
+                self.Refresh()           
         
 if __name__ == '__main__':
         help (Label)

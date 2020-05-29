@@ -248,7 +248,7 @@ class ProjectObject():   # Unified methods are set in this SuperClass
         def append (self):
                 """Created a Database record and writes all Project Object attributes into it
                 """
-                #print ('append: ', self.__class__.__name__, self.__dict__)
+                #logging.info ('append: ', self.__class__.__name__, self.__dict__)
                 _sql = db.compile_INSERT_script(self.__class__.__name__, self.__dict__)
                 db.executeSQL(_sql)
 
@@ -272,8 +272,9 @@ class ProjectObject():   # Unified methods are set in this SuperClass
         def delete (self):
                 """Finds related Project Object record and delete it from database
                 """                
-                logging.info ('delete: ', self.__class__.__name__, self.__dict__)
-                
+                #logging.info ('delete: ', self.__class__.__name__, self.__dict__)
+                _sql = db.complile_DELETE_BY_ITEM_ID(self.__class__.__name__, self.ID)
+                db.executeSQL(_sql)                
                 
         def viewItem (self, _id):
                 """Retrieves Project Object item from database based on its ID

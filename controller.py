@@ -9,7 +9,13 @@ def appendProjectObject (_class, _relatedProjectID):
         ObjectInstance.RelatedProject = _relatedProjectID
         ObjectInstance.append()
         #print (ObjectInstance)
-        pass
+
+def deleteProjectObject (_class, _ID):
+        ObjectClass = getattr(model, _class)
+        ObjectInstance = ObjectClass()
+        ObjectInstance.ID = _ID
+        ObjectInstance.delete()
+        #print (ObjectInstance)        
 
 def GetPredefinedListValues(_class, _attr):
         return model.PREDEFINED_LISTS_OF_VALUES[_class][_attr]

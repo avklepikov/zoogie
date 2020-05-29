@@ -256,6 +256,23 @@ def complile_SELECT_BY_ITEM_ID (_class: str, _attr_value_dict: dict, _id: int): 
         #logging.debug('Resulting SQL: ', SQL)
         return SQL        
 
+def complile_DELETE_BY_ITEM_ID (_class: str, _id: int):    # why we use _attr_value_dict?
+        """This method compiles SQL script to get from the database any project class record by its ID
+        """
+        logging.info (f'      DB Starting complile_DELETE_BY_ITEM_ID (_class = {_class}, _id = {_id})')
+        
+        table = get_class_table(_class)
+        #_fields_list = []
+        #for attr in _attr_value_dict:
+        #        _fields_list.append ( db_constants.DB_FIELDS_MAPPING[_class][attr][0])
+        #_fields_list_str = ', '.join(_fields_list)
+        _id_field = db_constants.DB_FIELDS_PK[_class]
+        #print ('SELECT_BY_ITEM_ID : _id_field: ', _id_field)
+        
+        SQL = f"DELETE FROM {table} WHERE {_id_field} = {_id}"  # changed from {_id_field} to RelatedProject
+        #logging.debug('Resulting SQL: ', SQL)
+        return SQL        
+
 def compile_INSERT_script (_class: str, _attr_value_dict: dict):
         """based in _class argument (Class from Project related classes) 
         creates SQL script for SQLLite that

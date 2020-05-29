@@ -92,38 +92,13 @@ class MainFrame (Frame):
                 self.BD = Breakdown(self, self.objectName, BD_argList, BD_argLabelList, argRowList, argColumnList, colorCode)
                 self.BD.pack()
                 
-                
-                self.popup_menu = Menu (self, tearoff=0)
-                self.popup_menu.add_command(label='Add new register item', command = self._addNewRegisterItem)
-                
-                #self.popup_menu.add_command(label='Delete selected register item', command = self._addNewRegisterItem)
-                self.Register.bind ('<Button-2>', self._do_popup)
-        
-        def _registerRefresh (self):
-                self.Register.Refresh()     
-                        
-                
+
                 
         def Refresh (self, dbRecordID):
                 """BreakDown refresh based on item selected in the register"""
                 self.BD.Refresh(dbRecordID)    
          
-        def _do_popup (self, event):
-                try:
-                        self.popup_menu.tk_popup(event.x_root, event.y_root, 0)
-                finally:
-                        # make sure to release the grab (Tk 8.0a1 only)
-                        self.popup_menu.grab_release()                 
-                
-        def _addNewRegisterItem (self):
-                #print ('_addNewRegisterItem method')
-                controller.appendProjectObject(self.objectName, self.dbProjectRecordID)
-                self._registerRefresh()
-                #print ('addNewRegisterItem self: ',self)
-                #self.Refresh(self.dbProjectRecordID)
-                
-                # TODO 1 [ ] Выделить наполнение реестра в отдельную функцию
-                # TODO 2 [ ] Run it from here
+        
 
 class Breakdown (Frame):
         def __init__ (self, master, objectName, argList, argLabelList, argRowList, argColumnList, colorCode):
