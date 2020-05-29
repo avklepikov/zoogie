@@ -4,7 +4,7 @@ import controller
 
 class ChangeTopLevel (Toplevel):
         def __init__(self, master: object, dbRecordID: int, objectName: str, attributeName: str, attributeLabel: str, attributeValue: str, colorCode: str):
-                print ('toplevel module:')
+                #print ('toplevel module:')
                 super().__init__(master)
                 self.config (bg = colorCode)
                 self.title ('Zoogie - edit window')
@@ -51,8 +51,8 @@ class ChangeTopLevel (Toplevel):
                 SaveButton = Button(self, text = 'Save changes', command = self.saveChanges).grid(row=14,column = 0, columnspan = 2, sticky = W+E)
                 
         def saveChanges(self):
-                print ('saveChanges method')
-                print(self.ChangeText.get(1.0, END))
+                #print ('saveChanges method')
+                #print(self.ChangeText.get(1.0, END))
                 controller.UpdateAttribute(self.objectName, self.attributeName, self.dbRecordID, self.ChangeText.get(1.0, END+"-1c"))
                 #self.master.master.Refresh()
                 

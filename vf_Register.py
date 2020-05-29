@@ -60,101 +60,95 @@ class MainFrame (Frame):
                 self.config (bg = colorCode)
                 self.dbProjectRecordID = dbProjectRecordID
                 self.objectName = objectName
-                #self.label = Label(self, text = 'label')
-                #self.label.pack()
-                print (self.objectName)
                 argList = []
                 argLabelList = []
                 argSizeList = []
                 
-                #print (REGISTER_BLOCKS['QualityRegister']['Register'])
+                #Building the Register based on REGISTER_BLOCKS setup:
                 for item in REGISTER_BLOCKS[self.objectName]['Register']:
-                        print (item)
                         argList.append (item)
                         argLabelList.append (REGISTER_BLOCKS[self.objectName]['Register'][item][0])
-                        argSizeList.append (REGISTER_BLOCKS[self.objectName]['Register'][item][1])
-                        #print (REGISTER_BLOCKS['QualityRegister']['Register'][item][1])
-                
-                print (argList)
-                print (argLabelList)
-                print (argSizeList)
-                
+                        argSizeList.append (REGISTER_BLOCKS[self.objectName]['Register'][item][1])                
                 self.Register = CustomizedElements.RegisterList(self, 
                                                                 self.dbProjectRecordID,
                                                                 self.objectName, 
                                                                 argList,
                                                                 argSizeList)
-                
                 self.Register.pack()
                 
-                
-                argList.clear()
-                argLabelList.clear()
+                #Building the Breakdown section
+                BD_argList =[]
+                BD_argLabelList= []
                 argSizeList.clear()
                 argRowList = []
                 argColumnList = []
-                
-                #print (REGISTER_BLOCKS['QualityRegister']['Register'])
                 for item in REGISTER_BLOCKS[self.objectName]['Breakdown']:
-                        print (item)
-                        argList.append (item)
-                        argLabelList.append (REGISTER_BLOCKS[self.objectName]['Breakdown'][item][0])
+                        BD_argList.append (item)
+                        BD_argLabelList.append (REGISTER_BLOCKS[self.objectName]['Breakdown'][item][0])
                         argRowList.append (REGISTER_BLOCKS[self.objectName]['Breakdown'][item][1])
                         argColumnList.append (REGISTER_BLOCKS[self.objectName]['Breakdown'][item][2])
-                        #argSizeList.append (REGISTER_BLOCKS[self.objectName]['Breakdown'][item][1])
-                        #print (REGISTER_BLOCKS['QualityRegister']['Register'][item][1])
+
                 
-                print (argList)
-                print (argLabelList)
-                print (argSizeList)                
-                
-                
-                self.BD = Breakdown(self, self.objectName, argList, argLabelList, argRowList, argColumnList, colorCode)
+                self.BD = Breakdown(self, self.objectName, BD_argList, BD_argLabelList, argRowList, argColumnList, colorCode)
                 self.BD.pack()
                 
+                
+                self.popup_menu = Menu (self, tearoff=0)
+                self.popup_menu.add_command(label='Add new register item', command = self._addNewRegisterItem)
+                
+                #self.popup_menu.add_command(label='Delete selected register item', command = self._addNewRegisterItem)
+                self.Register.bind ('<Button-2>', self._do_popup)
+        
+        def _registerRefresh (self):
+                self.Register.Refresh()     
+                        
+                
+                
         def Refresh (self, dbRecordID):
-                self.BD.Refresh(dbRecordID)     
+                """BreakDown refresh based on item selected in the register"""
+                self.BD.Refresh(dbRecordID)    
+         
+        def _do_popup (self, event):
+                try:
+                        self.popup_menu.tk_popup(event.x_root, event.y_root, 0)
+                finally:
+                        # make sure to release the grab (Tk 8.0a1 only)
+                        self.popup_menu.grab_release()                 
+                
+        def _addNewRegisterItem (self):
+                #print ('_addNewRegisterItem method')
+                controller.appendProjectObject(self.objectName, self.dbProjectRecordID)
+                self._registerRefresh()
+                #print ('addNewRegisterItem self: ',self)
+                #self.Refresh(self.dbProjectRecordID)
+                
+                # TODO 1 [ ] Выделить наполнение реестра в отдельную функцию
+                # TODO 2 [ ] Run it from here
 
 class Breakdown (Frame):
         def __init__ (self, master, objectName, argList, argLabelList, argRowList, argColumnList, colorCode):
                 super().__init__(master)
                 self.objectName = objectName
                 self.config (bg = colorCode)
-                #dbRecordID = '1'
-                #colorCode = 'gray'
+
                 
                 ObjectsList = []
                 
-                print ('len = ', len(argList), ' --> ', range(len(argList)))
+
                 for item in range(len(argList)):
-                        print (item, argList[item], argLabelList[item])
+                        
                         ObjectsList.append(CustomizedElements.AttributeBlockFrame(self, -1, self.objectName, argList[item], argLabelList[item], colorCode))
                         ObjectsList[-1].grid(row = argRowList[item], column = argColumnList[item],)
-                
-                #self.Attr1 = CustomizedElements.AttributeBlockFrame(self, -1, self.objectName, 'Title', 'Title', colorCode)
-                #self.Attr2 = CustomizedElements.AttributeBlockFrame(self, -1, self.objectName, 'RolesResponsibilities', 'RolesResponsibilities', colorCode)
-                #self.Attr2 = CustomizedElements.AttributeBlockFrame(self, -1, self.objectName, 'Result', 'Result', colorCode)
-
-
-                
-        
-                #self.Attr1.grid(row=0, column = 0)
-                #self.Attr2.grid(row=0, column = 1)
 
 
                 self.attributesObjects = ObjectsList
-                #self.attributesObjects = (self.Attr1, 
-                                          #self.Attr2)
-                
-                #self.Button = Button(self, text = 'Refresh', command = self.Refresh)
-                #self.Button.grid (row=4, column = 0)          
+         
         def Refresh (self, dbRecordID):
 
                 Keys, Data = controller.RefreshBusinessObject_byID(self.objectName, dbRecordID)
 
                 
                 for item in self.attributesObjects:
-                        #print (item.attributeName)
                         item.valueUpdate(Data[0][Keys[item.attributeName]])
                         item.dbRecordID = Data[0][Keys['ID']]
                         

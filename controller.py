@@ -2,6 +2,15 @@ import logging
 
 import model
 
+
+def appendProjectObject (_class, _relatedProjectID):
+        ObjectClass = getattr(model, _class)
+        ObjectInstance = ObjectClass()
+        ObjectInstance.RelatedProject = _relatedProjectID
+        ObjectInstance.append()
+        #print (ObjectInstance)
+        pass
+
 def GetPredefinedListValues(_class, _attr):
         return model.PREDEFINED_LISTS_OF_VALUES[_class][_attr]
 

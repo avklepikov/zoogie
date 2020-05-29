@@ -180,7 +180,7 @@ class MainFrame (Toplevel):
         
         def SaveChanges (self):
                 _class = controller (self.objectName)
-                print ('saving: ', _class)
+                #print ('saving: ', _class)
                 pass
         
         
@@ -230,6 +230,7 @@ class ControlFrame (Frame):
 
                 print (_attr_list, _attr_val_list)
                 controller.UpdateAttributeList(self.objectName, _attr_list, self.dbRecordID, _attr_val_list)
+                self.master.master.Refresh()
                 self.master.destroy()  
                 pass
                 

@@ -144,6 +144,7 @@ class ProjectPack():
                         return 0
         
         def _createProjectParts(self):
+                """Creates Project integral parts without registers"""
                 
                 PartsList = [self.BenefitApproach, 
                              self.BusinessCase, 
@@ -307,7 +308,7 @@ class ProjectObject():   # Unified methods are set in this SuperClass
                     _data   : values
                 """                
                 logging.info (f'    MODEL Starting viewProjectRelatedItems (_Project_id = {_Project_id})')
-                print ('viewitem: ', self.__class__.__name__, self.__dict__)
+                #print ('viewitem: ', self.__class__.__name__, self.__dict__)
                 _sql = db.complile_SELECT_BY_PROJECT_ID(self.__class__.__name__, self.__dict__,_Project_id)
                 _data = db.executeSQLget(_sql)
                 _dict = {}

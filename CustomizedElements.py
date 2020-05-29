@@ -109,7 +109,7 @@ class AttributeValue (Text):
                                                     self.master.objectName, 
                                                     self.master.attributeName,
                                                     self.master.attributeLabel,
-                                                    Event.widget.get (1.0, END),
+                                                    Event.widget.get (1.0, END+"-1c"),
                                                     self.master.colorCode)
                 top.mainloop()
         
@@ -121,7 +121,8 @@ class AttributeValue (Text):
                         self.insert(1.0, newValue)
                         self.config (state="disabled") 
                 else:
-                        print ('please update Customized Elements for Empty insert')
+                        #print ('please update Customized Elements for Empty insert')
+                        pass
 
 
 
@@ -145,10 +146,11 @@ class AttributeValue (Text):
 class RegisterList (ttk.Treeview):
         def __init__ (self, master, ProjectID: int, ObjectName: str, ArgList, ArgSizeList ):
                 super().__init__(master)
-                #print (ArgList)
+                
                 self.ProjectID = ProjectID
                 self.ObjectName = ObjectName
                 self.ArgList = ArgList
+                #print ('Arglist: ', self.ArgList)
                 self['columns'] = (ArgList)
                 self.heading ('#0', text = 'Code', anchor = 'w')
                 self.column('#0', width = 30)
@@ -169,15 +171,19 @@ class RegisterList (ttk.Treeview):
                 
                 #print ('.......................')
                 #print (self.master.__dict__)
+                for i in self.get_children():
+                        self.delete(i)                 
                 
+                #print ('Refresh Object', self)
+                #print ('Arglist: ', self.ArgList)
                 Keys, Data = controller.RefreshBusinessObject(self.ObjectName, self.ProjectID)
                 #print ('Object: ', self.ObjectName)
                 #print ('\n')
-                #print ('Keys:', Keys) 
+                #print ('Keys: ', Keys) 
                 #print ('\n')
-                #print ('Data:', Data)
+                #print ('Data: ', Data)
                 #print ('\n')
-                #print (self('columns'))
+                #print ('Columns: ', self('column'))
 
                 for item in Data:
                         insert_list = []
@@ -198,7 +204,7 @@ class RegisterList (ttk.Treeview):
                 item = self.identify('item', event.x, event.y)
                 bdRecordID = self.item(item, 'text')      
                 #iskRegisterTopWindow = Toplevel()
-                print ('Toplevel Risk: ', self.ObjectName, item)
+                #print ('Toplevel Risk: ', self.ObjectName, item)
                 registerItemCard = vf_Top_RegisterCard.MainFrame(self, bdRecordID, self.ObjectName,  'gray')
                 registerItemCard.mainloop()
                 
