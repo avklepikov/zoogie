@@ -120,9 +120,17 @@ REGISTER_BLOCKS = {
         'Team':{
                 'ID': ['TEXT_LINE_BLOCKED', 0, 0],
                 'RelatedProject': ['TEXT_LINE_BLOCKED', 1, 0],
-                'Person': ['TEXT_BOX', 2, 0],
+                'Person': ['TEXT_LINE', 2, 0],
                 'Role': ['COMBO', 3, 0],
-        'Responsibilities': ['TEXT_BOX', 4, 0]}
+        'Responsibilities': ['TEXT_BOX', 4, 0]},
+        'Stage':{
+                'ID':['TEXT_LINE_BLOCKED', 0, 0],
+                'RelatedProject': ['TEXT_LINE_BLOCKED', 0, 1],
+                'Title': ['TEXT_LINE', 1, 0],
+                'Category': ['COMBO', 1, 1],
+                'StartDate': ['TEXT_LINE', 2, 0],
+                'EndDate': ['TEXT_LINE', 2, 1],
+                'Status': ['COMBO', 3, 0]}
         }
         
 

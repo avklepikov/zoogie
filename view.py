@@ -303,6 +303,8 @@ class Frame_Organization (Frame):
 class Frame_Plan (Frame):
         def __init__ (self, master):
                 super().__init__(master)
+                tab_control = PlanTabControl(self)
+                tab_control.pack()
 
 class Frame_Quality (Frame):
         def __init__ (self, master):
@@ -340,7 +342,12 @@ class Frame_Meetings (Frame):
         def __init__ (self, master):
                 super().__init__(master)
 
-
+class PlanTabControl (ttk.Notebook):
+        def __init__(self, master):
+                super().__init__(master)
+                stages = vf_Register.MainFrame(self,self.master.master.master.ProjectPack.Project.ID, 'Stage', _BGC)
+                self.add(stages, text = 'Project Stages')
+                
 # TAB   :  Business Case             
 class BusinessCaseTabControl (ttk.Notebook):
         def __init__(self, master):

@@ -51,7 +51,16 @@ REGISTER_BLOCKS = {
                         },
                 'Breakdown': {
                         'Responsibilities': ['Project Responsibilities', 0, 0]}
-                }}
+                },
+        'Stage':{
+                'Register':{
+                        'Title': ['Title', 250],
+                        'Category': ['Stage Category', 250],
+                        'StartDate': ['Start Date', 100],
+                        'EndDate': ['End Date', 100],
+                        'Status': ['Status', 150]},
+                'Breakdown':{}
+        }}
         
                 
 class MainFrame (Frame):
@@ -133,7 +142,7 @@ def Main():
         
         logging.basicConfig(filename='logging.txt',level=logging.DEBUG, format='%(asctime)s %(name)-12s %(levelname)-8s %(message)s', datefmt='%m-%d %H:%M', filemode='w')
         app = Tk()
-        block = MainFrame(app,29, 'Team' ,'gray')
+        block = MainFrame(app,29, 'Stage' ,'gray')
         #block = MainFrame(app,1, 'Stakeholder' ,'gray')
         #block = MainFrame(app,1, 'QualityRegister' ,'gray')
         #QualityRegister
