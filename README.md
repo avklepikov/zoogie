@@ -1,32 +1,60 @@
-# "Zoogie Projects"
+# Project management application **Zoogie**
+*created by Project Managers for Project Managers*
 
-# Background 
-I am certified PRINCE2 practitioner responsible for change management projects delivery which cover organizational, process and IT areas.
-In my practice I face lack of IT tools which may save huge amount of time spent on daily project management routine tasks, documentation and so on. I tried a lot of PM software but mostly existing software focuses just on specific areas of project management activities while I always need more functionality.
-
-Being a Python adept I made a decision to create a solution which is based on real demand from project managers, totally free and flexible so anyone may adjust it for his own needs.
-
-# What kind of help I need
-Coding is my hobby from my childhood, but I am not a professional developer. In 2016 I tryed Python and took a few internet courses on it. But still I am junior level developer and appreciate your advise or help on the following areas: VMC, interaction of model with database, UI.
-
-# Zoogie concept
-I use the following structure of Zoogie project:
-
-Project Model (model.py)
-- represents a datamodel for all project managements concepts and artifacts. Users should be able to use it togerther with provided database or UI functionality or just separately as a starting toolkit for own python projects.
-
-Database connectors / controllers 
-- represent various options to run the model with different databases, so users may reuse the Model in their projects and databases which they prefer
-
-db_constants.py - defines mapping between model classes/attributes and database tables/fields
-
-db.py - db controller to run SQLite database + database initiation method which creates database from a scratch.
+# Zoogie concept:
+* free and opensource
+* cover various aspects of PM work including daily routine tasks
+* tailoring to local corporate standarts and formats
+* supports users in learning Project Management discipline
+* fast evolving based on feedback and suggestions 
+* promote collaboration and best practices sharing
 
 
-UI
-- Zoogie provides fully pack of functionality not only to resue model in different projects but also to be used as a full pack application.
+
+# Installation
+* MacOS / Windows / Linux
+* [Python 3.7 or higher](https://www.python.org)
+* clone code from GitHub [Zoogie repository](https://github.com/avklepikov/zoogie.git)
+* detailed [Installation instruction](INSTALLATION.md)
 
 
-# Instruction How to START and GET FAMILIAR with ZOOGIE
-Just run VIEW.PY. Database already have some test records.
+# Contacts
+support@zoogieproject.com
+
+
+# Roadmap
+## Current Release "MVP":
+"Minimal value product" to get feedback, ideas, initial contribution 
+* working with portfolio of projects
+* structure to keep project data at different project stages
+* Registers
+* Logging  
+* SQLite database as a data source for QlikView, Tableau, etc
+
+
+## Next release is expected to contain:
+* version control
+* PM daily meetings made simple 
+* switching to multiuser
+* dashboard
+* Project plan visualisation 
+* Different screen size and resolution
+
+
+# Contribution
+
+* Kindly follow Code of Conduct described in [Code of Conduct](CODE_OF_CONDUCT.md).
+* Please read [Contribution Instruction](CONTRIBUTION.md) for details.
+
+## Feedback and framework advice from Users
+* Feedback on current functionality
+* Advise how current version fits your daily routine and standards
+* Why you are ready to use Zoogie or not.
+* What you are missing in existing PM apps
+
+## Technical 
+* Zoogie Logo design
+* Code review and related feedback
+* Code contribution
+
 
