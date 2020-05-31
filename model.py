@@ -99,9 +99,28 @@ PREDEFINED_LISTS_OF_VALUES = {
                         'Executive', 
                         'Project Manager', 
                         'Senior User', 
-                        'Senior Supplier', 
+                        'Senior Supplier',
+                        'Supplier Team Manager', 
                         'Quality Assurance', 
-                        'Project Office']},
+                        'Project Support']},
+        'Lesson':{
+                'Category':['Business Case', 
+                            'Organization', 
+                            'Quality', 
+                            'Plans', 
+                            'Risk', 
+                            'Change', 
+                            'Progress',
+                            'Other'],
+                'CategoryProcess': ['Starting up a project', 
+                                    'Directing a project', 
+                                    'Initiation of a project', 
+                                    'Controlling a project', 
+                                    'Managing Product Delivery', 
+                                    'Managing Stage Boundary', 
+                                    'Closing a project',
+                                    'Other'],
+                'Priority': ['High', 'Medium', 'Low']},
         'Stage':{
                 'Category': ['Starting-Up (SU)', 'Project Initiation', 'Delivery Stage'],
                 'Status': ['Scheduled', 'Active', 'Active (Exception)', 'Terminated', 'Completed']}
@@ -636,20 +655,21 @@ class Lesson (ProjectObject):           # OK
         """Lesson learned to be taked into account in other Projects
         
         Attributes:
-            ID              (int): Item technical ID in database
-            BusinessID      (str): BusinessID in format accepted by Project Office
-            RelatedProject  (int): Related Project primary key
-            Title           (str): Short description
-            Description     (str): Long description
-            Category        (str): Category from custom reference table (not-predefined)
-            Event           (str): Description of event occurred
-            Effect          (str): What effect event had on the project
-            CauseTrigger    (str): What what the reason for the event
-            EarlyWarningIndicator     (str): Is there any early indicator that event will occurr?
-            Recommendations (str): Reccommendations for future projects
-            DateLogged      (str): Date when Lesson was logged
-            LoggedBy        (str): Person name logged the lesson
-            Priority        (str): Priority from {High, Medium, Low}
+            :ID:              (int) Item technical ID in database
+            :BusinessID:      (str) BusinessID in format accepted by Project Office
+            :RelatedProject:  (int) Related Project primary key
+            :Title:           (str) Short description
+            :Description:     (str) Long description
+            :Category:        (str) Category from custom reference table (Themes)
+            :CategoryProcess: (str) Category from custom reference table (Processes)
+            :Event:           (str) Description of event occurred
+            :Effect:          (str) What effect event had on the project
+            :CauseTrigger:    (str) What what the reason for the event
+            :EarlyWarningIndicator:     (str) Is there any early indicator that event will occurr?
+            :Recommendations: (str) Reccommendations for future projects
+            :DateLogged:      (str) Date when Lesson was logged
+            :LoggedBy:        (str) Person name logged the lesson
+            :Priority:        (str) Priority from {High, Medium, Low}
             
         Methods:
             Please refer to Superclass Methods for standard methods applied across all Project Classes
@@ -662,6 +682,7 @@ class Lesson (ProjectObject):           # OK
                       Title: str = None,
                       Description: str = None,
                       Category: str = None,
+                      CategoryProcess: str = None,
                       Event: str = None,
                       Effect: str = None,
                       CauseTrigger: str = None,
@@ -678,6 +699,7 @@ class Lesson (ProjectObject):           # OK
                 self.Title = Title,
                 self.Description = Description
                 self.Category=Category
+                self.CategoryProcess = CategoryProcess
                 self.Event=Event
                 self.Effect=Effect
                 self.CauseTrigger=CauseTrigger

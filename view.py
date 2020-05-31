@@ -24,7 +24,6 @@ import vf_ChangeApproach
 import vf_CommunicationApproach
 import vf_RegisterRisk
 import vf_RegisterChange
-import vf_RegisterLessons
 import vf_RegisterProjectProduct
 import vf_Register
 import CustomizedElements
@@ -255,16 +254,8 @@ class ProjectTabControl (ttk.Notebook):
                 frame_Change.config(bg = _BGC)
                 frame_Communication = Frame_Communication(self)
                 frame_Communication.config(bg = _BGC)
-                #frame_Lessons = Frame_Lessons(self)
-                #print (self.master)
-                #print ('@@@@  LESSONS @@@@')
-                #print (self.master.ProjectPack.Project.ID)
-                #print('')
-                #print (self.master.master.__dict__)
-                #print('')
-                #print (self.master.__dict__)
-                frame_Lessons = vf_RegisterLessons.MainFrame(self, self.master.ProjectPack.Project.ID, _BGC)
-                #frame_Lessons.config(bg = _BGC)
+                frame_Lessons = vf_Register.MainFrame(self, self.master.ProjectPack.Project.ID, 'Lesson', _BGC)
+
                 
                 frame_DailyLog = Frame_DailyLog(self)
                 frame_DailyLog.config(bg = _BGC)

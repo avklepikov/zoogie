@@ -78,6 +78,7 @@ DB_FIELDS_MAPPING ={                                #Class attributes -> Db Fiel
                   'Title': ['Title', 'TEXT'],
                   'Description': ['Description', 'TEXT'],
                   'Category': ['Category', 'TEXT'],
+                  'CategoryProcess': ['CategoryProcess', 'TEXT'],
                   'Event': ['Event', 'TEXT'],
                   'Effect': ['Effect', 'TEXT'],
                   'CauseTrigger': ['CauseTrigger', 'TEXT'],

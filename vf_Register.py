@@ -52,6 +52,27 @@ REGISTER_BLOCKS = {
                 'Breakdown': {
                         'Responsibilities': ['Project Responsibilities', 0, 0]}
                 },
+        'Lesson':{
+                'Register':{
+                        'BusinessID' : ['Bisiness ID', 80],
+                        'Title': ['Title', 250],
+                        'Category': ['Category', 210],
+                        'CategoryProcess': ['CategoryProcess', 210],
+                        'Priority': ['Priority', 150],
+                        'LoggedBy': ['LoggedBy', 120],
+                        'DateLogged' :['DateLogged', 120]},
+                'Breakdown': {
+                        'Title': ['Title', 0, 0],
+                        'Description': ['Description', 0, 1],
+                        'Recommendations': ['Recommendations', 1, 1],
+                        'CauseTrigger': ['Cause Trigger', 1, 0],
+                }
+                },
+        'Change':{
+                'Register':{},
+                'Breakdown':{}
+                },
+                
         'Stage':{
                 'Register':{
                         'Title': ['Title', 250],
@@ -142,7 +163,7 @@ def Main():
         
         logging.basicConfig(filename='logging.txt',level=logging.DEBUG, format='%(asctime)s %(name)-12s %(levelname)-8s %(message)s', datefmt='%m-%d %H:%M', filemode='w')
         app = Tk()
-        block = MainFrame(app,29, 'Stage' ,'gray')
+        block = MainFrame(app,29, 'Lesson' ,'gray')
         #block = MainFrame(app,1, 'Stakeholder' ,'gray')
         #block = MainFrame(app,1, 'QualityRegister' ,'gray')
         #QualityRegister
