@@ -77,17 +77,18 @@ REGISTER_BLOCKS = {
                 },
         'Issue':{
                 'ID': ['TEXT_LINE_BLOCKED', 0, 0],
-                'BusinessID': ['TEXT_LINE_BLOCKED', 0, 1],
+                'BusinessID': ['TEXT_LINE', 0, 1],
                 'RelatedProject': ['TEXT_LINE_BLOCKED', 0, 2],
-                'Description': ['TEXT_BOX', 1, 0],
+                'Title': ['TEXT_LINE', 1, 0],
+                'Description': ['TEXT_BOX', 1, 1],
                 'Category':['COMBO', 2, 0],
                 'Priority': ['COMBO', 2, 1],
                 'Severity': ['TEXT_LINE', 2, 2],
-                'ClosureDate': ['TEXT_LINE', 4, 0],
+                'ClosureDate': ['TEXT_LINE', 4, 1],
                 'DateRaised': ['TEXT_LINE', 3, 2],
                 'IssueAuthor': ['TEXT_LINE', 3, 1],
                 'RaisedBy': ['TEXT_LINE', 3, 0],
-                'Status': ['COMBO', 5, 0]
+                'Status': ['COMBO', 4, 0]
                 },
         'Benefit':{
                 'ID': ['TEXT_LINE_BLOCKED', 0, 0],
@@ -154,13 +155,13 @@ class MainFrame (Toplevel):
                 
                 """
                 super().__init__(master)
-                print ('start toplevel for register card')
+                #print ('start toplevel for register card')
                 self.config (bg=colorCode)
                 self.dbRecordID = dbRecordID
                 self.objectName = objectName
                 self.colorCode=colorCode
                 
-                print ('dbRecord:', self.dbRecordID, ' objName:', self.objectName)
+                #print ('dbRecord:', self.dbRecordID, ' objName:', self.objectName)
                 
                 self.controlFrame = ControlFrame(self, self.dbRecordID, self.objectName, self.objectName, self.objectName, self.colorCode)
                 self.cardFrame = CardFrame(self, self.dbRecordID, self.objectName, self.colorCode)
@@ -221,7 +222,7 @@ class ControlFrame (Frame):
         
                 
         def saveChanges(self):
-                print ('saveChanges method')
+                #print ('saveChanges method')
                 
                 _attr_list=[]
                 _attr_val_list = []
@@ -237,11 +238,11 @@ class ControlFrame (Frame):
                                         _attr_val_list.append(item.get(1.0, END+"-1c"))
                                         
 
-                print (_attr_list, _attr_val_list)
+                #print (_attr_list, _attr_val_list)
                 controller.UpdateAttributeList(self.objectName, _attr_list, self.dbRecordID, _attr_val_list)
                 self.master.master.Refresh()
                 self.master.destroy()  
-                pass
+                #pass
                 
 class CardFrame (Frame):
         """Frame with all Register attributes"""
@@ -252,7 +253,7 @@ class CardFrame (Frame):
                 self.FrameObjects = []
                 self.config (bg=colorCode)
                 #LBL = Label (self, text = 'Card').pack()
-                print('-->', self.objectName)
+                #print('-->', self.objectName)
                 RR_Blocks = REGISTER_BLOCKS[self.objectName]
                 self.editableClasses = [AttributeTextBox, AttributeTextLine, AttributeCombo, AttributeTextLineBlocked] # Actually all object excl Labels
                 

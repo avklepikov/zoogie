@@ -23,7 +23,7 @@ import vf_RiskApproach2
 import vf_ChangeApproach
 import vf_CommunicationApproach
 import vf_RegisterRisk
-import vf_RegisterChange
+#import vf_RegisterChange
 import vf_RegisterProjectProduct
 import vf_Register
 import CustomizedElements
@@ -426,7 +426,7 @@ class ChangeTabControl (ttk.Notebook):
                 
                 
                 
-                
+                #ChangeApproach = vf_Register.MainFrame(self, 
                 ChangeApproach = vf_ChangeApproach.MainFrame(self, self.master.master.master.ProjectPack.ChangeApproach.ID)
                 
                 
@@ -434,7 +434,8 @@ class ChangeTabControl (ttk.Notebook):
                 ChangeApproach.Refresh()
                 
                 
-                ChangeRegister = vf_RegisterChange.MainFrame (self, self.master.master.master.ProjectPack.Project.ID, _BGC) # <- TODO Check
+                #ChangeRegister = vf_RegisterChange.MainFrame (self, self.master.master.master.ProjectPack.Project.ID, _BGC) # <- TODO Check
+                ChangeRegister = vf_Register.MainFrame(self, self.master.master.master.ProjectPack.Project.ID, 'Issue', _BGC)
                 self.add(ChangeApproach, text = 'Change Approach')
                 self.add(ChangeRegister, text = 'Issue Register')
                 

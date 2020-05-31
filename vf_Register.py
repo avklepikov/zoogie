@@ -68,9 +68,20 @@ REGISTER_BLOCKS = {
                         'CauseTrigger': ['Cause Trigger', 1, 0],
                 }
                 },
-        'Change':{
-                'Register':{},
-                'Breakdown':{}
+        'Issue':{
+                'Register':{
+                        'BusinessID' : ['Bisiness ID', 90],
+                        'Title': ['Title', 250],
+                        'Category': ['Category', 150],   
+                        'Priority': ['Priority', 90],
+                        'Severity': ['Severity', 110],
+                        'RaisedBy': ['RaisedBy', 120],
+                        'ClosureDate': ['ClosureDate', 90],
+                        'Status': ['Status', 160]
+                        },
+                'Breakdown':{
+                        'Title': ['Title', 0, 0],
+                        'Description': ['Description', 0, 1],                }
                 },
                 
         'Stage':{
@@ -163,7 +174,7 @@ def Main():
         
         logging.basicConfig(filename='logging.txt',level=logging.DEBUG, format='%(asctime)s %(name)-12s %(levelname)-8s %(message)s', datefmt='%m-%d %H:%M', filemode='w')
         app = Tk()
-        block = MainFrame(app,29, 'Lesson' ,'gray')
+        block = MainFrame(app,29, 'Risk' ,'gray')
         #block = MainFrame(app,1, 'Stakeholder' ,'gray')
         #block = MainFrame(app,1, 'QualityRegister' ,'gray')
         #QualityRegister
