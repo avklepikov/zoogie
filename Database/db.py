@@ -4,7 +4,7 @@
 import sqlite3
 import logging
 #import model   # ??? two ways import?
-import db_constants
+from Database import db_constants
 
 #PROJECT_OBJECTS = (model.ProjectObject.__subclasses__())
 #"""List of Class objects from the Model which should be transformed into Tables in database

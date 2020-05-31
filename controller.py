@@ -1,6 +1,6 @@
 import logging
 
-import model
+from Model import model
 
 
 def appendProjectObject (_class, _relatedProjectID):

@@ -37,7 +37,7 @@ Classes: Business name is Project Objects
 """
 
 import logging
-import db        #database connector to run the model on SQLLite DB
+from Database import db        #database connector to run the model on SQLLite DB
 
 
 PREDEFINED_LISTS_OF_VALUES = {
@@ -696,7 +696,7 @@ class Lesson (ProjectObject):           # OK
                 self.ID=ID
                 self.BusinessID=BusinessID
                 self.RelatedProject=RelatedProject
-                self.Title = Title,
+                self.Title = Title
                 self.Description = Description
                 self.Category=Category
                 self.CategoryProcess = CategoryProcess
