@@ -18,10 +18,8 @@ import controller
 
 
 
-import vf_RiskApproach1
+import vf_RiskApproach1  # I do not know how to split them in vf_Register
 import vf_RiskApproach2
-
-
 
 
 import vf_RegisterProjectProduct
