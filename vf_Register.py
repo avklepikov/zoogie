@@ -106,6 +106,21 @@ REGISTER_BLOCKS = {
                         'TrainingNeeds': ['Training Needs for Project Delivery', 2, 1]}
                 
                 },
+        'QualityApproach' : {
+                'Register':{},
+                'Breakdown':{
+                        'Introduction' : ['Introduction', 0,0],
+                        'Records': ['Records', 0, 1],
+                        'Procedure': ['Procedure', 1, 0],
+                        'Reporting': ['Reporting', 1, 1],
+                        'ProjectQuality': ['Project Quality', 2, 0],
+                        'Timing': ['Timing', 2, 1],
+                        'Techniques': ['Techniques', 3, 0],
+                        'RolesResponsibilities': ['Roles and responsibilities', 3, 1]
+                        
+                        
+                        }
+                },
                 
         'Stage':{
                 'Register':{
@@ -242,7 +257,7 @@ def Main():
         
         logging.basicConfig(filename='logging.txt',level=logging.DEBUG, format='%(asctime)s %(name)-12s %(levelname)-8s %(message)s', datefmt='%m-%d %H:%M', filemode='w')
         app = Tk()
-        block = MainFrameWIthoutRegister(app,1, 'BusinessCase' ,'gray')
+        block = MainFrameWIthoutRegister(app,1, 'QualityApproach' ,'gray')
         #block = MainFrame(app,1, 'Stakeholder' ,'gray')
         #block = MainFrame(app,1, 'QualityRegister' ,'gray')
         #QualityRegister

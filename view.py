@@ -17,7 +17,7 @@ import logging
 import controller
 
 
-import vf_QualityApproach
+
 import vf_RiskApproach1
 import vf_RiskApproach2
 import vf_ChangeApproach
@@ -460,9 +460,8 @@ class CommunicationTabControl (ttk.Notebook):
 class QualityTabControl (ttk.Notebook):
         def __init__(self, master):
                 super().__init__(master)
-                
-                QualityApproach = vf_QualityApproach.MainFrame(self, self.master.master.master.ProjectPack.QualityApproach.ID)
-                QualityApproach.Refresh()
+                QualityApproach = vf_Register.MainFrameWIthoutRegister(self, self.master.master.master.ProjectPack.QualityApproach.ID, 'QualityApproach', _BGC)
+
                 self.add(QualityApproach, text = 'Quality Approach')
                 
                 QualityRegister = vf_Register.MainFrame(self, self.master.master.master.ProjectPack.Project.ID, 'QualityRegister', _BGC)
