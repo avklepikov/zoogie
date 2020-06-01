@@ -137,6 +137,23 @@ REGISTER_BLOCKS = {
                         
                         }
                 },
+        'Product':{
+                'Register':{
+                        'BusinessID' : ['Bisiness ID', 90],
+                        'Title': ['Title', 250]                     
+                        },
+                'Breakdown':{
+                        'Title' : ['Title', 0, 0],
+                        'Description': ['Description', 0, 1],
+                        'Composition' : ['Composition', 1, 0],
+                        'Derivation': ['Derivation', 1, 1],
+                        'Purpose': ['Purpose of product', 2, 0],
+                        'FormatPresentation': ['Presentation Format', 2, 1]
+                        
+                        }
+                },
+                        
+        
         'ChangeApproach':{
                 'Breakdown':{
                         'Introduction' : ['Introduction', 0, 0],
@@ -291,7 +308,7 @@ def Main():
         
         logging.basicConfig(filename='logging.txt',level=logging.DEBUG, format='%(asctime)s %(name)-12s %(levelname)-8s %(message)s', datefmt='%m-%d %H:%M', filemode='w')
         app = Tk()
-        block = MainFrame(app,1, 'RiskRegister' ,'gray')
+        block = MainFrame(app,1, 'Product' ,'gray')
         #block = MainFrame(app,1, 'Stakeholder' ,'gray')
         #block = MainFrame(app,1, 'QualityRegister' ,'gray')
         #QualityRegister

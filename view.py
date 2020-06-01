@@ -14,15 +14,13 @@ from tkinter import *
 from tkinter import ttk
 import logging
 
+#IMPORT OWN MODULES:
 import controller
-
-
-
 import vf_RiskApproach1  # I do not know how to split them in vf_Register
-import vf_RiskApproach2
+import vf_RiskApproach2  # I do not know how to split them in vf_Register 
 
 
-import vf_RegisterProjectProduct
+
 import vf_Register
 import CustomizedElements
 
@@ -349,8 +347,9 @@ class BusinessCaseTabControl (ttk.Notebook):
                 
                 
                 Benefits = vf_Register.MainFrame(self,self.master.master.master.ProjectPack.Project.ID, 'Benefit', _BGC)
-                              
-                ProjectProduct = vf_RegisterProjectProduct.MainFrame (self, self.master.master.master.ProjectPack.Project.ID, _BGC)
+                
+                ProjectProduct = vf_Register.MainFrame(self, self.master.master.master.ProjectPack.Project.ID, 'Product', _BGC)             
+                
                 
                 ProjectApproach = vf_Register.MainFrameWIthoutRegister(self, self.master.master.master.ProjectPack.ProjectApproach.ID, 'ProjectApproach', _BGC)
                 
