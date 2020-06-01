@@ -82,6 +82,19 @@ REGISTER_BLOCKS = {
                         'Title': ['Title', 0, 0],
                         'Description': ['Description', 0, 1]}
                 },
+        'BusinessCase':{
+                'Register':{},
+                'Breakdown':{
+                        'ExecutiveSummary':['Executive Summary', 0, 0],
+                        'ExpectedBenefits':['Expected Benefits', 1, 0],
+                        'Reasons':['Reasons', 0, 1],
+                        'ExpectedDisBenefits':['Expected Dis-Benefits',1 , 1],
+                        'Options':['Business Options', 2, 0],
+                        'Costs': ['Costs', 2, 1],
+                        'Timescale':['Time Scale', 3, 0],
+                        'InvestmentArraisal':['Investment Aprraisal', 3, 1]
+                        }
+                },
         'ProjectApproach':{
                 'Register':{},
                 'Breakdown':{
@@ -229,7 +242,7 @@ def Main():
         
         logging.basicConfig(filename='logging.txt',level=logging.DEBUG, format='%(asctime)s %(name)-12s %(levelname)-8s %(message)s', datefmt='%m-%d %H:%M', filemode='w')
         app = Tk()
-        block = MainFrameWIthoutRegister(app,1, 'ProjectApproach' ,'gray')
+        block = MainFrameWIthoutRegister(app,1, 'BusinessCase' ,'gray')
         #block = MainFrame(app,1, 'Stakeholder' ,'gray')
         #block = MainFrame(app,1, 'QualityRegister' ,'gray')
         #QualityRegister

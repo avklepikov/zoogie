@@ -16,14 +16,14 @@ import logging
 
 import controller
 
-import vf_BusinessCase
+
 import vf_QualityApproach
 import vf_RiskApproach1
 import vf_RiskApproach2
 import vf_ChangeApproach
 import vf_CommunicationApproach
 import vf_RegisterRisk
-#import vf_RegisterChange
+
 import vf_RegisterProjectProduct
 import vf_Register
 import CustomizedElements
@@ -346,10 +346,10 @@ class BusinessCaseTabControl (ttk.Notebook):
                 
                 Mandate = subFrame_Mandate(self)
                 
-                BusinessCase = vf_BusinessCase.MainFrame(self, self.master.master.master.ProjectPack.BusinessCase.ID)
-                BusinessCase.Refresh()
                 
-                #Benefits = subFrame_Benefits(self)
+                BusinessCase = vf_Register.MainFrameWIthoutRegister(self, self.master.master.master.ProjectPack.BusinessCase.ID, 'BusinessCase', _BGC)
+                
+                
                 Benefits = vf_Register.MainFrame(self,self.master.master.master.ProjectPack.Project.ID, 'Benefit', _BGC)
                               
                 ProjectProduct = vf_RegisterProjectProduct.MainFrame (self, self.master.master.master.ProjectPack.Project.ID, _BGC)
