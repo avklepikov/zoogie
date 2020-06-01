@@ -20,7 +20,7 @@ import controller
 
 import vf_RiskApproach1
 import vf_RiskApproach2
-import vf_ChangeApproach
+
 import vf_CommunicationApproach
 import vf_RegisterRisk
 
@@ -425,18 +425,8 @@ class RiskTabControl (ttk.Notebook):
 class ChangeTabControl (ttk.Notebook):
         def __init__(self, master):
                 super().__init__(master)
-                
-                
-                
-                #ChangeApproach = vf_Register.MainFrame(self, 
-                ChangeApproach = vf_ChangeApproach.MainFrame(self, self.master.master.master.ProjectPack.ChangeApproach.ID)
-                
-                
-                
-                ChangeApproach.Refresh()
-                
-                
-                #ChangeRegister = vf_RegisterChange.MainFrame (self, self.master.master.master.ProjectPack.Project.ID, _BGC) # <- TODO Check
+
+                ChangeApproach = vf_Register.MainFrameWIthoutRegister(self, self.master.master.master.ProjectPack.ChangeApproach.ID, 'ChangeApproach', _BGC)
                 ChangeRegister = vf_Register.MainFrame(self, self.master.master.master.ProjectPack.Project.ID, 'Issue', _BGC)
                 self.add(ChangeApproach, text = 'Change Approach')
                 self.add(ChangeRegister, text = 'Issue Register')

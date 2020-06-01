@@ -121,6 +121,14 @@ REGISTER_BLOCKS = {
                         
                         }
                 },
+        'ChangeApproach':{
+                'Breakdown':{
+                        'Introduction' : ['Introduction', 0, 0],
+                        'Records': ['Records', 0, 1],
+                        'Procedure': ['Procedure', 1, 0],
+                        'Reporting': ['Reporting', 1, 1],
+                        'Techniques': ['Techniques', 2, 0]}
+                },
                 
         'Stage':{
                 'Register':{
@@ -257,7 +265,7 @@ def Main():
         
         logging.basicConfig(filename='logging.txt',level=logging.DEBUG, format='%(asctime)s %(name)-12s %(levelname)-8s %(message)s', datefmt='%m-%d %H:%M', filemode='w')
         app = Tk()
-        block = MainFrameWIthoutRegister(app,1, 'QualityApproach' ,'gray')
+        block = MainFrameWIthoutRegister(app,1, 'ChangeApproach' ,'gray')
         #block = MainFrame(app,1, 'Stakeholder' ,'gray')
         #block = MainFrame(app,1, 'QualityRegister' ,'gray')
         #QualityRegister
