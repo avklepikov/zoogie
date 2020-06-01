@@ -82,8 +82,26 @@ REGISTER_BLOCKS = {
                         'Title': ['Title', 0, 0],
                         'Description': ['Description', 0, 1]}
                 },
+        'RiskRegister':{
+                'Register':{
+                        'BusinessID' : ['Bisiness ID', 90],
+                        'Title': ['Title', 250],
+                        'Category': ['Category', 150],  
+                        'Probability': ['Probability', 150],
+                        'RaisedDate': ['Raised Date', 150],
+                        'ResponseCategory': ['Response Category', 150],
+                        'Owner': ['Owner', 150],
+                        'Actionee': ['Actionee', 150],
+                        'Status': ['Status', 150]
+                        },
+                'Breakdown':{
+                        'Title': ['Title', 0, 0],
+                        'Impact': ['Impact', 0, 1],
+                        'Description': ['Description', 1, 0],
+                        'Response': ['Response', 1, 1]
+                        },
+                },
         'BusinessCase':{
-                'Register':{},
                 'Breakdown':{
                         'ExecutiveSummary':['Executive Summary', 0, 0],
                         'ExpectedBenefits':['Expected Benefits', 1, 0],
@@ -96,7 +114,6 @@ REGISTER_BLOCKS = {
                         }
                 },
         'ProjectApproach':{
-                'Register':{},
                 'Breakdown':{
                         'ExternalDependency':['External Dependency', 0, 0],
                         'IndustrySolutions':['Industry Solutions', 0 ,1],
@@ -107,7 +124,6 @@ REGISTER_BLOCKS = {
                 
                 },
         'QualityApproach' : {
-                'Register':{},
                 'Breakdown':{
                         'Introduction' : ['Introduction', 0,0],
                         'Records': ['Records', 0, 1],
@@ -128,6 +144,16 @@ REGISTER_BLOCKS = {
                         'Procedure': ['Procedure', 1, 0],
                         'Reporting': ['Reporting', 1, 1],
                         'Techniques': ['Techniques', 2, 0]}
+                },
+        'CommunicationApproach':{
+                'Breakdown':{
+                        'Introduction': ['Introduction', 0, 0],
+                        'Procedure': ['Procedure', 0, 1],
+                        'Reporting': ['Reporting', 1, 0],
+                        'Timing': ['Timing', 1, 1],
+                        'Techniques': ['Techniques', 2, 0],
+                        'RolesResponsibilities': ['Roles and Responsibilities', 2, 1],
+                        'Records': ['Records', 3, 0]}
                 },
                 
         'Stage':{
@@ -265,7 +291,7 @@ def Main():
         
         logging.basicConfig(filename='logging.txt',level=logging.DEBUG, format='%(asctime)s %(name)-12s %(levelname)-8s %(message)s', datefmt='%m-%d %H:%M', filemode='w')
         app = Tk()
-        block = MainFrameWIthoutRegister(app,1, 'ChangeApproach' ,'gray')
+        block = MainFrame(app,1, 'RiskRegister' ,'gray')
         #block = MainFrame(app,1, 'Stakeholder' ,'gray')
         #block = MainFrame(app,1, 'QualityRegister' ,'gray')
         #QualityRegister

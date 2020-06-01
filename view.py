@@ -21,8 +21,8 @@ import controller
 import vf_RiskApproach1
 import vf_RiskApproach2
 
-import vf_CommunicationApproach
-import vf_RegisterRisk
+
+
 
 import vf_RegisterProjectProduct
 import vf_Register
@@ -411,7 +411,8 @@ class RiskTabControl (ttk.Notebook):
                 RiskApproach2.Refresh()
                 
                 
-                RiskRegister = vf_RegisterRisk.MainFrame(self, self.master.master.master.ProjectPack.Project.ID, _BGC)  #<--- TODO CHECK
+                RiskRegister = vf_Register.MainFrame(self, self.master.master.master.ProjectPack.Project.ID, 'RiskRegister', _BGC)
+                
                 
                 
                 self.add(RiskApproach1, text = 'Risk Approach (1)')
@@ -437,8 +438,8 @@ class CommunicationTabControl (ttk.Notebook):
         def __init__(self, master):
                 super().__init__(master)
                 
-                CommunicationApproach = vf_CommunicationApproach.MainFrame(self, self.master.master.master.ProjectPack.CommunicationApproach.ID)
-                CommunicationApproach.Refresh()
+                CommunicationApproach = vf_Register.MainFrameWIthoutRegister(self,self.master.master.master.ProjectPack.CommunicationApproach.ID, 'CommunicationApproach', _BGC)
+
                 self.add(CommunicationApproach, text = 'Communication Approach')
                 
                 stakeholders = vf_Register.MainFrame(self, self.master.master.master.ProjectPack.Project.ID, 'Stakeholder', _BGC)
