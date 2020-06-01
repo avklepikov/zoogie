@@ -23,22 +23,23 @@ support@zoogieproject.com
 
 
 # Roadmap
-## Current Release "MVP":
-"Minimal value product" to get feedback, ideas, initial contribution 
+## Current Release: "Alfa version":
+"Minimal value product" to present the concept, to get feedback, ideas, initial contribution 
 * working with portfolio of projects
 * structure to keep project data at different project stages
 * Registers
 * Logging  
 * SQLite database as a data source for QlikView, Tableau, etc
+* Sample project data
 
 
 ## Next release is expected to contain:
 * version control
-* PM daily meetings made simple 
-* switching to multiuser
-* dashboard
-* Project plan visualisation 
-* Different screen size and resolution
+* daily log (journal)
+* PM daily meetings (agenda & minutes) made simple 
+* (?) switching to multiuser
+* (?) Project plan visualisation 
+* (?) Different screen size and resolution
 
 
 # Contribution
