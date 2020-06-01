@@ -263,7 +263,10 @@ DB_FIELDS_MAPPING ={                                #Class attributes -> Db Fiel
         'Project': {'ID': ['ID', 'INTEGER PRIMARY KEY AUTOINCREMENT'],
                     'Project': ['Project', 'TEXT'],
                     'BusinessID': ['BusinessID', 'TEXT'],
-                    'TechStatus': ['TechStatus', 'TEXT']}
+                    'TechStatus': ['TechStatus', 'TEXT'],
+                    'SnapshotAsOfDate': ['SnapshotAsOfDate', 'TEXT'],
+                    'SnapshotBoardConfirmed': ['SnapshotBoardConfirmed', 'TEXT'],
+                    'SnapshotCommentary': ['SnapshotCommentary', 'TEXT']}
         
         }
 """Converts (mapping) Class attribute name into database field name  

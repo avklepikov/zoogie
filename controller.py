@@ -106,9 +106,10 @@ def RefreshBusinessObject_byID(_class, _ID):
 # --- TESTING PART --- #
 def Main ():
         logging.basicConfig(filename='logging.txt',level=logging.DEBUG, format='%(asctime)s %(name)-12s %(levelname)-8s %(message)s', datefmt='%m-%d %H:%M', filemode='w')        
-        appendProjectPack('TestProject2')
+        #appendProjectPack('TestProject2')
         #print (GetPredefinedListValues('RiskRegister', 'Impact'))
-
+        model.Main()
+        
 if __name__ == '__main__':
         Main ()
         

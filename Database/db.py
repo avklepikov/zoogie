@@ -125,6 +125,7 @@ def compile_CREATE_TABLE_script (_class: str):                    #OK (used from
         return SQL
 
 
+
 def complile_SELECT_ALL (_class: str, _attr_value_dict: dict):
         logging.info (f'      DB Starting complile_SELECT_ALL (_class = {_class}, _attr_value_dict = {_attr_value_dict})')
         table = get_class_table(_class)

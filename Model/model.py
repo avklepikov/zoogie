@@ -121,10 +121,38 @@ PREDEFINED_LISTS_OF_VALUES = {
                                     'Closing a project',
                                     'Other'],
                 'Priority': ['High', 'Medium', 'Low']},
+        
+        'Project':{
+                'TechStatus': ['Published Current', 'Published Archived','Draft', 'Snapshot']},
+        
         'Stage':{
                 'Category': ['Starting-Up (SU)', 'Project Initiation', 'Delivery Stage'],
                 'Status': ['Scheduled', 'Active', 'Active (Exception)', 'Terminated', 'Completed']}
         }
+
+
+class ProjectsList():
+        def __init__ (self):
+                self.HeadList = []
+                self.DetailList = []
+        
+
+        
+        def Refresh (self):
+                _sql = db.complile_SELECT_ALL('Project', ['ID','BusinessID', 'Project', 'TechStatus', 'SnapshotAsOfDate', 'SnapshotBoardConfirmed', 'SnapshotCommentary'])
+                print (_sql)
+                self.HeadList = db.executeSQLget(_sql)                
+                
+                
+        def __str__ (self):
+                print ('==================')
+                print ('Register of Portfolios')
+                print ('------------------')
+                for item in self.HeadList:
+                        print (item)
+                #print ('------------------')
+                return ('------------------')
+                
 
 class ProjectPack():
         def __init__(self):
@@ -1409,21 +1437,20 @@ class Project (ProjectObject):          # OK +ProjectPack
                       Project: str = None,
                       BusinessID: str = None,
                       ID: int = None,
-                      TechStatus: str = None):
+                      TechStatus: str = None,
+                      SnapshotAsOfDate: str = None,
+                      SnapshotBoardConfirmed: str = None,
+                      SnapshotCommentary: str = None
+                      ):
                 super().__init__()
                 self.ID = ID
                 self.Project = Project
                 self.BusinessID = BusinessID
                 self.TechStatus = TechStatus
-                
-                #self.ProjectBrief = ProjectBrief()
-                
-                #self.BenefitApproach = BenefitApproach()
-                #self.BusinessCase = BusinessCase()
-                #self.QualityApproach=QualityApproach()
-                #self.RiskApproach=RiskApproach()
-                #self.CommunicationApproach = CommunicationApproach()
-                #self.ChangeApproach = ChangeApproach()
+                self.SnapshotAsOfDate = SnapshotAsOfDate
+                self.SnapshotBoardConfirmed = SnapshotBoardConfirmed
+                self.SnapshotCommentary = SnapshotCommentary
+
                 
                 
                 
@@ -1433,18 +1460,14 @@ def Main ():
         
         logging.basicConfig(filename='logging.txt',level=logging.DEBUG, format='%(asctime)s %(name)-12s %(levelname)-8s %(message)s', datefmt='%m-%d %H:%M', filemode='w')
         
-        X = ProjectPack()
-        #X.Refresh(1)
-        X.Create('KISPL PROJECT 007')
+        #X = ProjectPack()
+        #X.Create('KISPL PROJECT 007')
         
-        #X.ID = 1
-        #X.update()
-        
-        #Y = Mandate()
-        #print ('I am alive')
-        #print (X)
-        #print ('BenefitAppr: ', X.BenefitApproach)
+        X = ProjectsList()
+        X.Refresh()
         print (X)
+        
+        
 
 if __name__ == '__main__':
         Main()
