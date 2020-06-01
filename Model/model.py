@@ -137,6 +137,7 @@ class ProjectPack():
                 self.RiskApproach = RiskApproach()
                 self.CommunicationApproach = CommunicationApproach()
                 self.ChangeApproach = ChangeApproach()
+                self.ProjectApproach = ProjectApproach()
                 #print ('ProjectPack')
                 
         def Refresh (self, _ProjectID: int):
@@ -148,7 +149,8 @@ class ProjectPack():
                                      self.QualityApproach, 
                                      self.RiskApproach, 
                                      self.CommunicationApproach, 
-                                     self.ChangeApproach
+                                     self.ChangeApproach,
+                                     self.ProjectApproach
                                      ]
                 
                 
@@ -204,6 +206,7 @@ class ProjectPack():
                         self.ProjectBrief.RelatedProject = self.Project.ID
                         self.QualityApproach.RelatedProject = self.Project.ID
                         self.RiskApproach.RelatedProject = self.Project.ID
+                        self.ProjectApproach.RelatedProject = self.Project.ID
                         return 1
                         
                 else:
@@ -220,7 +223,8 @@ class ProjectPack():
                              self.Mandate, 
                              self.ProjectBrief, 
                              self.QualityApproach,
-                             self.RiskApproach
+                             self.RiskApproach,
+                             self.ProjectApproach
                              ]
                 
                 for item in PartsList:
@@ -277,8 +281,15 @@ class ProjectPack():
                 
                 print ('\n-----Risk Approach-----')
                 print (self.RiskApproach)    
-                print ('----------')                
+                print ('----------')          
+                
+                print ('\n-----Risk Approach-----')
+                print (self.ProjectApproach)    
+                print ('----------')                          
+                
                 return ('===================================')
+        
+        
         
         
 
@@ -477,6 +488,27 @@ class BenefitApproach (ProjectObject):  # OK +ProjectPack
                 self.Introduction = Introduction
                 self.Review = Review
         
+
+class ProjectApproach (ProjectObject):
+        def __init__(self,
+                     ID: int = None,
+                     RelatedProject: int = None,
+                     ExternalDependency: str = None,
+                     IndustrySolutions: str = None,
+                     OperationalEnvironment: str = None,
+                     SecurityConstrains: str = None,
+                     DeliveryApproach: str = None,
+                     TrainingNeeds: str = None):
+                super().__init__()
+                self.ID = ID
+                self.RelatedProject = RelatedProject
+                self.ExternalDependency = ExternalDependency
+                self.IndustrySolutions = IndustrySolutions
+                self.OperationalEnvironment = OperationalEnvironment
+                self.SecurityConstrains = SecurityConstrains
+                self.DeliveryApproach = DeliveryApproach
+                self.TrainingNeeds = TrainingNeeds               
+                     
 
 class BusinessCase (ProjectObject):     # OK +ProjectPack
         """Justification to run the project
@@ -1403,7 +1435,7 @@ def Main ():
         
         X = ProjectPack()
         #X.Refresh(1)
-        X.Create('KISPL PROJECT XX4')
+        X.Create('KISPL PROJECT 007')
         
         #X.ID = 1
         #X.update()

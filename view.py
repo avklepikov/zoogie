@@ -354,9 +354,11 @@ class BusinessCaseTabControl (ttk.Notebook):
                               
                 ProjectProduct = vf_RegisterProjectProduct.MainFrame (self, self.master.master.master.ProjectPack.Project.ID, _BGC)
                 
+                ProjectApproach = vf_Register.MainFrameWIthoutRegister(self, self.master.master.master.ProjectPack.ProjectApproach.ID, 'ProjectApproach', _BGC)
                 
                 self.add(Mandate, text = 'Mandate')
                 self.add(BusinessCase, text = 'Business Case')
+                self.add(ProjectApproach, text = 'Project Approach')
                 self.add(Benefits, text = 'Benefits')
                 self.add(ProjectProduct, text = 'Project Product')
         

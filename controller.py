@@ -2,6 +2,9 @@ import logging
 
 from Model import model
 
+def appendProjectPack(project_name):
+        projectPack = model.ProjectPack()
+        projectPack.Create(project_name)
 
 def appendProjectObject (_class, _relatedProjectID):
         ObjectClass = getattr(model, _class)
@@ -103,7 +106,8 @@ def RefreshBusinessObject_byID(_class, _ID):
 # --- TESTING PART --- #
 def Main ():
         logging.basicConfig(filename='logging.txt',level=logging.DEBUG, format='%(asctime)s %(name)-12s %(levelname)-8s %(message)s', datefmt='%m-%d %H:%M', filemode='w')        
-        print (GetPredefinedListValues('RiskRegister', 'Impact'))
+        appendProjectPack('TestProject2')
+        #print (GetPredefinedListValues('RiskRegister', 'Impact'))
 
 if __name__ == '__main__':
         Main ()

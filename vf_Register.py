@@ -65,8 +65,7 @@ REGISTER_BLOCKS = {
                         'Title': ['Title', 0, 0],
                         'Description': ['Description', 0, 1],
                         'Recommendations': ['Recommendations', 1, 1],
-                        'CauseTrigger': ['Cause Trigger', 1, 0],
-                }
+                        'CauseTrigger': ['Cause Trigger', 1, 0]}
                 },
         'Issue':{
                 'Register':{
@@ -81,7 +80,18 @@ REGISTER_BLOCKS = {
                         },
                 'Breakdown':{
                         'Title': ['Title', 0, 0],
-                        'Description': ['Description', 0, 1],                }
+                        'Description': ['Description', 0, 1]}
+                },
+        'ProjectApproach':{
+                'Register':{},
+                'Breakdown':{
+                        'ExternalDependency':['External Dependency', 0, 0],
+                        'IndustrySolutions':['Industry Solutions', 0 ,1],
+                        'OperationalEnvironment':['Operational Environment', 1, 0],
+                        'DeliveryApproach':['Delivery Approach', 1, 1],
+                        'SecurityConstrains': ['Security Constrains', 2, 0],
+                        'TrainingNeeds': ['Training Needs for Project Delivery', 2, 1]}
+                
                 },
                 
         'Stage':{
@@ -139,8 +149,52 @@ class MainFrame (Frame):
                 """BreakDown refresh based on item selected in the register"""
                 self.BD.Refresh(dbRecordID)    
          
-        
 
+class MainFrameWIthoutRegister (Frame):
+        def __init__ (self, master, dbProjectRecordID, objectName, colorCode):
+                super().__init__(master)
+                self.config (bg = colorCode)
+                self.dbProjectRecordID = dbProjectRecordID
+                self.objectName = objectName
+                argList = []
+                argLabelList = []
+                argSizeList = []
+                
+                #Building the Register based on REGISTER_BLOCKS setup:
+                #for item in REGISTER_BLOCKS[self.objectName]['Register']:
+                        #argList.append (item)
+                        #argLabelList.append (REGISTER_BLOCKS[self.objectName]['Register'][item][0])
+                        #argSizeList.append (REGISTER_BLOCKS[self.objectName]['Register'][item][1])                
+                #self.Register = CustomizedElements.RegisterList(self, 
+                                                                #self.dbProjectRecordID,
+                                                                #self.objectName, 
+                                                                #argList,
+                                                                #argSizeList)
+                #self.Register.pack()
+                
+                #Building the Breakdown section
+                BD_argList =[]
+                BD_argLabelList= []
+                argSizeList.clear()
+                argRowList = []
+                argColumnList = []
+                for item in REGISTER_BLOCKS[self.objectName]['Breakdown']:
+                        BD_argList.append (item)
+                        BD_argLabelList.append (REGISTER_BLOCKS[self.objectName]['Breakdown'][item][0])
+                        argRowList.append (REGISTER_BLOCKS[self.objectName]['Breakdown'][item][1])
+                        argColumnList.append (REGISTER_BLOCKS[self.objectName]['Breakdown'][item][2])
+
+                
+                self.BD = Breakdown(self, self.objectName, BD_argList, BD_argLabelList, argRowList, argColumnList, colorCode)
+                self.BD.pack()
+                self.Refresh(self.dbProjectRecordID)
+                
+
+                
+        def Refresh (self, dbRecordID):
+                """BreakDown refresh based on item selected in the register"""
+                self.BD.Refresh(dbRecordID)  
+                
 class Breakdown (Frame):
         def __init__ (self, master, objectName, argList, argLabelList, argRowList, argColumnList, colorCode):
                 super().__init__(master)
@@ -165,6 +219,7 @@ class Breakdown (Frame):
 
                 
                 for item in self.attributesObjects:
+                        print(item.objectName, item.attributeName)
                         item.valueUpdate(Data[0][Keys[item.attributeName]])
                         item.dbRecordID = Data[0][Keys['ID']]
                         
@@ -174,7 +229,7 @@ def Main():
         
         logging.basicConfig(filename='logging.txt',level=logging.DEBUG, format='%(asctime)s %(name)-12s %(levelname)-8s %(message)s', datefmt='%m-%d %H:%M', filemode='w')
         app = Tk()
-        block = MainFrame(app,29, 'Risk' ,'gray')
+        block = MainFrameWIthoutRegister(app,1, 'ProjectApproach' ,'gray')
         #block = MainFrame(app,1, 'Stakeholder' ,'gray')
         #block = MainFrame(app,1, 'QualityRegister' ,'gray')
         #QualityRegister
