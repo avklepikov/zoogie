@@ -38,6 +38,7 @@ Classes: Business name is Project Objects
 
 import logging
 from Database import db        #database connector to run the model on SQLLite DB
+from Model import SampleData
 
 
 PREDEFINED_LISTS_OF_VALUES = {
@@ -123,7 +124,7 @@ PREDEFINED_LISTS_OF_VALUES = {
                 'Priority': ['High', 'Medium', 'Low']},
         
         'Project':{
-                'TechStatus': ['Published Current', 'Published Archived','Draft', 'Snapshot']},
+                'TechStatus': ['Published (Current)', 'Published (Archived)', 'Draft', 'Snapshot']},
         
         'Stage':{
                 'Category': ['Starting-Up (SU)', 'Project Initiation', 'Delivery Stage'],
@@ -142,11 +143,11 @@ class ProjectsList():
                      
                 
                 _sql = db.complile_SELECT_ALL_GROUPPED('Project', ['BusinessID', 'Project'])
-                print (_sql)
+                #print (_sql)
                 self.HeadList = db.executeSQLget(_sql)                  
                 
                 _sql = db.complile_SELECT_ALL('Project', ['ID','BusinessID', 'Project', 'TechStatus', 'SnapshotAsOfDate', 'SnapshotBoardConfirmed', 'SnapshotCommentary'])
-                print (_sql)
+                #print (_sql)
                 self.DetailList = db.executeSQLget(_sql)                 
                 
         def __str__ (self):
@@ -221,10 +222,14 @@ class ProjectPack():
                                 setattr (ProjectObjectListItem, item, _value)
                                 
                         
-        def Create (self, ProjectName: str):
+        def Create (self, ProjectName: str, ProjectBusinessID: str = None, generateSampleData = None):
                 self.Project.Project=ProjectName
+                self.Project.BusinessID = ProjectBusinessID
                 self.Project.TechStatus='Active'
                 success = self._createProjectRecord()
+                if generateSampleData == 'Yes':
+                        SampleData.generate(self)
+                #print (self)
                 if success == 1:
                         self._createProjectParts()
                 else:
@@ -277,7 +282,7 @@ class ProjectPack():
                         #print (item.__class__.__name__, SQL_return)
                         if  len(SQL_return) == 0:
                                 
-                                print (item.__class__.__name__)
+                                #print (item.__class__.__name__)
                                 
                                 item.RelatedProject= self.Project.ID
                                 item.append()
@@ -1471,6 +1476,7 @@ class Project (ProjectObject):          # OK +ProjectPack
                 
 
 
+
 def Main ():
         
         logging.basicConfig(filename='logging.txt',level=logging.DEBUG, format='%(asctime)s %(name)-12s %(levelname)-8s %(message)s', datefmt='%m-%d %H:%M', filemode='w')
@@ -1478,11 +1484,11 @@ def Main ():
         #X = ProjectPack()
         #X.Create('KISPL PROJECT 007')
         
-        X = ProjectsList()
-        X.Refresh()
-        print (X)
+        #X = ProjectsList()
+        #X.Refresh()
+        #print (X)
         
-        
+        #GenerateSample()
 
 if __name__ == '__main__':
         Main()

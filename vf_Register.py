@@ -298,7 +298,7 @@ class Breakdown (Frame):
 
                 
                 for item in self.attributesObjects:
-                        print(item.objectName, item.attributeName)
+                        #print(item.objectName, item.attributeName)
                         item.valueUpdate(Data[0][Keys[item.attributeName]])
                         item.dbRecordID = Data[0][Keys['ID']]
                         

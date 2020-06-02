@@ -135,7 +135,7 @@ class PortfoliosTree (ttk.Treeview):
                 self.heading ('SnapshotCommentary', text = 'Commentary', anchor = 'w')
                 
                 
-                self.column('#0', width = 30)
+                self.column('#0', width = 70)
                 
                 
                 
@@ -144,13 +144,22 @@ class PortfoliosTree (ttk.Treeview):
                 self.projectsList = controller.getProjectsList()
                 
                 self.bind("<Double-1>", self.OnDoubleClick)
+                
+                
+                self.popup_menu = Menu (self, tearoff=0)
+                self.popup_menu.add_command(label='Add new project', command = self._addNewProject)
+                self.popup_menu.add_command(label='Add new Sample project', command = self._addNewSampleProject)
+                self.popup_menu.add_command(label='Snapshot selected project', command = self._snapshotProject)  
+                self.popup_menu.add_command(label='Delete selected project', command = self._deleteProject)  
+                self.bind ('<Button-2>', self._do_popup)
+                
                 self.Refresh()
                 
                 
         def OnDoubleClick(self, event):
                 item = self.identify('item', event.x, event.y)
                 bdRecordID = self.item(item, 'text')      
-                print ('Selected', bdRecordID)
+                #print ('Selected', bdRecordID)
                 projectwindow = ProjectApp(bdRecordID)
                 projectwindow.mainloop()
                 #registerItemCard = vf_Top_RegisterCard.MainFrame(self, bdRecordID, self.ObjectName,  'gray')
@@ -158,8 +167,12 @@ class PortfoliosTree (ttk.Treeview):
 
         
         def Refresh (self):
+                print ('Refresh tree')
+                for i in self.get_children():
+                        self.delete(i)
+                        
                 self.projectsList.Refresh()
-                print (self.projectsList)
+                #print (self.projectsList)
                 
                 
                 # CREATE FOLDERS
@@ -170,17 +183,91 @@ class PortfoliosTree (ttk.Treeview):
                         folderIndex[item[0]] = self.projectsList.HeadList.index(item)
                         self.insert('', self.projectsList.HeadList.index(item), iid = self.projectsList.HeadList.index(item), text = item[0], values=[item[1]])
                 
-                print ('Folder Index')
-                print (folderIndex)
+                #print ('Folder Index')
+                #print (folderIndex)
                 
                 for item in self.projectsList.DetailList:
-                        print (folderIndex[item[1]])
+                        #print (folderIndex[item[1]])
                         self.insert(folderIndex[item[1]], item[0], text = item[0], values=[item[2],item[3],item[4],item[5],item[6]])
                         pass
                         
+        def _do_popup (self, event):
+                try:
+                        self.popup_menu.tk_popup(event.x_root, event.y_root, 0)
+                        
+                finally:
+                        # make sure to release the grab (Tk 8.0a1 only)
+                        self.popup_menu.grab_release()  
+                        pass
 
+        def _addNewProject(self):
+                newProjectRequest = NewProjectRequest(self)
+                newProjectRequest.mainloop()
+                
+        def _addNewSampleProject(self):
+                newProjectRequest = NewSampleProjectRequest(self)
+                newProjectRequest.mainloop()                
+        
+        def _snapshotProject(self):
+                pass
+        
+        def _deleteProject(self):
+                pass
 
+class NewProjectRequest (Toplevel):
+        def __init__(self, master):
+                super().__init__(master)
+                self.title('Creation of a new Project')
+                self.myLabel = Label(self, text='Enter Business Code for a new Project')
+                self.myLabel.pack()
+                self.myEntryBox = Entry(self) 
+                self.myEntryBox.focus_set()
+                self.myEntryBox.pack()  
+                
+                self.myLabel2 = Label(self, text='Enter Title for a new Project')
+                self.myLabel2.pack()
+                self.myEntryBox2 = Entry(self) 
+                self.myEntryBox2.focus_set()
+                self.myEntryBox2.pack()  
+                
+                self.mySubmitButton = Button(self, text='Create', command=self._creationOfProject)
+                self.mySubmitButton.pack()   
+                
+        def _creationOfProject (self):
+                projectBID = self.myEntryBox.get()
+                projectTitle = self.myEntryBox2.get()
+                controller.appendProjectPack(projectTitle, projectBID)
+                #print ('careta')
+                self.master.Refresh()
+                self.destroy()
 
+class NewSampleProjectRequest (Toplevel):
+        def __init__(self, master):
+                super().__init__(master)
+                self.title('Creation of a new Project')
+                self.myLabel = Label(self, text='Enter Business Code for a new Project')
+                self.myLabel.pack()
+                self.myEntryBox = Entry(self) 
+                self.myEntryBox.focus_set()
+                self.myEntryBox.pack()  
+                
+                self.myLabel2 = Label(self, text='Enter Title for a new Project')
+                self.myLabel2.pack()
+                self.myEntryBox2 = Entry(self) 
+                self.myEntryBox2.focus_set()
+                self.myEntryBox2.pack()  
+                
+                self.mySubmitButton = Button(self, text='Create', command=self._creationOfProject)
+                self.mySubmitButton.pack()   
+                
+        def _creationOfProject (self):
+                projectBID = self.myEntryBox.get()
+                projectTitle = self.myEntryBox2.get()
+                controller.appendProjectPack(projectTitle, projectBID, 'Yes')
+                #print ('careta')
+                self.master.Refresh()
+                self.destroy()
+                
 # Building GUI                
 class ProjectApp (Toplevel):
         def __init__ (self, _activeProject):
@@ -251,7 +338,7 @@ class mainFrame_Project(Frame):
         def __init__ (self, master, _activeProject):
                 super().__init__(master)
                 self.ProjectPack = controller.GetProjectPack(_activeProject)
-                print(self.ProjectPack)
+                #print(self.ProjectPack)
                 self.config (bg = _BGC)
                 project_head = ProjectHead(self)
                 tab_control = ProjectTabControl(self)

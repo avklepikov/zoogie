@@ -43,7 +43,7 @@ class ChangeTopLevel (Toplevel):
                 self.EditButton.grid(row = 5, column = 0, columnspan = 2, sticky = W+E)
         
         def attributeEdit(self):
-                print ('AttributeEdit method')
+                #print ('AttributeEdit method')
                 self.EditButton.destroy()
                 self.Label_Commentary = Label(self, text = 'Edit commentary', bg = self.colorCode, anchor = W).grid(row = 6, column = 0, sticky = W+E)
                 self.Text_Commentary = Text (self,  width = 30, height = 6).grid(row=7, column = 0, columnspan=2, rowspan = 6)#,sticky = W+E)
@@ -55,7 +55,8 @@ class ChangeTopLevel (Toplevel):
                 #print(self.ChangeText.get(1.0, END))
                 controller.UpdateAttribute(self.objectName, self.attributeName, self.dbRecordID, self.ChangeText.get(1.0, END+"-1c"))
                 #self.master.master.Refresh()
-                
+                #print (self.master)
+                self.master.valueUpdate(self.ChangeText.get(1.0, END+"-1c"))
                 self.destroy()
                 
                 # pass

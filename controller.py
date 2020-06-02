@@ -7,9 +7,9 @@ def getProjectsList():
         ObjectInstance = ObjectClass() 
         return ObjectInstance
 
-def appendProjectPack(project_name):
+def appendProjectPack(project_name, ProjectBusinessID = None, generateSampleData = None):
         projectPack = model.ProjectPack()
-        projectPack.Create(project_name)
+        projectPack.Create(project_name, ProjectBusinessID, generateSampleData)
 
 def appendProjectObject (_class, _relatedProjectID):
         ObjectClass = getattr(model, _class)
