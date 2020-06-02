@@ -37,27 +37,138 @@ Classes: Business name is Project Objects
 """
 
 import logging
-import db        #database connector to run the model on SQLLite DB
+from Database import db        #database connector to run the model on SQLLite DB
+from Model import SampleData
 
 
 PREDEFINED_LISTS_OF_VALUES = {
         'RiskRegister' : {
-                'Status' : ['Open', 'Canceled', 'Realised', 'Closed'],
-                'Probability': ['High', 'Medium', 'Low'],
-                'ResponseCategory' : ['Avoid', 'Expolot', 'Reduce', 'Enhance',  'Share', 'Accept', 'Plan'],
-                'Impact': ['High', 'Medium', 'Low'],
-                'Category': ['Time', 'Cost', 'Quality', 'Benefits', 'Scope']},
+                'Status' : ['Open', 
+                            'Canceled', 
+                            'Realised', 
+                            'Closed'],
+                'Probability': ['High', 
+                                'Medium', 
+                                'Low'],
+                'ResponseCategory' : ['Avoid', 
+                                      'Expolot', 
+                                      'Reduce', 
+                                      'Enhance',  
+                                      'Share', 
+                                      'Accept', 
+                                      'Plan'],
+                'Impact': ['High', 
+                           'Medium', 
+                           'Low'],
+                'Category': ['Time', 
+                             'Cost', 
+                             'Quality', 
+                             'Benefits', 
+                             'Scope']},
         'Issue': {
-                'Category' : ['change request (CR)', 'problem', 'Off-spec'],
-                'Priority': ['High', 'Medium', 'Low'],
-                'Status': ['Open problem', 'Solved problem', 'CR Awaiting Approval', 'CR Approved by Board', 'CR Approved by PM', 'Open Off-spec', 'Solved Off-Spec', 'Canceled']},
+                'Category' : ['change request (CR)', 
+                              'problem', 
+                              'Off-spec'],
+                'Priority': ['High', 
+                             'Medium', 
+                             'Low'],
+                'Status': ['Open problem', 
+                           'Solved problem', 
+                           'CR Awaiting Approval', 
+                           'CR Approved by Board', 
+                           'CR Approved by PM', 
+                           'Open Off-spec', 
+                           'Solved Off-Spec', 
+                           'Canceled']},
         'QualityRegister':{
-                'Status': ['Scheduled', 'In progress', 'Passed', 'Not Passed', 'Canceled']},
+                'Status': ['Scheduled', 
+                           'In progress', 
+                           'Passed', 
+                           'Not Passed', 
+                           'Canceled']},
         'Stakeholder':{
-                'InfluenceLevel': ['High', 'Medim', 'Low'],
-                'SupportLevel': ['High', 'Medim', 'Low']},
+                'InfluenceLevel': ['High', 
+                                   'Medim', 
+                                   'Low'],
+                'SupportLevel': ['High', 
+                                 'Medim', 
+                                 'Low']},
         'Team':{
-                'Role':['Corporate Management (project mandate)', 'Programme Magager (project mandate)', 'Customer (project mandate)', 'Executive', 'Senior User', 'Senior Supplier', 'Quality Assurance', 'Project Office']}}   
+                'Role':['Corporate Management (project mandate)', 
+                        'Programme Magager (project mandate)', 
+                        'Customer (project mandate)', 
+                        'Executive', 
+                        'Project Manager', 
+                        'Senior User', 
+                        'Senior Supplier',
+                        'Supplier Team Manager', 
+                        'Quality Assurance', 
+                        'Project Support']},
+        'Lesson':{
+                'Category':['Business Case', 
+                            'Organization', 
+                            'Quality', 
+                            'Plans', 
+                            'Risk', 
+                            'Change', 
+                            'Progress',
+                            'Other'],
+                'CategoryProcess': ['Starting up a project', 
+                                    'Directing a project', 
+                                    'Initiation of a project', 
+                                    'Controlling a project', 
+                                    'Managing Product Delivery', 
+                                    'Managing Stage Boundary', 
+                                    'Closing a project',
+                                    'Other'],
+                'Priority': ['High', 'Medium', 'Low']},
+        
+        'Project':{
+                'TechStatus': ['Published (Current)', 'Published (Archived)', 'Draft', 'Snapshot']},
+        
+        'Stage':{
+                'Category': ['Starting-Up (SU)', 'Project Initiation', 'Delivery Stage'],
+                'Status': ['Scheduled', 'Active', 'Active (Exception)', 'Terminated', 'Completed']}
+        }
+
+
+class ProjectsList():
+        def __init__ (self):
+                self.HeadList = []
+                self.DetailList = []
+        
+
+        
+        def Refresh (self):
+                     
+                
+                _sql = db.complile_SELECT_ALL_GROUPPED('Project', ['BusinessID', 'Project'])
+                #print (_sql)
+                self.HeadList = db.executeSQLget(_sql)                  
+                
+                _sql = db.complile_SELECT_ALL('Project', ['ID','BusinessID', 'Project', 'TechStatus', 'SnapshotAsOfDate', 'SnapshotBoardConfirmed', 'SnapshotCommentary'])
+                #print (_sql)
+                self.DetailList = db.executeSQLget(_sql)                 
+                
+        def __str__ (self):
+                print ('==================')
+                print ('Register of Portfolios (HEADS)')
+                print ('------------------')
+                for item in self.HeadList:
+                        print (item)
+                        
+                print ('==================')
+                print ('Register of Portfolios (DETAILED)')
+                print ('------------------')      
+                for item in self.DetailList:
+                        print (item)                
+                #print ('------------------')
+                
+                
+                
+                
+                return ('------------------')
+                
 
 class ProjectPack():
         def __init__(self):
@@ -70,6 +181,7 @@ class ProjectPack():
                 self.RiskApproach = RiskApproach()
                 self.CommunicationApproach = CommunicationApproach()
                 self.ChangeApproach = ChangeApproach()
+                self.ProjectApproach = ProjectApproach()
                 #print ('ProjectPack')
                 
         def Refresh (self, _ProjectID: int):
@@ -81,7 +193,8 @@ class ProjectPack():
                                      self.QualityApproach, 
                                      self.RiskApproach, 
                                      self.CommunicationApproach, 
-                                     self.ChangeApproach
+                                     self.ChangeApproach,
+                                     self.ProjectApproach
                                      ]
                 
                 
@@ -109,10 +222,14 @@ class ProjectPack():
                                 setattr (ProjectObjectListItem, item, _value)
                                 
                         
-        def Create (self, ProjectName: str):
+        def Create (self, ProjectName: str, ProjectBusinessID: str = None, generateSampleData = None):
                 self.Project.Project=ProjectName
+                self.Project.BusinessID = ProjectBusinessID
                 self.Project.TechStatus='Active'
                 success = self._createProjectRecord()
+                if generateSampleData == 'Yes':
+                        SampleData.generate(self)
+                #print (self)
                 if success == 1:
                         self._createProjectParts()
                 else:
@@ -137,6 +254,7 @@ class ProjectPack():
                         self.ProjectBrief.RelatedProject = self.Project.ID
                         self.QualityApproach.RelatedProject = self.Project.ID
                         self.RiskApproach.RelatedProject = self.Project.ID
+                        self.ProjectApproach.RelatedProject = self.Project.ID
                         return 1
                         
                 else:
@@ -144,6 +262,7 @@ class ProjectPack():
                         return 0
         
         def _createProjectParts(self):
+                """Creates Project integral parts without registers"""
                 
                 PartsList = [self.BenefitApproach, 
                              self.BusinessCase, 
@@ -152,7 +271,8 @@ class ProjectPack():
                              self.Mandate, 
                              self.ProjectBrief, 
                              self.QualityApproach,
-                             self.RiskApproach
+                             self.RiskApproach,
+                             self.ProjectApproach
                              ]
                 
                 for item in PartsList:
@@ -162,7 +282,7 @@ class ProjectPack():
                         #print (item.__class__.__name__, SQL_return)
                         if  len(SQL_return) == 0:
                                 
-                                print (item.__class__.__name__)
+                                #print (item.__class__.__name__)
                                 
                                 item.RelatedProject= self.Project.ID
                                 item.append()
@@ -209,8 +329,15 @@ class ProjectPack():
                 
                 print ('\n-----Risk Approach-----')
                 print (self.RiskApproach)    
-                print ('----------')                
+                print ('----------')          
+                
+                print ('\n-----Risk Approach-----')
+                print (self.ProjectApproach)    
+                print ('----------')                          
+                
                 return ('===================================')
+        
+        
         
         
 
@@ -247,7 +374,7 @@ class ProjectObject():   # Unified methods are set in this SuperClass
         def append (self):
                 """Created a Database record and writes all Project Object attributes into it
                 """
-                #print ('append: ', self.__class__.__name__, self.__dict__)
+                #logging.info ('append: ', self.__class__.__name__, self.__dict__)
                 _sql = db.compile_INSERT_script(self.__class__.__name__, self.__dict__)
                 db.executeSQL(_sql)
 
@@ -271,8 +398,9 @@ class ProjectObject():   # Unified methods are set in this SuperClass
         def delete (self):
                 """Finds related Project Object record and delete it from database
                 """                
-                logging.info ('delete: ', self.__class__.__name__, self.__dict__)
-                
+                #logging.info ('delete: ', self.__class__.__name__, self.__dict__)
+                _sql = db.complile_DELETE_BY_ITEM_ID(self.__class__.__name__, self.ID)
+                db.executeSQL(_sql)                
                 
         def viewItem (self, _id):
                 """Retrieves Project Object item from database based on its ID
@@ -307,7 +435,7 @@ class ProjectObject():   # Unified methods are set in this SuperClass
                     _data   : values
                 """                
                 logging.info (f'    MODEL Starting viewProjectRelatedItems (_Project_id = {_Project_id})')
-                print ('viewitem: ', self.__class__.__name__, self.__dict__)
+                #print ('viewitem: ', self.__class__.__name__, self.__dict__)
                 _sql = db.complile_SELECT_BY_PROJECT_ID(self.__class__.__name__, self.__dict__,_Project_id)
                 _data = db.executeSQLget(_sql)
                 _dict = {}
@@ -408,6 +536,27 @@ class BenefitApproach (ProjectObject):  # OK +ProjectPack
                 self.Introduction = Introduction
                 self.Review = Review
         
+
+class ProjectApproach (ProjectObject):
+        def __init__(self,
+                     ID: int = None,
+                     RelatedProject: int = None,
+                     ExternalDependency: str = None,
+                     IndustrySolutions: str = None,
+                     OperationalEnvironment: str = None,
+                     SecurityConstrains: str = None,
+                     DeliveryApproach: str = None,
+                     TrainingNeeds: str = None):
+                super().__init__()
+                self.ID = ID
+                self.RelatedProject = RelatedProject
+                self.ExternalDependency = ExternalDependency
+                self.IndustrySolutions = IndustrySolutions
+                self.OperationalEnvironment = OperationalEnvironment
+                self.SecurityConstrains = SecurityConstrains
+                self.DeliveryApproach = DeliveryApproach
+                self.TrainingNeeds = TrainingNeeds               
+                     
 
 class BusinessCase (ProjectObject):     # OK +ProjectPack
         """Justification to run the project
@@ -586,20 +735,21 @@ class Lesson (ProjectObject):           # OK
         """Lesson learned to be taked into account in other Projects
         
         Attributes:
-            ID              (int): Item technical ID in database
-            BusinessID      (str): BusinessID in format accepted by Project Office
-            RelatedProject  (int): Related Project primary key
-            Title           (str): Short description
-            Description     (str): Long description
-            Category        (str): Category from custom reference table (not-predefined)
-            Event           (str): Description of event occurred
-            Effect          (str): What effect event had on the project
-            CauseTrigger    (str): What what the reason for the event
-            EarlyWarningIndicator     (str): Is there any early indicator that event will occurr?
-            Recommendations (str): Reccommendations for future projects
-            DateLogged      (str): Date when Lesson was logged
-            LoggedBy        (str): Person name logged the lesson
-            Priority        (str): Priority from {High, Medium, Low}
+            :ID:              (int) Item technical ID in database
+            :BusinessID:      (str) BusinessID in format accepted by Project Office
+            :RelatedProject:  (int) Related Project primary key
+            :Title:           (str) Short description
+            :Description:     (str) Long description
+            :Category:        (str) Category from custom reference table (Themes)
+            :CategoryProcess: (str) Category from custom reference table (Processes)
+            :Event:           (str) Description of event occurred
+            :Effect:          (str) What effect event had on the project
+            :CauseTrigger:    (str) What what the reason for the event
+            :EarlyWarningIndicator:     (str) Is there any early indicator that event will occurr?
+            :Recommendations: (str) Reccommendations for future projects
+            :DateLogged:      (str) Date when Lesson was logged
+            :LoggedBy:        (str) Person name logged the lesson
+            :Priority:        (str) Priority from {High, Medium, Low}
             
         Methods:
             Please refer to Superclass Methods for standard methods applied across all Project Classes
@@ -612,6 +762,7 @@ class Lesson (ProjectObject):           # OK
                       Title: str = None,
                       Description: str = None,
                       Category: str = None,
+                      CategoryProcess: str = None,
                       Event: str = None,
                       Effect: str = None,
                       CauseTrigger: str = None,
@@ -625,9 +776,10 @@ class Lesson (ProjectObject):           # OK
                 self.ID=ID
                 self.BusinessID=BusinessID
                 self.RelatedProject=RelatedProject
-                self.Title = Title,
+                self.Title = Title
                 self.Description = Description
                 self.Category=Category
+                self.CategoryProcess = CategoryProcess
                 self.Event=Event
                 self.Effect=Effect
                 self.CauseTrigger=CauseTrigger
@@ -1305,42 +1457,38 @@ class Project (ProjectObject):          # OK +ProjectPack
                       Project: str = None,
                       BusinessID: str = None,
                       ID: int = None,
-                      TechStatus: str = None):
+                      TechStatus: str = None,
+                      SnapshotAsOfDate: str = None,
+                      SnapshotBoardConfirmed: str = None,
+                      SnapshotCommentary: str = None
+                      ):
                 super().__init__()
                 self.ID = ID
                 self.Project = Project
                 self.BusinessID = BusinessID
                 self.TechStatus = TechStatus
-                
-                #self.ProjectBrief = ProjectBrief()
-                
-                #self.BenefitApproach = BenefitApproach()
-                #self.BusinessCase = BusinessCase()
-                #self.QualityApproach=QualityApproach()
-                #self.RiskApproach=RiskApproach()
-                #self.CommunicationApproach = CommunicationApproach()
-                #self.ChangeApproach = ChangeApproach()
+                self.SnapshotAsOfDate = SnapshotAsOfDate
+                self.SnapshotBoardConfirmed = SnapshotBoardConfirmed
+                self.SnapshotCommentary = SnapshotCommentary
+
                 
                 
                 
+
 
 
 def Main ():
         
         logging.basicConfig(filename='logging.txt',level=logging.DEBUG, format='%(asctime)s %(name)-12s %(levelname)-8s %(message)s', datefmt='%m-%d %H:%M', filemode='w')
         
-        X = ProjectPack()
-        #X.Refresh(1)
-        X.Create('KISPL PROJECT XX4')
+        #X = ProjectPack()
+        #X.Create('KISPL PROJECT 007')
         
-        #X.ID = 1
-        #X.update()
-        
-        #Y = Mandate()
-        #print ('I am alive')
+        #X = ProjectsList()
+        #X.Refresh()
         #print (X)
-        #print ('BenefitAppr: ', X.BenefitApproach)
-        print (X)
+        
+        #GenerateSample()
 
 if __name__ == '__main__':
         Main()

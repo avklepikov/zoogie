@@ -1,6 +1,29 @@
 import logging
 
-import model
+from Model import model
+
+def getProjectsList():
+        ObjectClass = getattr(model, 'ProjectsList')
+        ObjectInstance = ObjectClass() 
+        return ObjectInstance
+
+def appendProjectPack(project_name, ProjectBusinessID = None, generateSampleData = None):
+        projectPack = model.ProjectPack()
+        projectPack.Create(project_name, ProjectBusinessID, generateSampleData)
+
+def appendProjectObject (_class, _relatedProjectID):
+        ObjectClass = getattr(model, _class)
+        ObjectInstance = ObjectClass()
+        ObjectInstance.RelatedProject = _relatedProjectID
+        ObjectInstance.append()
+        #print (ObjectInstance)
+
+def deleteProjectObject (_class, _ID):
+        ObjectClass = getattr(model, _class)
+        ObjectInstance = ObjectClass()
+        ObjectInstance.ID = _ID
+        ObjectInstance.delete()
+        #print (ObjectInstance)        
 
 def GetPredefinedListValues(_class, _attr):
         return model.PREDEFINED_LISTS_OF_VALUES[_class][_attr]
@@ -15,7 +38,7 @@ def GetRegisterItemClass(_class):
 
 def UpdateAttribute(_class, _attr, _id, _attr_value):
         logging.info(f'  CONTROLLER: Starting UpdateAttribute (_class = {_class}, _attr = {_attr}, _id = {_id}, _attr_value = {_attr_value})')
-        print('Controller UpdateAttribute: ', _class, _attr, _id, _attr_value)
+        #print('Controller UpdateAttribute: ', _class, _attr, _id, _attr_value)
         ObjectClass = getattr(model, _class)
         ObjectInstance = ObjectClass()
         ObjectInstance.update_attr(_class, _attr, _id, _attr_value)        
@@ -24,7 +47,7 @@ def UpdateAttribute(_class, _attr, _id, _attr_value):
 
 def UpdateAttributeList(_class, _attr_list, _id, _attr_value_list):
         logging.info(f'  CONTROLLER: Starting UpdateAttributeList (_class = {_class}, _attr_list = {_attr_list}, _id = {_id}, _attr_value_list = {_attr_value_list})')
-        print('Controller UpdateAttribute: ', _class, _attr_list, _id, _attr_value_list)
+        #print('Controller UpdateAttribute: ', _class, _attr_list, _id, _attr_value_list)
         ObjectClass = getattr(model, _class)
         ObjectInstance = ObjectClass()
         ObjectInstance.update_attr_list (_class, _attr_list, _id, _attr_value_list)        
@@ -88,8 +111,10 @@ def RefreshBusinessObject_byID(_class, _ID):
 # --- TESTING PART --- #
 def Main ():
         logging.basicConfig(filename='logging.txt',level=logging.DEBUG, format='%(asctime)s %(name)-12s %(levelname)-8s %(message)s', datefmt='%m-%d %H:%M', filemode='w')        
-        print (GetPredefinedListValues('RiskRegister', 'Impact'))
-
+        #appendProjectPack('TestProject2')
+        #print (GetPredefinedListValues('RiskRegister', 'Impact'))
+        model.Main()
+        
 if __name__ == '__main__':
         Main ()
         

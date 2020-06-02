@@ -4,7 +4,7 @@ import controller
 
 class ChangeTopLevel (Toplevel):
         def __init__(self, master: object, dbRecordID: int, objectName: str, attributeName: str, attributeLabel: str, attributeValue: str, colorCode: str):
-                print ('toplevel module:')
+                #print ('toplevel module:')
                 super().__init__(master)
                 self.config (bg = colorCode)
                 self.title ('Zoogie - edit window')
@@ -35,7 +35,7 @@ class ChangeTopLevel (Toplevel):
                 
                 self.ChangeText = Text(self)
                 self.ChangeText.insert (1.0, attributeValue)
-                self.ChangeText.config (width = 150, height = 35, state="disabled")
+                self.ChangeText.config (width = 150, height = 35, state="disabled", wrap=WORD)
                 self.ChangeText.grid(row = 1, column =2, rowspan = 35)
                 
                 
@@ -43,7 +43,7 @@ class ChangeTopLevel (Toplevel):
                 self.EditButton.grid(row = 5, column = 0, columnspan = 2, sticky = W+E)
         
         def attributeEdit(self):
-                print ('AttributeEdit method')
+                #print ('AttributeEdit method')
                 self.EditButton.destroy()
                 self.Label_Commentary = Label(self, text = 'Edit commentary', bg = self.colorCode, anchor = W).grid(row = 6, column = 0, sticky = W+E)
                 self.Text_Commentary = Text (self,  width = 30, height = 6).grid(row=7, column = 0, columnspan=2, rowspan = 6)#,sticky = W+E)
@@ -51,11 +51,12 @@ class ChangeTopLevel (Toplevel):
                 SaveButton = Button(self, text = 'Save changes', command = self.saveChanges).grid(row=14,column = 0, columnspan = 2, sticky = W+E)
                 
         def saveChanges(self):
-                print ('saveChanges method')
-                print(self.ChangeText.get(1.0, END))
+                #print ('saveChanges method')
+                #print(self.ChangeText.get(1.0, END))
                 controller.UpdateAttribute(self.objectName, self.attributeName, self.dbRecordID, self.ChangeText.get(1.0, END+"-1c"))
                 #self.master.master.Refresh()
-                
+                #print (self.master)
+                self.master.valueUpdate(self.ChangeText.get(1.0, END+"-1c"))
                 self.destroy()
                 
                 # pass

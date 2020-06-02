@@ -4,9 +4,9 @@
 
 import sqlite3
 
-import db_constants
-import db 
-import model
+from Database import db_constants
+from Database import db 
+from Model import model
 
 PROJECT_OBJECTS = (model.ProjectObject.__subclasses__())
 """List of Class objects from the Model which should be transformed into Tables in database

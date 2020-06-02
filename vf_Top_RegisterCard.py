@@ -47,17 +47,18 @@ REGISTER_BLOCKS = {
                 'ID': ['TEXT_LINE_BLOCKED', 0, 0],
                 'RelatedProject':['TEXT_LINE_BLOCKED', 0, 1],
                 'BusinessID': ['TEXT_LINE', 0, 2],
-                'Category': ['TEXT_LINE', 1, 0],
+                'Category': ['COMBO', 3, 0],
+                'CategoryProcess': ['COMBO', 3, 1],
                 'Event': ['TEXT_LINE', 1, 1],
                 'Effect': ['TEXT_LINE', 1, 2],
-                'CauseTrigger':['TEXT_LINE', 2, 0],
-                'Description': ['TEXT_BOX', 2, 1],
-                'DateLogged':['TEXT_LINE', 4, 1],
-                'EarlyWarningIndicator':['TEXT_LINE', 2, 2],
-                'LoggedBy':['TEXT_LINE', 4, 0],
-                'Priority':['TEXT_LINE', 5, 0],
-                'Recommendations': ['TEXT_BOX', 5, 1],
-                'Title':['TEXT_LINE', 3, 0],
+                'CauseTrigger':['TEXT_LINE', 4, 0],
+                'Description': ['TEXT_BOX', 2, 0],
+                'DateLogged':['TEXT_LINE', 4, 2],
+                'EarlyWarningIndicator':['TEXT_BOX', 2, 2],
+                'LoggedBy':['TEXT_LINE', 4, 1],
+                'Priority':['COMBO', 3, 2],
+                'Recommendations': ['TEXT_BOX', 2, 1],
+                'Title':['TEXT_LINE', 1, 0],
                 'Lesson Identification': ['LABEL', 8,0],
                 'Lesson Analysis': ['LABEL', 8,1]
                 },
@@ -76,17 +77,18 @@ REGISTER_BLOCKS = {
                 },
         'Issue':{
                 'ID': ['TEXT_LINE_BLOCKED', 0, 0],
-                'BusinessID': ['TEXT_LINE_BLOCKED', 0, 1],
+                'BusinessID': ['TEXT_LINE', 0, 1],
                 'RelatedProject': ['TEXT_LINE_BLOCKED', 0, 2],
-                'Description': ['TEXT_BOX', 1, 0],
+                'Title': ['TEXT_LINE', 1, 0],
+                'Description': ['TEXT_BOX', 1, 1],
                 'Category':['COMBO', 2, 0],
                 'Priority': ['COMBO', 2, 1],
                 'Severity': ['TEXT_LINE', 2, 2],
-                'ClosureDate': ['TEXT_LINE', 4, 0],
+                'ClosureDate': ['TEXT_LINE', 4, 1],
                 'DateRaised': ['TEXT_LINE', 3, 2],
                 'IssueAuthor': ['TEXT_LINE', 3, 1],
                 'RaisedBy': ['TEXT_LINE', 3, 0],
-                'Status': ['COMBO', 5, 0]
+                'Status': ['COMBO', 4, 0]
                 },
         'Benefit':{
                 'ID': ['TEXT_LINE_BLOCKED', 0, 0],
@@ -120,9 +122,17 @@ REGISTER_BLOCKS = {
         'Team':{
                 'ID': ['TEXT_LINE_BLOCKED', 0, 0],
                 'RelatedProject': ['TEXT_LINE_BLOCKED', 1, 0],
-                'Person': ['TEXT_BOX', 2, 0],
+                'Person': ['TEXT_LINE', 2, 0],
                 'Role': ['COMBO', 3, 0],
-        'Responsibilities': ['TEXT_BOX', 4, 0]}
+        'Responsibilities': ['TEXT_BOX', 4, 0]},
+        'Stage':{
+                'ID':['TEXT_LINE_BLOCKED', 0, 0],
+                'RelatedProject': ['TEXT_LINE_BLOCKED', 0, 1],
+                'Title': ['TEXT_LINE', 1, 0],
+                'Category': ['COMBO', 1, 1],
+                'StartDate': ['TEXT_LINE', 2, 0],
+                'EndDate': ['TEXT_LINE', 2, 1],
+                'Status': ['COMBO', 3, 0]}
         }
         
 
@@ -145,13 +155,13 @@ class MainFrame (Toplevel):
                 
                 """
                 super().__init__(master)
-                print ('start toplevel for register card')
+                #print ('start toplevel for register card')
                 self.config (bg=colorCode)
                 self.dbRecordID = dbRecordID
                 self.objectName = objectName
                 self.colorCode=colorCode
                 
-                print ('dbRecord:', self.dbRecordID, ' objName:', self.objectName)
+                #print ('dbRecord:', self.dbRecordID, ' objName:', self.objectName)
                 
                 self.controlFrame = ControlFrame(self, self.dbRecordID, self.objectName, self.objectName, self.objectName, self.colorCode)
                 self.cardFrame = CardFrame(self, self.dbRecordID, self.objectName, self.colorCode)
@@ -180,7 +190,7 @@ class MainFrame (Toplevel):
         
         def SaveChanges (self):
                 _class = controller (self.objectName)
-                print ('saving: ', _class)
+                #print ('saving: ', _class)
                 pass
         
         
@@ -212,7 +222,7 @@ class ControlFrame (Frame):
         
                 
         def saveChanges(self):
-                print ('saveChanges method')
+                #print ('saveChanges method')
                 
                 _attr_list=[]
                 _attr_val_list = []
@@ -228,10 +238,11 @@ class ControlFrame (Frame):
                                         _attr_val_list.append(item.get(1.0, END+"-1c"))
                                         
 
-                print (_attr_list, _attr_val_list)
+                #print (_attr_list, _attr_val_list)
                 controller.UpdateAttributeList(self.objectName, _attr_list, self.dbRecordID, _attr_val_list)
+                self.master.master.Refresh()
                 self.master.destroy()  
-                pass
+                #pass
                 
 class CardFrame (Frame):
         """Frame with all Register attributes"""
@@ -242,7 +253,7 @@ class CardFrame (Frame):
                 self.FrameObjects = []
                 self.config (bg=colorCode)
                 #LBL = Label (self, text = 'Card').pack()
-                print('-->', self.objectName)
+                #print('-->', self.objectName)
                 RR_Blocks = REGISTER_BLOCKS[self.objectName]
                 self.editableClasses = [AttributeTextBox, AttributeTextLine, AttributeCombo, AttributeTextLineBlocked] # Actually all object excl Labels
                 
@@ -330,7 +341,7 @@ class AttributeTextBox (Text):
                 super().__init__(master)
                 self.objectName = objectName
                 self.attributeName = attributeName
-                self.config(width = 30, height = 9, state="disabled")#, yscrollcommand = scrollbar.set)
+                self.config(width = 30, height = 9, state="disabled", wrap=WORD)#, yscrollcommand = scrollbar.set)
                 
         def lockField (self):
                 self.config(state="disabled")

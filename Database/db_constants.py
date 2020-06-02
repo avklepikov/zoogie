@@ -25,6 +25,15 @@ DB_FIELDS_MAPPING ={                                #Class attributes -> Db Fiel
                    'ResourceRequirements': ['ResourceRequirements', 'TEXT'],
                    'Baseline': ['Baseline', 'TEXT']},
         
+        'ProjectApproach':{'ID': ['ID', 'INTEGER PRIMARY KEY AUTOINCREMENT'],
+                     'RelatedProject': ['RelatedProject', 'INTEGER'],
+                     'ExternalDependency': ['ExternalDependency', 'TEXT'],
+                     'IndustrySolutions': ['IndustrySolutions', 'TEXT'],
+                     'OperationalEnvironment': ['OperationalEnvironment', 'TEXT'],
+                     'SecurityConstrains': ['SecurityConstrains', 'TEXT'],
+                     'DeliveryApproach': ['DeliveryApproach', 'TEXT'],
+                     'TrainingNeeds': ['TrainingNeeds', 'TEXT']},
+        
         'BusinessCase':{'ID': ['ID', 'INTEGER PRIMARY KEY AUTOINCREMENT'],
                         'RelatedProject': ['RelatedProject', 'INTEGER'],
                         'ExecutiveSummary': ['ExecutiveSummary', 'TEXT'],
@@ -78,6 +87,7 @@ DB_FIELDS_MAPPING ={                                #Class attributes -> Db Fiel
                   'Title': ['Title', 'TEXT'],
                   'Description': ['Description', 'TEXT'],
                   'Category': ['Category', 'TEXT'],
+                  'CategoryProcess': ['CategoryProcess', 'TEXT'],
                   'Event': ['Event', 'TEXT'],
                   'Effect': ['Effect', 'TEXT'],
                   'CauseTrigger': ['CauseTrigger', 'TEXT'],
@@ -253,7 +263,10 @@ DB_FIELDS_MAPPING ={                                #Class attributes -> Db Fiel
         'Project': {'ID': ['ID', 'INTEGER PRIMARY KEY AUTOINCREMENT'],
                     'Project': ['Project', 'TEXT'],
                     'BusinessID': ['BusinessID', 'TEXT'],
-                    'TechStatus': ['TechStatus', 'TEXT']}
+                    'TechStatus': ['TechStatus', 'TEXT'],
+                    'SnapshotAsOfDate': ['SnapshotAsOfDate', 'TEXT'],
+                    'SnapshotBoardConfirmed': ['SnapshotBoardConfirmed', 'TEXT'],
+                    'SnapshotCommentary': ['SnapshotCommentary', 'TEXT']}
         
         }
 """Converts (mapping) Class attribute name into database field name  
@@ -269,6 +282,7 @@ DB_TABLE_MAPPING={'Product': 'reg_Product',         #Class            -> Db Tabl
                   'Lesson': 'reg_lessons', 
                   'Mandate': 'prj_Mandate',
                   'Project': 'reg_Projects',
+                  'ProjectApproach': 'ProjectApproach',
                   'ProjectBrief': 'proj_ProjectBrief', 
                   'QualityApproach': 'appr_Quality', 
                   'QualityRegister': 'reg_Quality', 
@@ -293,6 +307,7 @@ DB_FIELDS_PK={'Product': 'ID',                      #Class            -> Primary
               'Mandate': 'ID',
               'Project': 'ID',
               'ProjectBrief': 'ID', 
+              'ProjectApproach': 'ID',
               'QualityApproach': 'ID', 
               'QualityRegister': 'ID', 
               'RiskApproach': 'ID', 

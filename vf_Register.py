@@ -51,7 +51,137 @@ REGISTER_BLOCKS = {
                         },
                 'Breakdown': {
                         'Responsibilities': ['Project Responsibilities', 0, 0]}
-                }}
+                },
+        'Lesson':{
+                'Register':{
+                        'BusinessID' : ['Bisiness ID', 80],
+                        'Title': ['Title', 250],
+                        'Category': ['Category', 210],
+                        'CategoryProcess': ['CategoryProcess', 210],
+                        'Priority': ['Priority', 150],
+                        'LoggedBy': ['LoggedBy', 120],
+                        'DateLogged' :['DateLogged', 120]},
+                'Breakdown': {
+                        'Title': ['Title', 0, 0],
+                        'Description': ['Description', 0, 1],
+                        'Recommendations': ['Recommendations', 1, 1],
+                        'CauseTrigger': ['Cause Trigger', 1, 0]}
+                },
+        'Issue':{
+                'Register':{
+                        'BusinessID' : ['Bisiness ID', 90],
+                        'Title': ['Title', 250],
+                        'Category': ['Category', 150],   
+                        'Priority': ['Priority', 90],
+                        'Severity': ['Severity', 110],
+                        'RaisedBy': ['RaisedBy', 120],
+                        'ClosureDate': ['ClosureDate', 90],
+                        'Status': ['Status', 160]
+                        },
+                'Breakdown':{
+                        'Title': ['Title', 0, 0],
+                        'Description': ['Description', 0, 1]}
+                },
+        'RiskRegister':{
+                'Register':{
+                        'BusinessID' : ['Bisiness ID', 90],
+                        'Title': ['Title', 250],
+                        'Category': ['Category', 150],  
+                        'Probability': ['Probability', 150],
+                        'RaisedDate': ['Raised Date', 150],
+                        'ResponseCategory': ['Response Category', 150],
+                        'Owner': ['Owner', 150],
+                        'Actionee': ['Actionee', 150],
+                        'Status': ['Status', 150]
+                        },
+                'Breakdown':{
+                        'Title': ['Title', 0, 0],
+                        'Impact': ['Impact', 0, 1],
+                        'Description': ['Description', 1, 0],
+                        'Response': ['Response', 1, 1]
+                        },
+                },
+        'BusinessCase':{
+                'Breakdown':{
+                        'ExecutiveSummary':['Executive Summary', 0, 0],
+                        'ExpectedBenefits':['Expected Benefits', 1, 0],
+                        'Reasons':['Reasons', 0, 1],
+                        'ExpectedDisBenefits':['Expected Dis-Benefits',1 , 1],
+                        'Options':['Business Options', 2, 0],
+                        'Costs': ['Costs', 2, 1],
+                        'Timescale':['Time Scale', 3, 0],
+                        'InvestmentArraisal':['Investment Aprraisal', 3, 1]
+                        }
+                },
+        'ProjectApproach':{
+                'Breakdown':{
+                        'ExternalDependency':['External Dependency', 0, 0],
+                        'IndustrySolutions':['Industry Solutions', 0 ,1],
+                        'OperationalEnvironment':['Operational Environment', 1, 0],
+                        'DeliveryApproach':['Delivery Approach', 1, 1],
+                        'SecurityConstrains': ['Security Constrains', 2, 0],
+                        'TrainingNeeds': ['Training Needs for Project Delivery', 2, 1]}
+                
+                },
+        'QualityApproach' : {
+                'Breakdown':{
+                        'Introduction' : ['Introduction', 0,0],
+                        'Records': ['Records', 0, 1],
+                        'Procedure': ['Procedure', 1, 0],
+                        'Reporting': ['Reporting', 1, 1],
+                        'ProjectQuality': ['Project Quality', 2, 0],
+                        'Timing': ['Timing', 2, 1],
+                        'Techniques': ['Techniques', 3, 0],
+                        'RolesResponsibilities': ['Roles and responsibilities', 3, 1]
+                        
+                        
+                        }
+                },
+        'Product':{
+                'Register':{
+                        'BusinessID' : ['Bisiness ID', 90],
+                        'Title': ['Title', 250]                     
+                        },
+                'Breakdown':{
+                        'Title' : ['Title', 0, 0],
+                        'Description': ['Description', 0, 1],
+                        'Composition' : ['Composition', 1, 0],
+                        'Derivation': ['Derivation', 1, 1],
+                        'Purpose': ['Purpose of product', 2, 0],
+                        'FormatPresentation': ['Presentation Format', 2, 1]
+                        
+                        }
+                },
+                        
+        
+        'ChangeApproach':{
+                'Breakdown':{
+                        'Introduction' : ['Introduction', 0, 0],
+                        'Records': ['Records', 0, 1],
+                        'Procedure': ['Procedure', 1, 0],
+                        'Reporting': ['Reporting', 1, 1],
+                        'Techniques': ['Techniques', 2, 0]}
+                },
+        'CommunicationApproach':{
+                'Breakdown':{
+                        'Introduction': ['Introduction', 0, 0],
+                        'Procedure': ['Procedure', 0, 1],
+                        'Reporting': ['Reporting', 1, 0],
+                        'Timing': ['Timing', 1, 1],
+                        'Techniques': ['Techniques', 2, 0],
+                        'RolesResponsibilities': ['Roles and Responsibilities', 2, 1],
+                        'Records': ['Records', 3, 0]}
+                },
+                
+        'Stage':{
+                'Register':{
+                        'Title': ['Title', 250],
+                        'Category': ['Stage Category', 250],
+                        'StartDate': ['Start Date', 100],
+                        'EndDate': ['End Date', 100],
+                        'Status': ['Status', 150]},
+                'Breakdown':{}
+        }}
         
                 
 class MainFrame (Frame):
@@ -60,101 +190,115 @@ class MainFrame (Frame):
                 self.config (bg = colorCode)
                 self.dbProjectRecordID = dbProjectRecordID
                 self.objectName = objectName
-                #self.label = Label(self, text = 'label')
-                #self.label.pack()
-                print (self.objectName)
                 argList = []
                 argLabelList = []
                 argSizeList = []
                 
-                #print (REGISTER_BLOCKS['QualityRegister']['Register'])
+                #Building the Register based on REGISTER_BLOCKS setup:
                 for item in REGISTER_BLOCKS[self.objectName]['Register']:
-                        print (item)
                         argList.append (item)
                         argLabelList.append (REGISTER_BLOCKS[self.objectName]['Register'][item][0])
-                        argSizeList.append (REGISTER_BLOCKS[self.objectName]['Register'][item][1])
-                        #print (REGISTER_BLOCKS['QualityRegister']['Register'][item][1])
-                
-                print (argList)
-                print (argLabelList)
-                print (argSizeList)
-                
+                        argSizeList.append (REGISTER_BLOCKS[self.objectName]['Register'][item][1])                
                 self.Register = CustomizedElements.RegisterList(self, 
                                                                 self.dbProjectRecordID,
                                                                 self.objectName, 
                                                                 argList,
                                                                 argSizeList)
-                
                 self.Register.pack()
                 
-                
-                argList.clear()
-                argLabelList.clear()
+                #Building the Breakdown section
+                BD_argList =[]
+                BD_argLabelList= []
                 argSizeList.clear()
                 argRowList = []
                 argColumnList = []
-                
-                #print (REGISTER_BLOCKS['QualityRegister']['Register'])
                 for item in REGISTER_BLOCKS[self.objectName]['Breakdown']:
-                        print (item)
-                        argList.append (item)
-                        argLabelList.append (REGISTER_BLOCKS[self.objectName]['Breakdown'][item][0])
+                        BD_argList.append (item)
+                        BD_argLabelList.append (REGISTER_BLOCKS[self.objectName]['Breakdown'][item][0])
                         argRowList.append (REGISTER_BLOCKS[self.objectName]['Breakdown'][item][1])
                         argColumnList.append (REGISTER_BLOCKS[self.objectName]['Breakdown'][item][2])
-                        #argSizeList.append (REGISTER_BLOCKS[self.objectName]['Breakdown'][item][1])
-                        #print (REGISTER_BLOCKS['QualityRegister']['Register'][item][1])
+
                 
-                print (argList)
-                print (argLabelList)
-                print (argSizeList)                
-                
-                
-                self.BD = Breakdown(self, self.objectName, argList, argLabelList, argRowList, argColumnList, colorCode)
+                self.BD = Breakdown(self, self.objectName, BD_argList, BD_argLabelList, argRowList, argColumnList, colorCode)
                 self.BD.pack()
                 
-        def Refresh (self, dbRecordID):
-                self.BD.Refresh(dbRecordID)     
 
+                
+        def Refresh (self, dbRecordID):
+                """BreakDown refresh based on item selected in the register"""
+                self.BD.Refresh(dbRecordID)    
+         
+
+class MainFrameWIthoutRegister (Frame):
+        def __init__ (self, master, dbProjectRecordID, objectName, colorCode):
+                super().__init__(master)
+                self.config (bg = colorCode)
+                self.dbProjectRecordID = dbProjectRecordID
+                self.objectName = objectName
+                argList = []
+                argLabelList = []
+                argSizeList = []
+                
+                #Building the Register based on REGISTER_BLOCKS setup:
+                #for item in REGISTER_BLOCKS[self.objectName]['Register']:
+                        #argList.append (item)
+                        #argLabelList.append (REGISTER_BLOCKS[self.objectName]['Register'][item][0])
+                        #argSizeList.append (REGISTER_BLOCKS[self.objectName]['Register'][item][1])                
+                #self.Register = CustomizedElements.RegisterList(self, 
+                                                                #self.dbProjectRecordID,
+                                                                #self.objectName, 
+                                                                #argList,
+                                                                #argSizeList)
+                #self.Register.pack()
+                
+                #Building the Breakdown section
+                BD_argList =[]
+                BD_argLabelList= []
+                argSizeList.clear()
+                argRowList = []
+                argColumnList = []
+                for item in REGISTER_BLOCKS[self.objectName]['Breakdown']:
+                        BD_argList.append (item)
+                        BD_argLabelList.append (REGISTER_BLOCKS[self.objectName]['Breakdown'][item][0])
+                        argRowList.append (REGISTER_BLOCKS[self.objectName]['Breakdown'][item][1])
+                        argColumnList.append (REGISTER_BLOCKS[self.objectName]['Breakdown'][item][2])
+
+                
+                self.BD = Breakdown(self, self.objectName, BD_argList, BD_argLabelList, argRowList, argColumnList, colorCode)
+                self.BD.pack()
+                self.Refresh(self.dbProjectRecordID)
+                
+
+                
+        def Refresh (self, dbRecordID):
+                """BreakDown refresh based on item selected in the register"""
+                self.BD.Refresh(dbRecordID)  
+                
 class Breakdown (Frame):
         def __init__ (self, master, objectName, argList, argLabelList, argRowList, argColumnList, colorCode):
                 super().__init__(master)
                 self.objectName = objectName
                 self.config (bg = colorCode)
-                #dbRecordID = '1'
-                #colorCode = 'gray'
+
                 
                 ObjectsList = []
                 
-                print ('len = ', len(argList), ' --> ', range(len(argList)))
+
                 for item in range(len(argList)):
-                        print (item, argList[item], argLabelList[item])
+                        
                         ObjectsList.append(CustomizedElements.AttributeBlockFrame(self, -1, self.objectName, argList[item], argLabelList[item], colorCode))
                         ObjectsList[-1].grid(row = argRowList[item], column = argColumnList[item],)
-                
-                #self.Attr1 = CustomizedElements.AttributeBlockFrame(self, -1, self.objectName, 'Title', 'Title', colorCode)
-                #self.Attr2 = CustomizedElements.AttributeBlockFrame(self, -1, self.objectName, 'RolesResponsibilities', 'RolesResponsibilities', colorCode)
-                #self.Attr2 = CustomizedElements.AttributeBlockFrame(self, -1, self.objectName, 'Result', 'Result', colorCode)
-
-
-                
-        
-                #self.Attr1.grid(row=0, column = 0)
-                #self.Attr2.grid(row=0, column = 1)
 
 
                 self.attributesObjects = ObjectsList
-                #self.attributesObjects = (self.Attr1, 
-                                          #self.Attr2)
-                
-                #self.Button = Button(self, text = 'Refresh', command = self.Refresh)
-                #self.Button.grid (row=4, column = 0)          
+         
         def Refresh (self, dbRecordID):
 
                 Keys, Data = controller.RefreshBusinessObject_byID(self.objectName, dbRecordID)
 
                 
                 for item in self.attributesObjects:
-                        #print (item.attributeName)
+                        #print(item.objectName, item.attributeName)
                         item.valueUpdate(Data[0][Keys[item.attributeName]])
                         item.dbRecordID = Data[0][Keys['ID']]
                         
@@ -164,7 +308,7 @@ def Main():
         
         logging.basicConfig(filename='logging.txt',level=logging.DEBUG, format='%(asctime)s %(name)-12s %(levelname)-8s %(message)s', datefmt='%m-%d %H:%M', filemode='w')
         app = Tk()
-        block = MainFrame(app,29, 'Team' ,'gray')
+        block = MainFrame(app,1, 'Product' ,'gray')
         #block = MainFrame(app,1, 'Stakeholder' ,'gray')
         #block = MainFrame(app,1, 'QualityRegister' ,'gray')
         #QualityRegister

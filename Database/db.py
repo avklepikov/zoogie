@@ -4,7 +4,7 @@
 import sqlite3
 import logging
 #import model   # ??? two ways import?
-import db_constants
+from Database import db_constants
 
 #PROJECT_OBJECTS = (model.ProjectObject.__subclasses__())
 #"""List of Class objects from the Model which should be transformed into Tables in database
@@ -125,6 +125,7 @@ def compile_CREATE_TABLE_script (_class: str):                    #OK (used from
         return SQL
 
 
+
 def complile_SELECT_ALL (_class: str, _attr_value_dict: dict):
         logging.info (f'      DB Starting complile_SELECT_ALL (_class = {_class}, _attr_value_dict = {_attr_value_dict})')
         table = get_class_table(_class)
@@ -135,6 +136,18 @@ def complile_SELECT_ALL (_class: str, _attr_value_dict: dict):
         SQL = f"SELECT {_fields_list_str} FROM {table}"
         #logging.debug('Resulting SQL: ', SQL)
         return SQL
+
+def complile_SELECT_ALL_GROUPPED (_class: str, _attr_value_dict: dict):
+        logging.info (f'      DB Starting complile_SELECT_ALL_GROUPED (_class = {_class}, _attr_value_dict = {_attr_value_dict})')
+        table = get_class_table(_class)
+        _fields_list = []
+        for attr in _attr_value_dict:
+                _fields_list.append ( db_constants.DB_FIELDS_MAPPING[_class][attr][0])
+        _fields_list_str = ', '.join(_fields_list)
+        SQL = f"SELECT {_fields_list_str} FROM {table} GROUP BY {_fields_list_str}"
+        #logging.debug('Resulting SQL: ', SQL)
+        return SQL        
+
 
 def complile_SELECT_BY_PROJECT_ID (_class: str, _attr_value_dict: dict, _Project_id: int):
         """his is a target function to be used to retrived any Project related record from any table by related Project ID
@@ -253,6 +266,23 @@ def complile_SELECT_BY_ITEM_ID (_class: str, _attr_value_dict: dict, _id: int): 
         #print ('SELECT_BY_ITEM_ID : _id_field: ', _id_field)
         
         SQL = f"SELECT {_fields_list_str} FROM {table} WHERE {_id_field} = {_id}"  # changed from {_id_field} to RelatedProject
+        #logging.debug('Resulting SQL: ', SQL)
+        return SQL        
+
+def complile_DELETE_BY_ITEM_ID (_class: str, _id: int):    # why we use _attr_value_dict?
+        """This method compiles SQL script to get from the database any project class record by its ID
+        """
+        logging.info (f'      DB Starting complile_DELETE_BY_ITEM_ID (_class = {_class}, _id = {_id})')
+        
+        table = get_class_table(_class)
+        #_fields_list = []
+        #for attr in _attr_value_dict:
+        #        _fields_list.append ( db_constants.DB_FIELDS_MAPPING[_class][attr][0])
+        #_fields_list_str = ', '.join(_fields_list)
+        _id_field = db_constants.DB_FIELDS_PK[_class]
+        #print ('SELECT_BY_ITEM_ID : _id_field: ', _id_field)
+        
+        SQL = f"DELETE FROM {table} WHERE {_id_field} = {_id}"  # changed from {_id_field} to RelatedProject
         #logging.debug('Resulting SQL: ', SQL)
         return SQL        
 
