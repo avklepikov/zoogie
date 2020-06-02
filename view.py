@@ -1,11 +1,5 @@
 """GUI Part of Zoogie application
 
-TODO [ ] : Substitute standard Text widgets with new custom AppText
-TODO [x] : Backgroud Colour across Frames
-TODO [ ] : Reduce space to the left from text widgets 
-TODO [ ] : Change from _ActiveProject to _ID in OnDoubleClick methods - cosmetics of the code
-TODO [ ] : Implement _TextBoxSizes
-
 
 """
 
@@ -20,7 +14,6 @@ import vf_RiskApproach1  # I do not know how to split them in vf_Register
 import vf_RiskApproach2  # I do not know how to split them in vf_Register 
 
 
-
 import vf_Register
 import CustomizedElements
 
@@ -30,101 +23,178 @@ _BGC = '#abc4e7'
 """Background colour for Frames 
 use https://www.color-hex.com/ to find nice colour code"""
 
-_TextBoxSizes = {'small' : 1,
-                 'medium' : 12,
-                 'big' : 36}
-"""Parameters for Heights of customized text boxes AppTextBox"""
+#_TextBoxSizes = {'small' : 1,
+                 #'medium' : 12,
+                 #'big' : 36}
+"""Parameters for Heights of customized text boxes AppTextBox
+To delete as unused?"""
 
 
 
 
 # Custom Widgets
-class AppText (Text):
-        """Custom 1-line Text widget with simplified update method to substiture Delete+Instert + Formatting"""
-        def __init__(self, *args, **kwargs):
-                super().__init__(*args,**kwargs)
-                self.config(width = 60, height = 1, state="disabled")
-                #self.bind ("<Double-1>", self.OnDoubleClick2)
+#class AppText (Text):
+        #"""Custom 1-line Text widget with simplified update method to substiture Delete+Instert + Formatting"""
+        #def __init__(self, *args, **kwargs):
+                #super().__init__(*args,**kwargs)
+                #self.config(width = 60, height = 1, state="disabled")
+                
         
-        def TextUpdate(self, NewText):
+        #def TextUpdate(self, NewText):
                 
-                self.config(state="normal")
-                self.delete(1.0, END)
-                self.insert(1.0, NewText)
-                self.config (state="disabled")
+                #self.config(state="normal")
+                #self.delete(1.0, END)
+                #self.insert(1.0, NewText)
+                #self.config (state="disabled")
                 
-        #def OnDoubleClick2 (self, Event):
+        
    
 
 
-class AppTextBox (Text):
-        """Custom Text widget with simplified update method to substiture Delete+Instert + Formatting + mapping to Class name and Attributes"""
-        def __init__(self, master, __class, __attribute, *args, **kwargs):
+#class AppTextBox (Text):
+        #"""Custom Text widget with simplified update method to substiture Delete+Instert + Formatting + mapping to Class name and Attributes"""
+        #def __init__(self, master, __class, __attribute, *args, **kwargs):
             
-                super().__init__(master, *args,**kwargs)
+                #super().__init__(master, *args,**kwargs)
 
-                self._class = __class
-                self._attribute = __attribute
-                self.config(width = 60, height = 12,state="disabled")
-                self.bind ("<Double-1>", self.OnDoubleClick2)
+                #self._class = __class
+                #self._attribute = __attribute
+                #self.config(width = 60, height = 12,state="disabled")
+                #self.bind ("<Double-1>", self.OnDoubleClick2)
 
         
-        def TextUpdate(self, NewText):
-                self.config(state="normal")
-                self.delete(1.0, END)
-                self.insert(1.0, NewText)  
-                self.config (state="disabled")
+        #def TextUpdate(self, NewText):
+                #self.config(state="normal")
+                #self.delete(1.0, END)
+                #self.insert(1.0, NewText)  
+                #self.config (state="disabled")
                 
-        def OnDoubleClick2 (self, Event):
-                logging.info ('OnDoubleClick2 is aptured')
-                global _activeProject
+        #def OnDoubleClick2 (self, Event):
+                #logging.info ('OnDoubleClick2 is aptured')
+                #global _activeProject
 
-                top = Toplevel(self)
-                top.config(bg = _BGC)
-                #relatedProjectID = Label (top, text = _activeProject, bg = _BGC).grid(row=0, column = 0)
+                #top = Toplevel(self)
+                #top.config(bg = _BGC)
+                ##relatedProjectID = Label (top, text = _activeProject, bg = _BGC).grid(row=0, column = 0)
                 
-                self.relatedClass = Label(top, text = Event.widget._class, bg = _BGC).grid(row=0, column = 0, sticky=W+E+N+S)
-                self.relatedAttribute = Label(top, text = Event.widget._attribute, bg = _BGC).grid(row = 1, column = 0, sticky=W+E+N+S)
-                self.editableTextBox = Text(top, height = 30)
-                self.editableTextBox.insert (1.0, Event.widget.get (1.0, END))
-                self.editableTextBox.grid(row=2, column =0, columnspan=2)
+                #self.relatedClass = Label(top, text = Event.widget._class, bg = _BGC).grid(row=0, column = 0, sticky=W+E+N+S)
+                #self.relatedAttribute = Label(top, text = Event.widget._attribute, bg = _BGC).grid(row = 1, column = 0, sticky=W+E+N+S)
+                #self.editableTextBox = Text(top, height = 30)
+                #self.editableTextBox.insert (1.0, Event.widget.get (1.0, END))
+                #self.editableTextBox.grid(row=2, column =0, columnspan=2)
                 
-                self.CommentaryLabel = Label(top, text = 'Change related commentaries:', bg = _BGC).grid(row=3, column =0)
-                self.CommentaryText = Text(top, height = 3).grid(row=4, column =0)
+                #self.CommentaryLabel = Label(top, text = 'Change related commentaries:', bg = _BGC).grid(row=3, column =0)
+                #self.CommentaryText = Text(top, height = 3).grid(row=4, column =0)
                 
-                self.buttonEdit = Button(top, text = 'Edit', command = abc).grid(row=5, column =0, sticky=W+E+N+S)
-                self.buttonEdit = Button(top, text = 'Save Changes', command = self.SaveChangaes).grid(row=6, column =0, sticky=W+E+N+S)
-                self.buttonEdit = Button(top, text = 'Close without changes', command = abc).grid(row=7, column =0, sticky=W+E+N+S)
+                #self.buttonEdit = Button(top, text = 'Edit', command = abc).grid(row=5, column =0, sticky=W+E+N+S)
+                #self.buttonEdit = Button(top, text = 'Save Changes', command = self.SaveChangaes).grid(row=6, column =0, sticky=W+E+N+S)
+                #self.buttonEdit = Button(top, text = 'Close without changes', command = abc).grid(row=7, column =0, sticky=W+E+N+S)
                 
                 
                 
-                top.mainloop()
+                #top.mainloop()
                 
-        def SaveChangaes (self):
-                #logging.info ('VIEW SAVING NEW ATTR VALUE')
-                __class =  self._class
-                __attr = self._attribute
-                __value = self.editableTextBox.get (1.0, END)
-                controller.UpdateAttribute(__class, __attr, _activeProject, __value)
+        #def SaveChangaes (self):
+                ##logging.info ('VIEW SAVING NEW ATTR VALUE')
+                #__class =  self._class
+                #__attr = self._attribute
+                #__value = self.editableTextBox.get (1.0, END)
+                #controller.UpdateAttribute(__class, __attr, _activeProject, __value)
 
 
 
 def abc():  #NOT USED TextBox Click event General. To accept TextBox Value, class and attribute names to run SQL
         print ("ABC")
 
-# Building GUI                
-class ProjectApp (Tk):
+class Application(Tk):
         def __init__ (self):
                 super().__init__()
-                self._frame = None
-                self.switch_frame(mainFrame_Portfolio)
+                #application = Tk()
+                projectsList = PortfoliosTree(self)
+                projectsList.pack()
+                #application.mainloop()
+
+#class PortfoliosTree (Frame):
+        #def __init__(self, master):
+                #super().__init__(master)
+                #portfolioTree = PortfoliosTree (self)
+                #portfolioTree.pack()
+                
+                
+                
+class PortfoliosTree (ttk.Treeview):
+        def __init__(self, master):
+                super().__init__(master)
+                self['columns'] = (['Title', 'Version', 'SnapshotAsOfDate', 'SnapshotBoardConfirmed', 'SnapshotCommentary'])
+                
+                self.heading ('#0', text = 'Code', anchor = 'w')
+                self.heading ('Title', text = 'Title', anchor = 'w')
+                self.heading ('Version', text = 'Version', anchor = 'w')
+                self.heading ('SnapshotAsOfDate', text = 'As Of Date', anchor = 'w')
+                self.heading ('SnapshotBoardConfirmed', text = 'Agreed by Steering', anchor = 'w')
+                self.heading ('SnapshotCommentary', text = 'Commentary', anchor = 'w')
+                
+                
+                self.column('#0', width = 30)
+                
+                
+                
+                self.config(height = 15)        
+                self.pack()
+                self.projectsList = controller.getProjectsList()
+                
+                self.bind("<Double-1>", self.OnDoubleClick)
+                self.Refresh()
+                
+                
+        def OnDoubleClick(self, event):
+                item = self.identify('item', event.x, event.y)
+                bdRecordID = self.item(item, 'text')      
+                print ('Selected', bdRecordID)
+                projectwindow = ProjectApp(bdRecordID)
+                projectwindow.mainloop()
+                #registerItemCard = vf_Top_RegisterCard.MainFrame(self, bdRecordID, self.ObjectName,  'gray')
+                #registerItemCard.mainloop()     
+
+        
+        def Refresh (self):
+                self.projectsList.Refresh()
+                print (self.projectsList)
+                
+                
+                # CREATE FOLDERS
+                folderIndex = {}
+                for item in self.projectsList.HeadList:
+                        
+                        #print(self.projectsList.HeadList.index(item))
+                        folderIndex[item[0]] = self.projectsList.HeadList.index(item)
+                        self.insert('', self.projectsList.HeadList.index(item), iid = self.projectsList.HeadList.index(item), text = item[0], values=[item[1]])
+                
+                print ('Folder Index')
+                print (folderIndex)
+                
+                for item in self.projectsList.DetailList:
+                        print (folderIndex[item[1]])
+                        self.insert(folderIndex[item[1]], item[0], text = item[0], values=[item[2],item[3],item[4],item[5],item[6]])
+                        pass
+                        
+
+
+
+# Building GUI                
+class ProjectApp (Toplevel):
+        def __init__ (self, _activeProject):
+                super().__init__()
+                self._frame = mainFrame_Project(self, _activeProject)
+                
+                #self.switch_frame(mainFrame_Portfolio)
                
                 
-        def switch_frame(self, frame_class):
-                new_frame = frame_class(self)
-                if self._frame is not None:
-                        self._frame.destroy()
-                self._frame = new_frame
+        #def switch_frame(self, frame_class):
+                #new_frame = frame_class(self)
+                #if self._frame is not None:
+                        #self._frame.destroy()
+                #self._frame = new_frame
                 self._frame.pack()
                 
              
@@ -178,7 +248,7 @@ class PortfolioTree (ttk.Treeview):
                 
 #  -----------------PROJECT MAIN FRAME ---------------------                
 class mainFrame_Project(Frame):
-        def __init__ (self, master):
+        def __init__ (self, master, _activeProject):
                 super().__init__(master)
                 self.ProjectPack = controller.GetProjectPack(_activeProject)
                 print(self.ProjectPack)
@@ -231,6 +301,7 @@ class ProjectHead(Frame):
                 self.Entry_ProjectName.insert(0, self.master.ProjectPack.Project.Project)
                 self.Entry_ProjectStatus.insert(0,self.master.ProjectPack.Project.TechStatus )
                 
+                self.master.master.title('Project # : ' + str (self.master.ProjectPack.Project.ID) + ' ' + self.master.ProjectPack.Project.Project)
                 logging.info ('VIEW Finished Project Head Refresh')
                 
 class ProjectTabControl (ttk.Notebook):
@@ -460,7 +531,10 @@ class QualityTabControl (ttk.Notebook):
                 
 def Main ():
         logging.basicConfig(filename='logging.txt',level=logging.DEBUG, format='%(asctime)s %(name)-12s %(levelname)-8s %(message)s', datefmt='%m-%d %H:%M', filemode='w')
-        X = ProjectApp()
+        
+        #X = ProjectApp()
+        X = Application()
+        X.title ('Zoogie Project')
         X.mainloop()
 
 

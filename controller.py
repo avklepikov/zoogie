@@ -2,6 +2,11 @@ import logging
 
 from Model import model
 
+def getProjectsList():
+        ObjectClass = getattr(model, 'ProjectsList')
+        ObjectInstance = ObjectClass() 
+        return ObjectInstance
+
 def appendProjectPack(project_name):
         projectPack = model.ProjectPack()
         projectPack.Create(project_name)

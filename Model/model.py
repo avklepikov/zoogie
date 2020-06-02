@@ -139,18 +139,33 @@ class ProjectsList():
 
         
         def Refresh (self):
+                     
+                
+                _sql = db.complile_SELECT_ALL_GROUPPED('Project', ['BusinessID', 'Project'])
+                print (_sql)
+                self.HeadList = db.executeSQLget(_sql)                  
+                
                 _sql = db.complile_SELECT_ALL('Project', ['ID','BusinessID', 'Project', 'TechStatus', 'SnapshotAsOfDate', 'SnapshotBoardConfirmed', 'SnapshotCommentary'])
                 print (_sql)
-                self.HeadList = db.executeSQLget(_sql)                
-                
+                self.DetailList = db.executeSQLget(_sql)                 
                 
         def __str__ (self):
                 print ('==================')
-                print ('Register of Portfolios')
+                print ('Register of Portfolios (HEADS)')
                 print ('------------------')
                 for item in self.HeadList:
                         print (item)
+                        
+                print ('==================')
+                print ('Register of Portfolios (DETAILED)')
+                print ('------------------')      
+                for item in self.DetailList:
+                        print (item)                
                 #print ('------------------')
+                
+                
+                
+                
                 return ('------------------')
                 
 

@@ -137,6 +137,18 @@ def complile_SELECT_ALL (_class: str, _attr_value_dict: dict):
         #logging.debug('Resulting SQL: ', SQL)
         return SQL
 
+def complile_SELECT_ALL_GROUPPED (_class: str, _attr_value_dict: dict):
+        logging.info (f'      DB Starting complile_SELECT_ALL_GROUPED (_class = {_class}, _attr_value_dict = {_attr_value_dict})')
+        table = get_class_table(_class)
+        _fields_list = []
+        for attr in _attr_value_dict:
+                _fields_list.append ( db_constants.DB_FIELDS_MAPPING[_class][attr][0])
+        _fields_list_str = ', '.join(_fields_list)
+        SQL = f"SELECT {_fields_list_str} FROM {table} GROUP BY {_fields_list_str}"
+        #logging.debug('Resulting SQL: ', SQL)
+        return SQL        
+
+
 def complile_SELECT_BY_PROJECT_ID (_class: str, _attr_value_dict: dict, _Project_id: int):
         """his is a target function to be used to retrived any Project related record from any table by related Project ID
         
