@@ -158,12 +158,13 @@ class PortfoliosTree (ttk.Treeview):
                 
         def OnDoubleClick(self, event):
                 item = self.identify('item', event.x, event.y)
-                bdRecordID = self.item(item, 'text')      
-                #print ('Selected', bdRecordID)
-                projectwindow = ProjectApp(bdRecordID)
-                projectwindow.mainloop()
-                #registerItemCard = vf_Top_RegisterCard.MainFrame(self, bdRecordID, self.ObjectName,  'gray')
-                #registerItemCard.mainloop()     
+                bdRecordID = self.item(item, 'text')     
+                if (len(self.item(item, 'values'))) != 1:
+                        #print ('Selected', bdRecordID)
+                        projectwindow = ProjectApp(bdRecordID)
+                        projectwindow.mainloop()
+                        #registerItemCard = vf_Top_RegisterCard.MainFrame(self, bdRecordID, self.ObjectName,  'gray')
+                        #registerItemCard.mainloop()     
 
         
         def Refresh (self):
