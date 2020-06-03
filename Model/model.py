@@ -126,6 +126,11 @@ PREDEFINED_LISTS_OF_VALUES = {
         'Project':{
                 'TechStatus': ['Published (Current)', 'Published (Archived)', 'Draft', 'Snapshot']},
         
+        'Product':{
+                'Category': ['Project', 'Management'],
+                'Status': ['Open', 'Closed']},
+                
+        
         'Stage':{
                 'Category': ['Starting-Up (SU)', 'Project Initiation', 'Delivery Stage'],
                 'Status': ['Scheduled', 'Active', 'Active (Exception)', 'Terminated', 'Completed']}
@@ -841,7 +846,10 @@ class Product (ProjectObject):          # OK
                       Composition: str = None, 
                       Derivation: str = None, 
                       FormatPresentation: str = None, 
-                      DevSkills: str = None, 
+                      DevSkills: str = None,
+                      Category: str = None,
+                      Status: str = None,
+                      AcceptanceCriterias: str = None,
                       ID: int = None,
                       ParentID: int = None):
                 
@@ -856,6 +864,9 @@ class Product (ProjectObject):          # OK
                 self.Derivation = Derivation
                 self.FormatPresentation = FormatPresentation
                 self.DevSkills = DevSkills
+                self.Category = Category
+                self.Status = Status
+                self.AcceptanceCriterias = AcceptanceCriterias
                 self.ParentID = ParentID
                 
                 

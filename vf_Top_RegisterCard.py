@@ -73,7 +73,10 @@ REGISTER_BLOCKS = {
                 'FormatPresentation': ['TEXT_BOX', 3, 0],
                 'Purpose': ['TEXT_BOX', 3, 1],
                 'RelatedProject': ['TEXT_LINE_BLOCKED', 0, 2],
-                'ParentID': ['TEXT_LINE', 1, 1]
+                'ParentID': ['TEXT_LINE', 1, 1],
+                'Status': ['COMBO', 4, 0],
+                'Category': ['COMBO', 4, 1],
+                'AcceptanceCriterias': ['TEXT_BOX', 4, 2]
                 },
         'Issue':{
                 'ID': ['TEXT_LINE_BLOCKED', 0, 0],
