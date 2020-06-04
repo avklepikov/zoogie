@@ -149,8 +149,10 @@ class PortfoliosTree (ttk.Treeview):
                 self.popup_menu = Menu (self, tearoff=0)
                 self.popup_menu.add_command(label='Add new project', command = self._addNewProject)
                 self.popup_menu.add_command(label='Add new Sample project', command = self._addNewSampleProject)
-                self.popup_menu.add_command(label='Snapshot selected project', command = self._snapshotProject)  
-                self.popup_menu.add_command(label='Delete selected project', command = self._deleteProject)  
+                self.popup_menu.add_command(label='Export selected project (csv)', command = self._CSVexportProject)
+                #self.popup_menu.add_command(label='Snapshot selected project', command = self._snapshotProject)  
+                
+                #self.popup_menu.add_command(label='Delete selected project', command = self._deleteProject)  
                 self.bind ('<Button-2>', self._do_popup)
                 
                 self.Refresh()
@@ -214,6 +216,18 @@ class PortfoliosTree (ttk.Treeview):
         
         def _deleteProject(self):
                 pass
+        
+        def _CSVexportProject(self):
+                #print (self)
+                curItem = self.focus()
+                bdRecordID = self.item(curItem, 'text') 
+                if (len(self.item(curItem, 'values'))) != 1:
+                        print ('ID', bdRecordID)
+                        #self.item(
+                        projectPack = controller.GetProjectPack(bdRecordID)
+                        projectPack.exportCSV()
+                        #print (projectPack)
+                
 
 class NewProjectRequest (Toplevel):
         def __init__(self, master):

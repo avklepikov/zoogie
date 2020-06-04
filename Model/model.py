@@ -39,6 +39,8 @@ Classes: Business name is Project Objects
 import logging
 from Database import db        #database connector to run the model on SQLLite DB
 from Model import SampleData
+import csv, os
+
 
 
 PREDEFINED_LISTS_OF_VALUES = {
@@ -345,7 +347,37 @@ class ProjectPack():
         
         
         
-
+        def exportCSV(self):
+                filename = str(self.Project.ID) + " " +  str(self.Project.BusinessID) + " " + str(self.Project.Project) + ".csv"
+                with open(filename, mode='w', newline='') as project_file:
+                        project_writer = csv.writer(project_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
+                        project_writer.writerow(['PID Section', 'PID Paragraph',  'Value'])
+                        exportObjects = [
+                                self.Project,
+                                self.Mandate,
+                                self.ProjectBrief,
+                                self.BusinessCase,
+                                self.BenefitApproach,
+                                self.QualityApproach,
+                                self.RiskApproach,
+                                self.CommunicationApproach,
+                                self.ChangeApproach,
+                                self.ProjectApproach]
+                        for exportObject in exportObjects:
+                        
+                                for _attr in exportObject.__dict__:
+                                        #print (_attr)
+                                        #print (self.ID)
+                                        #print(_attr, ' -> ' ,getattr(exportObject, _attr))
+                                        string = getattr(exportObject, _attr)
+                                        if type(string) == str:
+                                                string = string.replace("\r"," ")
+                                                string = string.replace("\n"," ")
+                                                string = string.replace("\r\n"," ")
+                                        
+                                        if getattr(exportObject, _attr) != None and _attr!= 'ID' and _attr != 'RelatedProject':
+                                                project_writer.writerow([exportObject.__class__.__name__, _attr,  string])
+        
 class ProjectObject():   # Unified methods are set in this SuperClass
         """Provides each Project Class with unified methods to read and update the database
         
@@ -1492,9 +1524,10 @@ def Main ():
         
         logging.basicConfig(filename='logging.txt',level=logging.DEBUG, format='%(asctime)s %(name)-12s %(levelname)-8s %(message)s', datefmt='%m-%d %H:%M', filemode='w')
         
-        #X = ProjectPack()
+        X = ProjectPack()
         #X.Create('KISPL PROJECT 007')
-        
+        X.BusinessCase.ExecutiveSummary = '_ Executive Summary _' 
+        X.exportCSV()
         #X = ProjectsList()
         #X.Refresh()
         #print (X)

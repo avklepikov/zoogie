@@ -4,6 +4,7 @@ __pycache__/db.cpython-37.pyc
 __pycache__/db_constants.cpython-37.pyc
 .vscode/settings.json
 *.pyc
+*.csv
 logging.txt
 to delete
 manual_model_check.py
