@@ -39,7 +39,7 @@ Classes: Business name is Project Objects
 import logging
 from Database import db        #database connector to run the model on SQLLite DB
 from Model import SampleData
-import csv, os
+import csv
 
 
 
@@ -377,6 +377,39 @@ class ProjectPack():
                                         
                                         if getattr(exportObject, _attr) != None and _attr!= 'ID' and _attr != 'RelatedProject':
                                                 project_writer.writerow([exportObject.__class__.__name__, _attr,  string])
+        def registerExportCSV (_class, _dbProjectID):
+        
+                import sys
+                mod = (sys.modules[__name__])
+                
+                project = Project()
+                _keysP, _dataP = project.viewItem(_dbProjectID)
+                print (_keysP)
+                print (_dataP)
+                
+                #_dataP[0][_keysP['ID']]
+                
+                filename = str(_dataP[0][_keysP['ID']])
+                print (filename)
+                
+                filename = filename + " " + _dataP[0][_keysP['BusinessID']]
+                print (filename)
+                
+                filename = filename + " " + _dataP[0][_keysP['Project']]
+                print (filename)        
+                
+                ObjectClass = getattr(mod, _class)
+                objectInstance = ObjectClass()
+                _keys, _data = objectInstance.viewProjectRelatedItems(_dbProjectID)
+                print (_keys)
+                print (_data)
+                filename = f"{_class} " + filename +".csv"
+                with open(filename, mode='w', newline='') as project_file:
+                        project_writer = csv.writer(project_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)  
+                        project_writer.writerow(_keys)
+                        for item in _data:
+                                
+                                project_writer.writerow(item)
         
 class ProjectObject():   # Unified methods are set in this SuperClass
         """Provides each Project Class with unified methods to read and update the database
@@ -1186,7 +1219,8 @@ class RiskRegister (ProjectObject):     # --                          -> add att
                 self.Actionee=Actionee    
                 #self.ShortListAttributes =[self.ID, self.BusinessID, self.Title, self.Category, self.RaisedDate, self.ResponseCategory, self.Owner, self.Status]
                 #"""List of attributes shown as lines in the Treeview register"""
-
+        
+        
 class Stakeholder (ProjectObject):      # OK
         """List of Project stakeholders
         
@@ -1520,14 +1554,19 @@ class Project (ProjectObject):          # OK +ProjectPack
 
 
 
+
+
+                        
+        
+        
 def Main ():
         
         logging.basicConfig(filename='logging.txt',level=logging.DEBUG, format='%(asctime)s %(name)-12s %(levelname)-8s %(message)s', datefmt='%m-%d %H:%M', filemode='w')
-        
-        X = ProjectPack()
+        registerExportCSV ('RiskRegister', 1)
+        #X = ProjectPack()
         #X.Create('KISPL PROJECT 007')
-        X.BusinessCase.ExecutiveSummary = '_ Executive Summary _' 
-        X.exportCSV()
+        #X.BusinessCase.ExecutiveSummary = '_ Executive Summary _' 
+        #X.exportCSV()
         #X = ProjectsList()
         #X.Refresh()
         #print (X)

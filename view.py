@@ -150,6 +150,10 @@ class PortfoliosTree (ttk.Treeview):
                 self.popup_menu.add_command(label='Add new project', command = self._addNewProject)
                 self.popup_menu.add_command(label='Add new Sample project', command = self._addNewSampleProject)
                 self.popup_menu.add_command(label='Export selected project (csv)', command = self._CSVexportProject)
+                self.popup_menu.add_command(label='Export Risk    Register for selected project (csv)', command = self._CSVexportRiskRegister)
+                self.popup_menu.add_command(label='Export Issue   Register for selected project (csv)', command = self._CSVexportIssueRegister)
+                self.popup_menu.add_command(label='Export Product Register for selected project (csv)', command = self._CSVexportProductRegister)
+                
                 #self.popup_menu.add_command(label='Snapshot selected project', command = self._snapshotProject)  
                 
                 #self.popup_menu.add_command(label='Delete selected project', command = self._deleteProject)  
@@ -227,6 +231,24 @@ class PortfoliosTree (ttk.Treeview):
                         projectPack = controller.GetProjectPack(bdRecordID)
                         projectPack.exportCSV()
                         #print (projectPack)
+                        
+        def _CSVexportRiskRegister(self):
+                curItem = self.focus()
+                bdRecordID = self.item(curItem, 'text') 
+                if (len(self.item(curItem, 'values'))) != 1:
+                        print ('ID', bdRecordID)
+                        #self.item(
+                        projectPack = controller.GetProjectPack(bdRecordID)
+                        projectPack.registerExportCSV('RiskRegister', bdRecordID)                
+        
+                
+        def _CSVexportIssueRegister(self):
+                pass
+        
+                
+        def _CSVexportProductRegister (self):
+                pass
+        
                 
 
 class NewProjectRequest (Toplevel):
