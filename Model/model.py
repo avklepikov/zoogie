@@ -39,6 +39,8 @@ Classes: Business name is Project Objects
 import logging
 from Database import db        #database connector to run the model on SQLLite DB
 from Model import SampleData
+import csv
+
 
 
 PREDEFINED_LISTS_OF_VALUES = {
@@ -125,6 +127,11 @@ PREDEFINED_LISTS_OF_VALUES = {
         
         'Project':{
                 'TechStatus': ['Published (Current)', 'Published (Archived)', 'Draft', 'Snapshot']},
+        
+        'Product':{
+                'Category': ['Project', 'Management'],
+                'Status': ['Open', 'Closed']},
+                
         
         'Stage':{
                 'Category': ['Starting-Up (SU)', 'Project Initiation', 'Delivery Stage'],
@@ -340,7 +347,70 @@ class ProjectPack():
         
         
         
-
+        def exportCSV(self):
+                filename = str(self.Project.ID) + " " +  str(self.Project.BusinessID) + " " + str(self.Project.Project) + ".csv"
+                with open(filename, mode='w', newline='') as project_file:
+                        project_writer = csv.writer(project_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
+                        project_writer.writerow(['PID Section', 'PID Paragraph',  'Value'])
+                        exportObjects = [
+                                self.Project,
+                                self.Mandate,
+                                self.ProjectBrief,
+                                self.BusinessCase,
+                                self.BenefitApproach,
+                                self.QualityApproach,
+                                self.RiskApproach,
+                                self.CommunicationApproach,
+                                self.ChangeApproach,
+                                self.ProjectApproach]
+                        for exportObject in exportObjects:
+                        
+                                for _attr in exportObject.__dict__:
+                                        #print (_attr)
+                                        #print (self.ID)
+                                        #print(_attr, ' -> ' ,getattr(exportObject, _attr))
+                                        string = getattr(exportObject, _attr)
+                                        if type(string) == str:
+                                                string = string.replace("\r"," ")
+                                                string = string.replace("\n"," ")
+                                                string = string.replace("\r\n"," ")
+                                        
+                                        if getattr(exportObject, _attr) != None and _attr!= 'ID' and _attr != 'RelatedProject':
+                                                project_writer.writerow([exportObject.__class__.__name__, _attr,  string])
+        def registerExportCSV (_class, _dbProjectID):
+        
+                import sys
+                mod = (sys.modules[__name__])
+                
+                project = Project()
+                _keysP, _dataP = project.viewItem(_dbProjectID)
+                print (_keysP)
+                print (_dataP)
+                
+                #_dataP[0][_keysP['ID']]
+                
+                filename = str(_dataP[0][_keysP['ID']])
+                print (filename)
+                
+                filename = filename + " " + _dataP[0][_keysP['BusinessID']]
+                print (filename)
+                
+                filename = filename + " " + _dataP[0][_keysP['Project']]
+                print (filename)        
+                
+                ObjectClass = getattr(mod, _class)
+                objectInstance = ObjectClass()
+                _keys, _data = objectInstance.viewProjectRelatedItems(_dbProjectID)
+                print (_keys)
+                print (_data)
+                filename = f"{_class} " + filename +".csv"
+                with open(filename, mode='w', newline='') as project_file:
+                        project_writer = csv.writer(project_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)  
+                        project_writer.writerow(_keys)
+                        for item in _data:
+                                
+                                project_writer.writerow(item)
+        
 class ProjectObject():   # Unified methods are set in this SuperClass
         """Provides each Project Class with unified methods to read and update the database
         
@@ -841,7 +911,10 @@ class Product (ProjectObject):          # OK
                       Composition: str = None, 
                       Derivation: str = None, 
                       FormatPresentation: str = None, 
-                      DevSkills: str = None, 
+                      DevSkills: str = None,
+                      Category: str = None,
+                      Status: str = None,
+                      AcceptanceCriterias: str = None,
                       ID: int = None,
                       ParentID: int = None):
                 
@@ -856,6 +929,9 @@ class Product (ProjectObject):          # OK
                 self.Derivation = Derivation
                 self.FormatPresentation = FormatPresentation
                 self.DevSkills = DevSkills
+                self.Category = Category
+                self.Status = Status
+                self.AcceptanceCriterias = AcceptanceCriterias
                 self.ParentID = ParentID
                 
                 
@@ -1143,7 +1219,8 @@ class RiskRegister (ProjectObject):     # --                          -> add att
                 self.Actionee=Actionee    
                 #self.ShortListAttributes =[self.ID, self.BusinessID, self.Title, self.Category, self.RaisedDate, self.ResponseCategory, self.Owner, self.Status]
                 #"""List of attributes shown as lines in the Treeview register"""
-
+        
+        
 class Stakeholder (ProjectObject):      # OK
         """List of Project stakeholders
         
@@ -1477,13 +1554,19 @@ class Project (ProjectObject):          # OK +ProjectPack
 
 
 
+
+
+                        
+        
+        
 def Main ():
         
         logging.basicConfig(filename='logging.txt',level=logging.DEBUG, format='%(asctime)s %(name)-12s %(levelname)-8s %(message)s', datefmt='%m-%d %H:%M', filemode='w')
-        
+        registerExportCSV ('RiskRegister', 1)
         #X = ProjectPack()
         #X.Create('KISPL PROJECT 007')
-        
+        #X.BusinessCase.ExecutiveSummary = '_ Executive Summary _' 
+        #X.exportCSV()
         #X = ProjectsList()
         #X.Refresh()
         #print (X)

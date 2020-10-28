@@ -54,8 +54,8 @@ class MainFrame (Frame):
                                           self.Attr5, 
                                           self.Attr6)
                 
-                self.Button = Button(self, text = 'Refresh', command = self.Refresh)
-                self.Button.grid (row=4, column = 0)
+                #self.Button = Button(self, text = 'Refresh', command = self.Refresh)
+                #self.Button.grid (row=4, column = 0)
                 
                         
         def Refresh (self):        # ? move to separate superclass

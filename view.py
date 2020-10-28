@@ -149,8 +149,14 @@ class PortfoliosTree (ttk.Treeview):
                 self.popup_menu = Menu (self, tearoff=0)
                 self.popup_menu.add_command(label='Add new project', command = self._addNewProject)
                 self.popup_menu.add_command(label='Add new Sample project', command = self._addNewSampleProject)
-                self.popup_menu.add_command(label='Snapshot selected project', command = self._snapshotProject)  
-                self.popup_menu.add_command(label='Delete selected project', command = self._deleteProject)  
+                self.popup_menu.add_command(label='Export selected project (csv)', command = self._CSVexportProject)
+                self.popup_menu.add_command(label='Export Risk    Register for selected project (csv)', command = self._CSVexportRiskRegister)
+                self.popup_menu.add_command(label='Export Issue   Register for selected project (csv)', command = self._CSVexportIssueRegister)
+                self.popup_menu.add_command(label='Export Product Register for selected project (csv)', command = self._CSVexportProductRegister)
+                
+                #self.popup_menu.add_command(label='Snapshot selected project', command = self._snapshotProject)  
+                
+                #self.popup_menu.add_command(label='Delete selected project', command = self._deleteProject)  
                 self.bind ('<Button-2>', self._do_popup)
                 
                 self.Refresh()
@@ -158,12 +164,13 @@ class PortfoliosTree (ttk.Treeview):
                 
         def OnDoubleClick(self, event):
                 item = self.identify('item', event.x, event.y)
-                bdRecordID = self.item(item, 'text')      
-                #print ('Selected', bdRecordID)
-                projectwindow = ProjectApp(bdRecordID)
-                projectwindow.mainloop()
-                #registerItemCard = vf_Top_RegisterCard.MainFrame(self, bdRecordID, self.ObjectName,  'gray')
-                #registerItemCard.mainloop()     
+                bdRecordID = self.item(item, 'text')     
+                if (len(self.item(item, 'values'))) != 1:
+                        #print ('Selected', bdRecordID)
+                        projectwindow = ProjectApp(bdRecordID)
+                        projectwindow.mainloop()
+                        #registerItemCard = vf_Top_RegisterCard.MainFrame(self, bdRecordID, self.ObjectName,  'gray')
+                        #registerItemCard.mainloop()     
 
         
         def Refresh (self):
@@ -213,6 +220,36 @@ class PortfoliosTree (ttk.Treeview):
         
         def _deleteProject(self):
                 pass
+        
+        def _CSVexportProject(self):
+                #print (self)
+                curItem = self.focus()
+                bdRecordID = self.item(curItem, 'text') 
+                if (len(self.item(curItem, 'values'))) != 1:
+                        print ('ID', bdRecordID)
+                        #self.item(
+                        projectPack = controller.GetProjectPack(bdRecordID)
+                        projectPack.exportCSV()
+                        #print (projectPack)
+                        
+        def _CSVexportRiskRegister(self):
+                curItem = self.focus()
+                bdRecordID = self.item(curItem, 'text') 
+                if (len(self.item(curItem, 'values'))) != 1:
+                        print ('ID', bdRecordID)
+                        #self.item(
+                        projectPack = controller.GetProjectPack(bdRecordID)
+                        projectPack.registerExportCSV('RiskRegister', bdRecordID)                
+        
+                
+        def _CSVexportIssueRegister(self):
+                pass
+        
+                
+        def _CSVexportProductRegister (self):
+                pass
+        
+                
 
 class NewProjectRequest (Toplevel):
         def __init__(self, master):

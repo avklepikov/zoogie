@@ -95,12 +95,14 @@ def RefreshBusinessObject(_class, _dbProjectRecordID):
         
         return Keys, Data   
 
-def RefreshBusinessObject_byID(_class, _ID):
+def RefreshBusinessObject_byID(_class, _ID):  # ТРОГАЛ ТУТ
         """retrievs table item based on its PK value"""
         logging.info(f'  CONTROLLER: Starting RefreshBusinessObject_byID (_class = {_class}, _ID = {_ID})')
         ObjectClass = getattr(model, _class)
-        ObjectInstance = ObjectClass()
-        Keys, Data = ObjectInstance.viewItem(_ID)
+        objectInstance = ObjectClass()
+        Keys, Data = objectInstance.viewItem(_ID)
+        
+        
         #logging.debug('Keys:')
         #logging.debug(Keys)
         #logging.debug('Data:')
@@ -113,6 +115,7 @@ def Main ():
         logging.basicConfig(filename='logging.txt',level=logging.DEBUG, format='%(asctime)s %(name)-12s %(levelname)-8s %(message)s', datefmt='%m-%d %H:%M', filemode='w')        
         #appendProjectPack('TestProject2')
         #print (GetPredefinedListValues('RiskRegister', 'Impact'))
+              
         model.Main()
         
 if __name__ == '__main__':

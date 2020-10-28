@@ -140,7 +140,9 @@ REGISTER_BLOCKS = {
         'Product':{
                 'Register':{
                         'BusinessID' : ['Bisiness ID', 90],
-                        'Title': ['Title', 250]                     
+                        'Title': ['Title', 250],
+                        'Category': ['Category', 250],
+                        'Status': ['Status', 250],
                         },
                 'Breakdown':{
                         'Title' : ['Title', 0, 0],
@@ -148,7 +150,7 @@ REGISTER_BLOCKS = {
                         'Composition' : ['Composition', 1, 0],
                         'Derivation': ['Derivation', 1, 1],
                         'Purpose': ['Purpose of product', 2, 0],
-                        'FormatPresentation': ['Presentation Format', 2, 1]
+                        'AcceptanceCriterias': ['Acceptance Criterias', 2, 1]
                         
                         }
                 },

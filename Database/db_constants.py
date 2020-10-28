@@ -12,6 +12,9 @@ DB_FIELDS_MAPPING ={                                #Class attributes -> Db Fiel
                 'Derivation': ['Derivation', 'TEXT'],
                 'FormatPresentation': ['FormatPresentation', 'TEXT'],
                 'DevSkills': ['DevSkills', 'TEXT'],
+                'Category': ['Category', 'TEXT'],
+                'Status': ['Status', 'TEXT'],
+                'AcceptanceCriterias': ['AcceptanceCriterias', 'TEXT'],
                 'ParentID':['ParentID', 'INTEGER']},
         
         'Benefit':{'ID': ['ID', 'INTEGER PRIMARY KEY AUTOINCREMENT'],

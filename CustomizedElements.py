@@ -97,7 +97,7 @@ class AttributeValue (Text):
                 #scrollbar = Scrollbar(self)
                 #scrollbar.pack( side = RIGHT, fill = Y )
                 
-                self.config(width = 75, height = 9, state="disabled", wrap=WORD)#, yscrollcommand = scrollbar.set)
+                self.config(width = 70, height = 8, state="disabled", wrap=WORD)#, yscrollcommand = scrollbar.set)
                 self.bind ("<Double-1>", self.OnDoubleClick2)
 
         def OnDoubleClick2(self, Event):
