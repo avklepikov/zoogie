@@ -30,79 +30,6 @@ use https://www.color-hex.com/ to find nice colour code"""
 To delete as unused?"""
 
 
-
-
-# Custom Widgets
-#class AppText (Text):
-        #"""Custom 1-line Text widget with simplified update method to substiture Delete+Instert + Formatting"""
-        #def __init__(self, *args, **kwargs):
-                #super().__init__(*args,**kwargs)
-                #self.config(width = 60, height = 1, state="disabled")
-                
-        
-        #def TextUpdate(self, NewText):
-                
-                #self.config(state="normal")
-                #self.delete(1.0, END)
-                #self.insert(1.0, NewText)
-                #self.config (state="disabled")
-                
-        
-   
-
-
-#class AppTextBox (Text):
-        #"""Custom Text widget with simplified update method to substiture Delete+Instert + Formatting + mapping to Class name and Attributes"""
-        #def __init__(self, master, __class, __attribute, *args, **kwargs):
-            
-                #super().__init__(master, *args,**kwargs)
-
-                #self._class = __class
-                #self._attribute = __attribute
-                #self.config(width = 60, height = 12,state="disabled")
-                #self.bind ("<Double-1>", self.OnDoubleClick2)
-
-        
-        #def TextUpdate(self, NewText):
-                #self.config(state="normal")
-                #self.delete(1.0, END)
-                #self.insert(1.0, NewText)  
-                #self.config (state="disabled")
-                
-        #def OnDoubleClick2 (self, Event):
-                #logging.info ('OnDoubleClick2 is aptured')
-                #global _activeProject
-
-                #top = Toplevel(self)
-                #top.config(bg = _BGC)
-                ##relatedProjectID = Label (top, text = _activeProject, bg = _BGC).grid(row=0, column = 0)
-                
-                #self.relatedClass = Label(top, text = Event.widget._class, bg = _BGC).grid(row=0, column = 0, sticky=W+E+N+S)
-                #self.relatedAttribute = Label(top, text = Event.widget._attribute, bg = _BGC).grid(row = 1, column = 0, sticky=W+E+N+S)
-                #self.editableTextBox = Text(top, height = 30)
-                #self.editableTextBox.insert (1.0, Event.widget.get (1.0, END))
-                #self.editableTextBox.grid(row=2, column =0, columnspan=2)
-                
-                #self.CommentaryLabel = Label(top, text = 'Change related commentaries:', bg = _BGC).grid(row=3, column =0)
-                #self.CommentaryText = Text(top, height = 3).grid(row=4, column =0)
-                
-                #self.buttonEdit = Button(top, text = 'Edit', command = abc).grid(row=5, column =0, sticky=W+E+N+S)
-                #self.buttonEdit = Button(top, text = 'Save Changes', command = self.SaveChangaes).grid(row=6, column =0, sticky=W+E+N+S)
-                #self.buttonEdit = Button(top, text = 'Close without changes', command = abc).grid(row=7, column =0, sticky=W+E+N+S)
-                
-                
-                
-                #top.mainloop()
-                
-        #def SaveChangaes (self):
-                ##logging.info ('VIEW SAVING NEW ATTR VALUE')
-                #__class =  self._class
-                #__attr = self._attribute
-                #__value = self.editableTextBox.get (1.0, END)
-                #controller.UpdateAttribute(__class, __attr, _activeProject, __value)
-
-
-
 def abc():  #NOT USED TextBox Click event General. To accept TextBox Value, class and attribute names to run SQL
         print ("ABC")
 
@@ -114,11 +41,7 @@ class Application(Tk):
                 projectsList.pack()
                 #application.mainloop()
 
-#class PortfoliosTree (Frame):
-        #def __init__(self, master):
-                #super().__init__(master)
-                #portfolioTree = PortfoliosTree (self)
-                #portfolioTree.pack()
+
                 
                 
                 
@@ -310,18 +233,7 @@ class ProjectApp (Toplevel):
         def __init__ (self, _activeProject):
                 super().__init__()
                 self._frame = mainFrame_Project(self, _activeProject)
-                
-                #self.switch_frame(mainFrame_Portfolio)
-               
-                
-        #def switch_frame(self, frame_class):
-                #new_frame = frame_class(self)
-                #if self._frame is not None:
-                        #self._frame.destroy()
-                #self._frame = new_frame
-                self._frame.pack()
-                
-             
+                self._frame.pack()          
                 
                 
 #  ---------------- PORTFOLIO MAIN FRAME -------------------                
@@ -372,6 +284,8 @@ class PortfolioTree (ttk.Treeview):
                 
 #  -----------------PROJECT MAIN FRAME ---------------------                
 class mainFrame_Project(Frame):
+        """Level 0. Main Frame which contains header and clickable tab"""
+        
         def __init__ (self, master, _activeProject):
                 super().__init__(master)
                 self.ProjectPack = controller.GetProjectPack(_activeProject)
@@ -384,6 +298,8 @@ class mainFrame_Project(Frame):
                 
                 
 class ProjectHead(Frame):
+        """Level 1. This is a header with basic project information"""
+        
         def __init__ (self, master):
                 super().__init__(master)
                 
@@ -429,6 +345,8 @@ class ProjectHead(Frame):
                 logging.info ('VIEW Finished Project Head Refresh')
                 
 class ProjectTabControl (ttk.Notebook):
+        """Level 1. This is a tab with defenition for all main sections"""
+        
         def __init__(self, master):
                 super().__init__(master)
                 frame_BusinessCase = Frame_BusinessCase(self)
@@ -469,6 +387,8 @@ class ProjectTabControl (ttk.Notebook):
                 
 
 class Frame_BusinessCase (Frame):
+        """Level 2. Frame within Business Case Tab"""
+        
         def __init__ (self, master):
                 super().__init__(master)
                 self.config (bg = _BGC)                           # no effect
@@ -476,6 +396,8 @@ class Frame_BusinessCase (Frame):
                 tab_control.pack()
 
 class Frame_Organization (Frame):
+        """Level 2. Frame within Organization Tab"""
+        
         def __init__ (self, master):
                 super().__init__(master)
                 teamRegister = vf_Register.MainFrame(self, self.master.master.ProjectPack.Project.ID, 'Team', _BGC)
@@ -483,48 +405,66 @@ class Frame_Organization (Frame):
                 
 
 class Frame_Plan (Frame):
+        """Level 2. Frame within Plan Tab"""
+        
         def __init__ (self, master):
                 super().__init__(master)
                 tab_control = PlanTabControl(self)
                 tab_control.pack()
 
 class Frame_Quality (Frame):
+        """Level 2. Frame within Quality Tab"""
+        
         def __init__ (self, master):
                 super().__init__(master)
                 tab_control = QualityTabControl(self)
                 tab_control.pack()                
 
 class Frame_Risk (Frame):
+        """Level 2. Frame within Risk Tab"""
+        
         def __init__ (self, master):
                 super().__init__(master)
                 tab_control = RiskTabControl(self)
                 tab_control.pack()
                 
 class Frame_Change (Frame):
+        """Level 2. Frame within Change Tab"""
+        
         def __init__ (self, master):
                 super().__init__(master)
                 tab_control = ChangeTabControl(self)
                 tab_control.pack()                
 
 class Frame_Communication (Frame):
+        """Level 2. Frame within Communication Tab"""
+        
         def __init__ (self, master):
                 super().__init__(master)
                 tab_control = CommunicationTabControl(self)
                 tab_control.pack()                
 
 class Frame_DailyLog (Frame):
+        """Level 2. Frame within Daily Log Tab (EMPTY)"""
+        
         def __init__ (self, master):
                 super().__init__(master)
 
 class Frame_DashBoard (Frame):
+        """Level 2. Frame within Dashboard Tab (EMPTY)"""
+        
         def __init__ (self, master):
                 super().__init__(master)
 
 class Frame_Meetings (Frame):
+        """Level 2. Frame within Meetings Tab (EMPTY)"""
+        
         def __init__ (self, master):
                 super().__init__(master)
 
 class PlanTabControl (ttk.Notebook):
+        """Level 3. Frame inside Plan Tab"""
+        
         def __init__(self, master):
                 super().__init__(master)
                 stages = vf_Register.MainFrame(self,self.master.master.master.ProjectPack.Project.ID, 'Stage', _BGC)
@@ -532,20 +472,16 @@ class PlanTabControl (ttk.Notebook):
                 
 # TAB   :  Business Case             
 class BusinessCaseTabControl (ttk.Notebook):
+        """Level 3. Tab within Business Case Tab. Definition of Business Case sub-tree"""
+        
         def __init__(self, master):
                 super().__init__(master)
                 
                 Mandate = subFrame_Mandate(self)
                 
-                
                 BusinessCase = vf_Register.MainFrameWIthoutRegister(self, self.master.master.master.ProjectPack.BusinessCase.ID, 'BusinessCase', _BGC)
-                
-                
                 Benefits = vf_Register.MainFrame(self,self.master.master.master.ProjectPack.Project.ID, 'Benefit', _BGC)
-                
                 ProjectProduct = vf_Register.MainFrame(self, self.master.master.master.ProjectPack.Project.ID, 'Product', _BGC)             
-                
-                
                 ProjectApproach = vf_Register.MainFrameWIthoutRegister(self, self.master.master.master.ProjectPack.ProjectApproach.ID, 'ProjectApproach', _BGC)
                 
                 self.add(Mandate, text = 'Mandate')
@@ -556,6 +492,8 @@ class BusinessCaseTabControl (ttk.Notebook):
         
 
 class subFrame_Mandate(Frame):
+        """Level 4. Main -> Business Case -> Mandate Frame"""
+        
         def __init__(self, master):
                 super().__init__(master)
                 self.config (bg = _BGC)
@@ -569,27 +507,7 @@ class subFrame_Mandate(Frame):
                 
                 
                 
-# TAB   :   Organization
-class subFrame_Team(Frame):
-        def __init__ (self, master):
-                super().__init__(master)  
-                self.config (bg = _BGC)
-                
-class subFrame_Roles(Frame):
-        def __init__ (self, master):
-                super().__init__(master) 
-                self.config (bg = _BGC)
-
-# TAB   :   Plan
-class subFrame_Products(Frame):
-        def __init__ (self, master):
-                super().__init__(master)  
-                self.config (bg = _BGC)
-                
-class subFrame_WBS(Frame):
-        def __init__ (self, master):
-                super().__init__(master)  
-                self.config (bg = _BGC)
+   
 # TAB   :   Risk
 class RiskTabControl (ttk.Notebook):
         def __init__(self, master):
@@ -598,21 +516,15 @@ class RiskTabControl (ttk.Notebook):
                 RiskApproach1 = vf_RiskApproach1.MainFrame(self, self.master.master.master.ProjectPack.RiskApproach.ID)
                 RiskApproach1.Refresh()
                 
-                
                 RiskApproach2 = vf_RiskApproach2.MainFrame(self, self.master.master.master.ProjectPack.RiskApproach.ID)
                 RiskApproach2.Refresh()
                 
-                
                 RiskRegister = vf_Register.MainFrame(self, self.master.master.master.ProjectPack.Project.ID, 'RiskRegister', _BGC)
-                
-                
                 
                 self.add(RiskApproach1, text = 'Risk Approach (1)')
                 self.add(RiskApproach2, text = 'Risk Approach (2)')
                 self.add(RiskRegister, text = 'Risk Register')
                 
-
-
 
 # TAB   :   Change
 class ChangeTabControl (ttk.Notebook):
@@ -643,14 +555,14 @@ class CommunicationTabControl (ttk.Notebook):
 class QualityTabControl (ttk.Notebook):
         def __init__(self, master):
                 super().__init__(master)
+                
                 QualityApproach = vf_Register.MainFrameWIthoutRegister(self, self.master.master.master.ProjectPack.QualityApproach.ID, 'QualityApproach', _BGC)
-
                 self.add(QualityApproach, text = 'Quality Approach')
                 
                 QualityRegister = vf_Register.MainFrame(self, self.master.master.master.ProjectPack.Project.ID, 'QualityRegister', _BGC)
                 self.add(QualityRegister, text = 'Quality Register')
                 
-                
+                # Here to place criteria Register.
                 
                 
 def Main ():
