@@ -213,9 +213,10 @@ class MainFrame (Frame):
                 #Building the Register based on REGISTER_BLOCKS setup:
                 for item in REGISTER_BLOCKS[self.objectName]['Register']:
                         argList.append (item)
-                        argLabelList.append (REGISTER_BLOCKS[self.objectName]['Register'][item][0])
-                        argSizeList.append (REGISTER_BLOCKS[self.objectName]['Register'][item][1])                
-                #Mounting register
+                        argLabelList.append (REGISTER_BLOCKS[self.objectName]['Register'][item][0]) # List of attributes
+                        argSizeList.append (REGISTER_BLOCKS[self.objectName]['Register'][item][1])  # Lengths of each attribute             
+                
+                #Mounting register + assigning key defining attributes to it. Data update is done in CustomizedElements.RegisterList by its own method.
                 self.Register = CustomizedElements.RegisterList(self, 
                                                                 self.dbProjectRecordID,
                                                                 self.objectName, 

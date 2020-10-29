@@ -149,10 +149,14 @@ class RegisterList (ttk.Treeview):
                 """Can be of 2 types: plain and tree. Controled by treeType attribute with default False (plain) value"""
                 super().__init__(master)
                 #print ("***********************", ObjectName, "treeType: ", treeType)
+                
+                # Defining own instance attributes
                 self.ProjectID = ProjectID
                 self.ObjectName = ObjectName
                 self.ArgList = ArgList
                 #print ('Arglist: ', self.ArgList)
+                
+                # Setting the TreeView 
                 self['columns'] = (ArgList)
                 self.heading ('#0', text = 'Code', anchor = 'w')
                 self.column('#0', width = 30)
@@ -168,6 +172,7 @@ class RegisterList (ttk.Treeview):
                 
                 self.pack()
                 
+                # Pop-Up Menu settings
                 self.popup_menu = Menu (self, tearoff=0)
                 self.popup_menu.add_command(label='Add new register item', command = self._addNewRegisterItem)
                 self.popup_menu.add_command(label='Delete selected item', command = self._deleteRegisterItem)
@@ -178,12 +183,18 @@ class RegisterList (ttk.Treeview):
                 
                 #print ('.......................')
                 #print (self.master.__dict__)
+                
+                # Cleaning the tree from the data 
                 for i in self.get_children():
                         self.delete(i)                 
                 
                 #print ('Refresh Object', self)
                 #print ('Arglist: ', self.ArgList)
+                
+                # Retrieve the data
                 Keys, Data = controller.RefreshBusinessObject(self.ObjectName, self.ProjectID)
+                
+                
                 #print ('Object: ', self.ObjectName)
                 #print ('\n')
                 #print ('Keys: ', Keys) 
@@ -191,7 +202,8 @@ class RegisterList (ttk.Treeview):
                 #print ('Data: ', Data)
                 #print ('\n')
                 #print ('Columns: ', self('column'))
-
+                
+                # Inserting data values one by one (Algorythm for replacement for new nested views)
                 for item in Data:
                         insert_list = []
                         #print ('item: ', item)
