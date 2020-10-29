@@ -153,6 +153,8 @@ REGISTER_BLOCKS = {
                 },
         'Product':{
                 'Register':{
+                        'ID': ['ID', 90],
+                        'ParentID': ['ParentID', 90],
                         'BusinessID' : ['Bisiness ID', 90],
                         'Title': ['Title', 250],
                         'Category': ['Category', 250],
