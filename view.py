@@ -41,9 +41,7 @@ class Application(Tk):
                 projectsList.pack()
                 #application.mainloop()
 
-
-                
-                
+  
                 
 class PortfoliosTree (ttk.Treeview):
         def __init__(self, master):
@@ -57,17 +55,13 @@ class PortfoliosTree (ttk.Treeview):
                 self.heading ('SnapshotBoardConfirmed', text = 'Agreed by Steering', anchor = 'w')
                 self.heading ('SnapshotCommentary', text = 'Commentary', anchor = 'w')
                 
-                
                 self.column('#0', width = 70)
-                
-                
                 
                 self.config(height = 15)        
                 self.pack()
                 self.projectsList = controller.getProjectsList()
                 
                 self.bind("<Double-1>", self.OnDoubleClick)
-                
                 
                 self.popup_menu = Menu (self, tearoff=0)
                 self.popup_menu.add_command(label='Add new project', command = self._addNewProject)
@@ -77,9 +71,10 @@ class PortfoliosTree (ttk.Treeview):
                 self.popup_menu.add_command(label='Export Issue   Register for selected project (csv)', command = self._CSVexportIssueRegister)
                 self.popup_menu.add_command(label='Export Product Register for selected project (csv)', command = self._CSVexportProductRegister)
                 
-                #self.popup_menu.add_command(label='Snapshot selected project', command = self._snapshotProject)  
+                # DO NOT DELETE 
+                #self.popup_menu.add_command(label='Snapshot selected project', command = self._snapshotProject)
+                #self.popup_menu.add_command(label='Delete selected project', command = self._deleteProject)
                 
-                #self.popup_menu.add_command(label='Delete selected project', command = self._deleteProject)  
                 self.bind ('<Button-2>', self._do_popup)
                 
                 self.Refresh()
@@ -98,9 +93,12 @@ class PortfoliosTree (ttk.Treeview):
         
         def Refresh (self):
                 print ('Refresh tree')
+                
+                #Go around the tree and delete all existing records at all levels.
                 for i in self.get_children():
                         self.delete(i)
-                        
+                
+                #Retrieve the data for the tree        
                 self.projectsList.Refresh()
                 #print (self.projectsList)
                 
@@ -560,7 +558,7 @@ class QualityTabControl (ttk.Notebook):
                 self.add(QualityApproach, text = 'Quality Approach')
                 
                 QualityRegister = vf_Register.MainFrame(self, self.master.master.master.ProjectPack.Project.ID, 'QualityRegister', _BGC)
-                self.add(QualityRegister, text = 'Quality Register')
+                self.add(QualityRegister, text = 'Quality Events Register')
                 
                 # Here to place criteria Register.
                 QualityCriteria = vf_Register.MainFrame(self, self.master.master.master.ProjectPack.Project.ID, 'QualityCriteria', _BGC)

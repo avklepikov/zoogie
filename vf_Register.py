@@ -215,6 +215,7 @@ class MainFrame (Frame):
                         argList.append (item)
                         argLabelList.append (REGISTER_BLOCKS[self.objectName]['Register'][item][0])
                         argSizeList.append (REGISTER_BLOCKS[self.objectName]['Register'][item][1])                
+                #Mounting register
                 self.Register = CustomizedElements.RegisterList(self, 
                                                                 self.dbProjectRecordID,
                                                                 self.objectName, 
@@ -222,7 +223,7 @@ class MainFrame (Frame):
                                                                 argSizeList)
                 self.Register.pack()
                 
-                #Building the Breakdown section
+                #Mounting the Breakdown section
                 BD_argList =[]
                 BD_argLabelList= []
                 argSizeList.clear()

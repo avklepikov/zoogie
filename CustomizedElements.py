@@ -144,9 +144,11 @@ class AttributeValue (Text):
 
 
 class RegisterList (ttk.Treeview):
-        def __init__ (self, master, ProjectID: int, ObjectName: str, ArgList, ArgSizeList ):
+        """Plain/tree register """
+        def __init__ (self, master, ProjectID: int, ObjectName: str, ArgList, ArgSizeList, treeType = False ):
+                """Can be of 2 types: plain and tree. Controled by treeType attribute with default False (plain) value"""
                 super().__init__(master)
-                
+                #print ("***********************", ObjectName, "treeType: ", treeType)
                 self.ProjectID = ProjectID
                 self.ObjectName = ObjectName
                 self.ArgList = ArgList
