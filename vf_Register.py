@@ -19,6 +19,18 @@ REGISTER_BLOCKS = {
                         'RolesResponsibilities': ['Roles and Responsibilities', 0, 0],
                         'Result':['Result', 0, 1]}
                 },
+        'QualityCriteria': {
+                'Register': {
+                        'BusinessID': ['Business ID', 80],
+                        'RelatedProduct': ['Related Product', 80]},
+                'Breakdown': {
+                        'Expectation': ['Expectation', 0, 1],
+                        'Description': ['Description', 0, 0],
+                        'AcceptCriteria': ['Acceptance Criteria', 1, 0],
+                        'Tolerance': ['Tolerance', 1, 1],
+                        'Method': ['Method', 2, 0],
+                        'Responsibility': ['Responsibility', 2,1]}
+                },
         'Stakeholder':{
                 'Register':{
                         'Name': ['Name', 250],

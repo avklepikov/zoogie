@@ -563,6 +563,8 @@ class QualityTabControl (ttk.Notebook):
                 self.add(QualityRegister, text = 'Quality Register')
                 
                 # Here to place criteria Register.
+                QualityCriteria = vf_Register.MainFrame(self, self.master.master.master.ProjectPack.Project.ID, 'QualityCriteria', _BGC)
+                self.add(QualityCriteria, text = 'Quality Criteria Register')
                 
                 
 def Main ():

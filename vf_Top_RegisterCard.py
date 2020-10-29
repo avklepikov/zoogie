@@ -30,6 +30,18 @@ REGISTER_BLOCKS = {
                 'Risk Evaluation':['LABEL', 8, 2],
                 'Risk Planing': ['LABEL', 8, 3]
                 },
+        'QualityCriteria':{
+                'ID': ['TEXT_LINE_BLOCKED', 0, 0],
+                'RelatedProject':['TEXT_LINE_BLOCKED', 0, 2],
+                'RelatedProduct':['TEXT_LINE_BLOCKED', 0, 3],
+                'BusinessID':['TEXT_LINE', 0 , 1],
+                'Description': ['TEXT_BOX', 1, 1],
+                'Expectation': ['TEXT_BOX', 1, 2],
+                'Method': ['TEXT_BOX', 2, 1],
+                'AcceptCriteria': ['TEXT_BOX', 2, 2],
+                'Tolerance': ['TEXT_BOX', 2, 3],
+                'Responsibility': ['TEXT_BOX', 1, 3]
+                },
         'QualityRegister':{
                 'ID':['TEXT_LINE_BLOCKED', 0, 0],
                 'RelatedProject':['TEXT_LINE_BLOCKED', 7, 0],
