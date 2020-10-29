@@ -22,7 +22,9 @@ REGISTER_BLOCKS = {
         'QualityCriteria': {
                 'Register': {
                         'BusinessID': ['Business ID', 80],
-                        'RelatedProduct': ['Related Product', 80]},
+                        'RelatedProduct': ['Related Product', 80],
+                        'Title': ['Title', 250],
+                        'InspectionStatus': ['Status', 120]},
                 'Breakdown': {
                         'Expectation': ['Expectation', 0, 1],
                         'Description': ['Description', 0, 0],

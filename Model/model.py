@@ -1471,19 +1471,26 @@ class QualityCriteria (ProjectObject):  # --                          -> add att
             ID                      (int): Item technical ID in database.
             BusinessID              (str): BusinessID in format accepted by Project Office.
             RelatedProject          (int): Related Project primary key.
-            RelatedProduct          (int): ?
+            RelatedProduct          (int): ID of related product
+            Title                   (str)  Short description
             Expectation             (str): Description of expectations from the User / Customer
-            Description             (str): ?
+            Description             (str): General description of criteria
             AcceptCriteria          (str): Expectations in terms of criteria
             Tolerance               (str): Possible accepted tollerance around criteria
-            Method                  (str): Mthod of estimation of criteria compliance
+            Method                  (str): Method of estimation of criteria compliance
             Responsibility          (str): Who is responsible to verify criteria
+            Inspector               (str): Name of the person who performs tests
+            InspectionDate          (str): Date of last performed inspection
+            InspectionStatus        (str): Result of last inspection (Pending, Passed, Waived, Error)
+            InspectorCommentary     (str): Comments from Inspector
+            
         
         Methods:
             Please refer to Superclass Methods for standard methods applied across all Project Classes    
         """
         def __init__ (self,
                       BusinessID: str = None,
+                      Title: str = None,
                       RelatedProject: int = None,
                       RelatedProduct: int = None,
                       Expectation: str = None,
@@ -1492,10 +1499,15 @@ class QualityCriteria (ProjectObject):  # --                          -> add att
                       Tolerance: str = None,
                       Method: str = None,
                       Responsibility  : str = None,  
+                      Inspector: str = None,
+                      InspectionDate: str = None,
+                      InspectionStatus: str = None,
+                      InspectorCommentary: str = None,
                       ID: int = None):
                 super().__init__()
                 self.ID=ID
                 self.BusinessID=BusinessID
+                self.Title = Title
                 self.RelatedProject=RelatedProject
                 self.RelatedProduct=RelatedProduct
                 self.Expectation=Expectation
@@ -1504,6 +1516,11 @@ class QualityCriteria (ProjectObject):  # --                          -> add att
                 self.Tolerance=Tolerance
                 self.Method=Method
                 self.Responsibility=Responsibility
+                self.Inspector = Inspector
+                self.InspectionDate=InspectionDate
+                self.InspectionStatus=InspectionStatus
+                self.InspectorCommentary=InspectorCommentary
+                
         
 class Project (ProjectObject):          # OK +ProjectPack
         """Project class around which all other Project object are organized

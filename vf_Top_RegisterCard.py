@@ -32,15 +32,20 @@ REGISTER_BLOCKS = {
                 },
         'QualityCriteria':{
                 'ID': ['TEXT_LINE_BLOCKED', 0, 0],
+                'Title': ['TEXT_LINE', 0, 0],
                 'RelatedProject':['TEXT_LINE_BLOCKED', 0, 2],
                 'RelatedProduct':['TEXT_LINE_BLOCKED', 0, 3],
                 'BusinessID':['TEXT_LINE', 0 , 1],
-                'Description': ['TEXT_BOX', 1, 1],
-                'Expectation': ['TEXT_BOX', 1, 2],
-                'Method': ['TEXT_BOX', 2, 1],
-                'AcceptCriteria': ['TEXT_BOX', 2, 2],
-                'Tolerance': ['TEXT_BOX', 2, 3],
-                'Responsibility': ['TEXT_BOX', 1, 3]
+                'Description': ['TEXT_BOX', 1, 0],
+                'Expectation': ['TEXT_BOX', 1, 1],
+                'Method': ['TEXT_BOX', 2, 0],
+                'AcceptCriteria': ['TEXT_BOX', 2, 1],
+                'Tolerance': ['TEXT_BOX', 2, 2],
+                'Responsibility': ['TEXT_BOX', 1, 2],
+                'Inspector': ['TEXT_LINE', 3, 0],
+                'InspectionDate': ['TEXT_LINE', 3, 1],
+                'InspectionStatus': ['TEXT_LINE', 3, 2],
+                'InspectorCommentary': ['TEXT_BOX', 3, 3]
                 },
         'QualityRegister':{
                 'ID':['TEXT_LINE_BLOCKED', 0, 0],
