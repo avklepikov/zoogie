@@ -196,13 +196,26 @@ class RegisterList (ttk.Treeview):
                 
                 
                 #print ('Object: ', self.ObjectName)
-                #print ('\n')
-                #print ('Keys: ', Keys) 
-                #print ('\n')
+                print ('\n')
+                print ('Keys: ', Keys) 
+                print ('\n')
                 #print ('Data: ', Data)
                 #print ('\n')
                 #print ('Columns: ', self('column'))
                 
+                if 'BusinessID' in Keys:
+                        print ('Business ID: ', Keys['BusinessID'])
+                else:
+                        print ('No Business ID')
+                
+                # PLAN
+                # We can make 2 branches: with and without ParentID
+                # 1. Above if script to find ID of Specific Attribute
+                # 2. Make 1st round with empty or zero ParentIDs. Once record is picked then remove from list.
+                # 3. Make the loop matching Parent ID of record with register. Once matched, populate and remove.
+                
+                
+                # Algorythm without ParentID
                 # Inserting data values one by one (Algorythm for replacement for new nested views)
                 for item in Data:
                         insert_list = []
@@ -211,6 +224,8 @@ class RegisterList (ttk.Treeview):
                         for arg in self.ArgList:
                                 #print ('Arg ', arg)
                                 insert_list.append(item[Keys[arg]])
+                                #print ('Parent ID index: ', Keys['ParentID'])
+                                
                         
                         
                         self.insert('',item[0], text=item[0], values=insert_list)
@@ -218,6 +233,17 @@ class RegisterList (ttk.Treeview):
                         #print (insert_list)
                         del insert_list[:]
                 #pass
+                
+                
+                """
+                insert(parent, index, iid=None, **kw)
+                Creates a new item and returns the item identifier of the newly created item.
+                
+                parent is the item ID of the parent item, or the empty string to create a new top-level item. index is an integer, or the value “end”, 
+                specifying where in the list of parent’s children to insert the new item. If index is less than or equal to zero, the new node is inserted at the beginning; 
+                if index is greater than or equal to the current number of children, it is inserted at the end. If iid is specified, it is used as the item identifier; 
+                iid must not already exist in the tree. Otherwise, a new unique identifier is generated.
+                """
 
         def OnDoubleClick(self, event):
                 item = self.identify('item', event.x, event.y)
