@@ -199,14 +199,14 @@ class RegisterList (ttk.Treeview):
                 print ('\n')
                 print ('Keys: ', Keys) 
                 print ('\n')
-                #print ('Data: ', Data)
+                print ('Data: ', Data)
                 #print ('\n')
                 #print ('Columns: ', self('column'))
                 
-                if 'BusinessID' in Keys:
-                        print ('Business ID: ', Keys['BusinessID'])
+                if 'ParentID' in Keys:
+                        isNested = True
                 else:
-                        print ('No Business ID')
+                        isNested = False
                 
                 # PLAN
                 # We can make 2 branches: with and without ParentID
@@ -214,25 +214,40 @@ class RegisterList (ttk.Treeview):
                 # 2. Make 1st round with empty or zero ParentIDs. Once record is picked then remove from list.
                 # 3. Make the loop matching Parent ID of record with register. Once matched, populate and remove.
                 
-                
-                # Algorythm without ParentID
-                # Inserting data values one by one (Algorythm for replacement for new nested views)
-                for item in Data:
-                        insert_list = []
-                        #print ('item: ', item)
-                        
-                        for arg in self.ArgList:
-                                #print ('Arg ', arg)
-                                insert_list.append(item[Keys[arg]])
-                                #print ('Parent ID index: ', Keys['ParentID'])
+                if isNested == False:
+                        # Algorythm without ParentID
+                        # Inserting data values one by one (Algorythm for replacement for new nested views)
+                        for item in Data:
+                                insert_list = []
+                                #print ('item: ', item)
                                 
-                        
-                        
-                        self.insert('',item[0], text=item[0], values=insert_list)
-
-                        #print (insert_list)
-                        del insert_list[:]
-                #pass
+                                for arg in self.ArgList:
+                                        #print ('Arg ', arg)
+                                        insert_list.append(item[Keys[arg]])
+                                        #print ('Parent ID index: ', Keys['ParentID'])
+                                        
+        
+                                self.insert('',item[0], text=item[0], values=insert_list)
+        
+                                #print (insert_list)
+                                del insert_list[:]
+                else:
+                        for item in Data:
+                                insert_list = []
+                                print ('is Nested')
+                                if item[Keys['ParentID']] == 0:
+                                        for arg in self.ArgList:
+                                                print (arg, item[Keys[arg]])
+                                                insert_list.append(item[Keys[arg]])
+                                                print ('item from Data to remove: ', item)
+                                                
+                                                
+                                        self.insert('',item[0], text=item[0], values=insert_list)
+                                        Data.remove(item)
+                                del insert_list[:]
+                                        
+                        pass
+                
                 
                 
                 """
