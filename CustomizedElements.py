@@ -233,6 +233,8 @@ class RegisterList (ttk.Treeview):
                         print ('is Nested')
                         print ('Data initial: \n', Data)
                         self.column('#0', width = 70)
+                        self.column('ID', minwidth = 0)
+                        self.column('ParentID', minwidth = 0)
                         
                         #Population of core level items
                         remove_list = []
