@@ -181,7 +181,7 @@ class RegisterList (ttk.Treeview):
         
         def Refresh (self):
                 
-                #print ('.......................')
+                #print ('........REFRESH...............')
                 #print (self.master.__dict__)
                 
                 # Cleaning the tree from the data 
@@ -196,10 +196,10 @@ class RegisterList (ttk.Treeview):
                 
                 
                 #print ('Object: ', self.ObjectName)
-                print ('\n')
-                print ('Keys: ', Keys) 
-                print ('\n')
-                print ('Data: ', Data)
+                #print ('\n')
+                #print ('Keys: ', Keys) 
+                #print ('\n')
+                #print ('Data: ', Data)
                 #print ('\n')
                 #print ('Columns: ', self('column'))
                 
@@ -208,15 +208,13 @@ class RegisterList (ttk.Treeview):
                 else:
                         isNested = False
                 
-                # PLAN
-                # We can make 2 branches: with and without ParentID
-                # 1. Above if script to find ID of Specific Attribute
-                # 2. Make 1st round with empty or zero ParentIDs. Once record is picked then remove from list.
-                # 3. Make the loop matching Parent ID of record with register. Once matched, populate and remove.
+
                 
                 if isNested == False:
                         # Algorythm without ParentID
                         # Inserting data values one by one (Algorythm for replacement for new nested views)
+                        self.column('#0', width = 30)
+                        
                         for item in Data:
                                 insert_list = []
                                 #print ('item: ', item)
@@ -232,21 +230,63 @@ class RegisterList (ttk.Treeview):
                                 #print (insert_list)
                                 del insert_list[:]
                 else:
+                        #print ('is Nested')
+                        #print ('Data initial: ', Data)
+                        self.column('#0', width = 70)
+                        
+                        #Population of core level items
                         for item in Data:
                                 insert_list = []
-                                print ('is Nested')
+                                
                                 if item[Keys['ParentID']] == 0:
                                         for arg in self.ArgList:
-                                                print (arg, item[Keys[arg]])
+                                                #print (arg, item[Keys[arg]])
                                                 insert_list.append(item[Keys[arg]])
-                                                print ('item from Data to remove: ', item)
                                                 
                                                 
-                                        self.insert('',item[0], text=item[0], values=insert_list)
+                                        #print ('item from Data to remove: ', item)        
+                                        self.insert('',item[0], iid=item[0], text=item[0], values=insert_list)
                                         Data.remove(item)
                                 del insert_list[:]
+                        
+                                
+                        #print (Data)
+                        
+                        #Population of nested items
+                        #1st loop. Go through remaining Data list
+                        
+                        while len(Data) > 0:
+                                #print ('Data Len:', len(Data))
+                                for item in Data:
+                                        insert_list = []
+                                        #Parent is retrieved with index 13 in item 
                                         
-                        pass
+                                        #print (item[13], 'DataItem Parent------>')
+                                        #print ('search index:', item[13], ':', self.exists(item[13]))
+                                        for child in self.get_children():
+                                                #print ('get children:', self.get_children())
+                                                #print('tree item:', self.item(child)["values"][0])
+                                                if self.exists(item[13]):
+                                                        #When match is found
+                                                        for arg in self.ArgList:
+                                                                #print (arg, item[Keys[arg]])
+                                                                insert_list.append(item[Keys[arg]])       
+                                                        #print ('item from Data to remove: ', item)        
+                                                        self.insert(item[13] ,item[0], iid=item[0], text=item[0], values=insert_list)
+                                                        Data.remove(item)                                                
+                                                        
+                                                
+                                        #print ('------<')
+                                        
+                                        del insert_list[:]
+                                        #print ('Data after cycle:', Data)
+                                        #print ()
+                                
+                                
+                        
+                        
+                                        
+                        
                 
                 
                 
@@ -262,11 +302,13 @@ class RegisterList (ttk.Treeview):
 
         def OnDoubleClick(self, event):
                 item = self.identify('item', event.x, event.y)
-                bdRecordID = self.item(item, 'text')      
-                registerItemCard = vf_Top_RegisterCard.MainFrame(self, bdRecordID, self.ObjectName,  'gray')
-                registerItemCard.mainloop()
+                bdRecordID = self.item(item, 'text')  
                 
-                pass
+                if item!="":
+                        registerItemCard = vf_Top_RegisterCard.MainFrame(self, bdRecordID, self.ObjectName,  'gray')
+                        registerItemCard.mainloop()
+                
+                
         def OnClick(self, event):
                 #print ('1 Click')
                 item = self.identify('item', event.x, event.y)
@@ -274,8 +316,9 @@ class RegisterList (ttk.Treeview):
                 #print (self)
                 #print (self.master)
                 #print (self.master.__dict__)
-                self.master.Refresh(bdRecordID)
-                pass
+                if item!="":
+                        self.master.Refresh(bdRecordID)
+                
         
         def _addNewRegisterItem (self):
                 

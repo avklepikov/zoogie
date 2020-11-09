@@ -437,7 +437,7 @@ class AttributeCombo (ttk.Combobox):
         
                 
         def Refresh (self, _text):
-                print ('AttributeCombo refresh')
+                #print ('AttributeCombo refresh')
                 self.set(_text)
                 
 def Main():
