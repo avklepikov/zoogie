@@ -3,7 +3,7 @@ from tkinter import ttk
 
 import controller
 
-
+#[Filed type, Row, Column]
 REGISTER_BLOCKS = {
         'RiskRegister': {
                 'ID': ['TEXT_LINE_BLOCKED', 0, 1],
@@ -93,7 +93,7 @@ REGISTER_BLOCKS = {
                 'ParentID': ['TEXT_LINE', 1, 1],
                 'Status': ['COMBO', 4, 0],
                 'Category': ['COMBO', 4, 1],
-                'AcceptanceCriterias': ['TEXT_BOX', 4, 2]
+                'AcceptanceCriterias': ['TEXT_BOX', 3, 2]
                 },
         'Issue':{
                 'ID': ['TEXT_LINE_BLOCKED', 0, 0],
