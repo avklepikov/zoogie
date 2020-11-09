@@ -139,12 +139,14 @@ REGISTER_BLOCKS = {
                 'InfoToProject': ['TEXT_BOX', 4, 1],
                 'KeyMessages': ['TEXT_BOX', 4, 1]
                 },
+        
         'Team':{
                 'ID': ['TEXT_LINE_BLOCKED', 0, 0],
                 'RelatedProject': ['TEXT_LINE_BLOCKED', 1, 0],
                 'Person': ['TEXT_LINE', 2, 0],
                 'Role': ['COMBO', 3, 0],
-        'Responsibilities': ['TEXT_BOX', 4, 0]},
+                'Responsibilities': ['TEXT_BOX', 4, 0]},
+        
         'Stage':{
                 'ID':['TEXT_LINE_BLOCKED', 0, 0],
                 'RelatedProject': ['TEXT_LINE_BLOCKED', 0, 1],
@@ -152,7 +154,8 @@ REGISTER_BLOCKS = {
                 'Category': ['COMBO', 1, 1],
                 'StartDate': ['TEXT_LINE', 2, 0],
                 'EndDate': ['TEXT_LINE', 2, 1],
-                'Status': ['COMBO', 3, 0]}
+                'Status': ['COMBO', 3, 0],
+                'ParentID': ['TEXT_LINE', 4, 1]}
         }
         
 

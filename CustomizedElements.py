@@ -181,26 +181,26 @@ class RegisterList (ttk.Treeview):
         
         def Refresh (self):
                 
-                #print ('........REFRESH...............')
-                #print (self.master.__dict__)
+                print ('........REFRESH...............')
+                print (self.master.__dict__)
                 
                 # Cleaning the tree from the data 
                 for i in self.get_children():
                         self.delete(i)                 
                 
-                #print ('Refresh Object', self)
-                #print ('Arglist: ', self.ArgList)
+                print ('Refresh Object', self)
+                print ('Arglist: ', self.ArgList)
                 
                 # Retrieve the data
                 Keys, Data = controller.RefreshBusinessObject(self.ObjectName, self.ProjectID)
                 
                 
-                #print ('Object: ', self.ObjectName)
-                #print ('\n')
-                #print ('Keys: ', Keys) 
-                #print ('\n')
-                #print ('Data: ', Data)
-                #print ('\n')
+                print ('Object: ', self.ObjectName)
+                print ('\n')
+                print ('Keys: ', Keys) 
+                print ('\n')
+                print ('Data: ', Data)
+                print ('\n')
                 #print ('Columns: ', self('column'))
                 
                 if 'ParentID' in Keys:
@@ -269,25 +269,27 @@ class RegisterList (ttk.Treeview):
                         
                         #Population of nested items
                         #1st loop. Go through remaining Data list
-                        
+                        print (Keys['ParentID'])
+                        indexParentID=Keys['ParentID']
+                        print ('Parent ID index:', indexParentID)
                         while len(Data) > 0:
                                 print ('Data Len:', len(Data))
                                 for item in Data:
                                         insert_list = []
                                         #Parent is retrieved with index 13 in item 
                                         
-                                        print (item[13], 'DataItem Parent------>')
-                                        print ('search index:', item[13], ':', self.exists(item[13]))
+                                        print (item[indexParentID], 'DataItem Parent------>')
+                                        print ('search index:', item[indexParentID], ':', self.exists(item[indexParentID]))
                                         #for child in self.get_children():
                                                 #print ('get children:', self.get_children())
                                                 #print('tree item:', self.item(child)["values"][0])
-                                        if self.exists(item[13]):
+                                        if self.exists(item[indexParentID]):
                                                 #When match is found
                                                 for arg in self.ArgList:
                                                         #print (arg, item[Keys[arg]])
                                                         insert_list.append(item[Keys[arg]])       
                                                 #print ('item from Data to remove: ', item)        
-                                                self.insert(item[13] ,item[0], iid=item[0], text=item[0], values=insert_list)
+                                                self.insert(item[indexParentID] ,item[0], iid=item[0], text=item[0], values=insert_list)
                                                 Data.remove(item)                                                
                                                         
                                                 

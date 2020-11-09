@@ -134,7 +134,31 @@ PREDEFINED_LISTS_OF_VALUES = {
                 
         
         'Stage':{
-                'Category': ['Starting-Up (SU)', 'Project Initiation', 'Delivery Stage'],
+                'Category': ['Stage: Pre-Project',
+                             'Stage: Project Initiation', 
+                             'Stage: Delivery',
+                             'Process: Starting-Up',
+                             '...appoint the executive and the project manager',
+                             '...capture previous lessons',
+                             '...design and appoint the project management team',
+                             '...prepare the outline business case',
+                             '...select the project approach and assemble the project brief', 
+                             '...plan the initiation stage', 
+                             
+                             'Process: Directing',
+                             '...authorize initiation', 
+                             '...authorize the project',
+                             '...authorize a stage or exception plan',
+                             '...authorize project closure', 
+                             
+                             'Process: Initiating the Project',
+                             'Process: Controlling a Stage',
+                             'Managing Product Delivery',
+                             'Managing Stage Boundary',
+                             'Closing a Project'                             
+                             
+
+                             ],
                 'Status': ['Scheduled', 'Active', 'Active (Exception)', 'Terminated', 'Completed']}
         }
 
@@ -1351,6 +1375,7 @@ class Stage (ProjectObject):            # OK
             Status                  (str): Status of the stage {Scheduled, Active, Replaced, Closed}
             Title                   (str): Short name for the stage
             Category                (str): Stage category from {Initiation, Delivery}
+            ParentID                (int): Parent ID
         
         Methods:
             Please refer to Superclass Methods for standard methods applied across all Project Classes    
@@ -1362,7 +1387,8 @@ class Stage (ProjectObject):            # OK
                       Status: str = None,
                       Title: str = None,
                       Category: str = None,
-                      ID: int = None):
+                      ID: int = None,
+                      ParentID: int = None):
                 super().__init__()
                 self.ID=ID
                 self.RelatedProject=RelatedProject
@@ -1370,7 +1396,8 @@ class Stage (ProjectObject):            # OK
                 self.EndDate=EndDate
                 self.Status=Status
                 self.Title=Title
-                self.Category=Category                
+                self.Category=Category     
+                self.ParentID = ParentID
 
 class CommunicationApproach (ProjectObject):   # OK +ProjectPack
         """Applied policy to manage Project communications
