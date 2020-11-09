@@ -230,50 +230,63 @@ class RegisterList (ttk.Treeview):
                                 #print (insert_list)
                                 del insert_list[:]
                 else:
-                        #print ('is Nested')
-                        #print ('Data initial: ', Data)
+                        print ('is Nested')
+                        print ('Data initial: \n', Data)
                         self.column('#0', width = 70)
                         
                         #Population of core level items
+                        remove_list = []
                         for item in Data:
                                 insert_list = []
                                 
+                                print ('\ncheck item:', item)
                                 if item[Keys['ParentID']] == 0:
                                         for arg in self.ArgList:
                                                 #print (arg, item[Keys[arg]])
                                                 insert_list.append(item[Keys[arg]])
                                                 
                                                 
-                                        #print ('item from Data to remove: ', item)        
+                                                
+                                                
+                                        remove_list.append(item)
                                         self.insert('',item[0], iid=item[0], text=item[0], values=insert_list)
-                                        Data.remove(item)
+                                        
+                                        
                                 del insert_list[:]
                         
+                        print ('\nData from which to remove: \n', Data)
+                        print ('\nList for removal\n', remove_list)   
+                        
+                        for item in remove_list:
+                                print ('\nitem from Data to remove: \n', item)
+                                Data.remove(item)
                                 
-                        #print (Data)
+                        
+                                
+                        print ('data after base level has been completed : \n', Data)
                         
                         #Population of nested items
                         #1st loop. Go through remaining Data list
                         
                         while len(Data) > 0:
-                                #print ('Data Len:', len(Data))
+                                print ('Data Len:', len(Data))
                                 for item in Data:
                                         insert_list = []
                                         #Parent is retrieved with index 13 in item 
                                         
-                                        #print (item[13], 'DataItem Parent------>')
-                                        #print ('search index:', item[13], ':', self.exists(item[13]))
-                                        for child in self.get_children():
+                                        print (item[13], 'DataItem Parent------>')
+                                        print ('search index:', item[13], ':', self.exists(item[13]))
+                                        #for child in self.get_children():
                                                 #print ('get children:', self.get_children())
                                                 #print('tree item:', self.item(child)["values"][0])
-                                                if self.exists(item[13]):
-                                                        #When match is found
-                                                        for arg in self.ArgList:
-                                                                #print (arg, item[Keys[arg]])
-                                                                insert_list.append(item[Keys[arg]])       
-                                                        #print ('item from Data to remove: ', item)        
-                                                        self.insert(item[13] ,item[0], iid=item[0], text=item[0], values=insert_list)
-                                                        Data.remove(item)                                                
+                                        if self.exists(item[13]):
+                                                #When match is found
+                                                for arg in self.ArgList:
+                                                        #print (arg, item[Keys[arg]])
+                                                        insert_list.append(item[Keys[arg]])       
+                                                #print ('item from Data to remove: ', item)        
+                                                self.insert(item[13] ,item[0], iid=item[0], text=item[0], values=insert_list)
+                                                Data.remove(item)                                                
                                                         
                                                 
                                         #print ('------<')

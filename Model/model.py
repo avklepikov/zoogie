@@ -441,11 +441,19 @@ class ProjectObject():   # Unified methods are set in this SuperClass
                 pass
         
         
-        def append (self):
+        def append (self, ParentID = 0):
                 """Created a Database record and writes all Project Object attributes into it
+                
                 """
                 #logging.info ('append: ', self.__class__.__name__, self.__dict__)
-                _sql = db.compile_INSERT_script(self.__class__.__name__, self.__dict__)
+                
+                #Check if Class has a ParentID field
+                if hasattr(self, 'ParentID'):
+                        hasParentID = True
+                else:
+                        hasParentID = False
+                
+                _sql = db.compile_INSERT_script(self.__class__.__name__, self.__dict__, hasParentID, ParentID)
                 db.executeSQL(_sql)
 
 

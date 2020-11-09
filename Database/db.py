@@ -286,12 +286,14 @@ def complile_DELETE_BY_ITEM_ID (_class: str, _id: int):    # why we use _attr_va
         #logging.debug('Resulting SQL: ', SQL)
         return SQL        
 
-def compile_INSERT_script (_class: str, _attr_value_dict: dict):
+def compile_INSERT_script (_class: str, _attr_value_dict: dict, _hasParentID = False, _ParentID = 0):
         """based in _class argument (Class from Project related classes) 
-        creates SQL script for SQLLite that
-        creates ......"""
+        creates SQL script for SQLLite that creates record
+        script takes into account incoming flag of existing ParentID field which should be populated with 0 by default
+        or with real ParentID if provided
+        """
         
-        logging.info (f'      DB Starting compile_INSERT_script (_class = {_class}, _attr_value_dict = {_attr_value_dict})')
+        logging.info (f'      DB Starting compile_INSERT_script (_class = {_class}, _attr_value_dict = {_attr_value_dict}, _hasParentID = {_hasParentID}, _ParentID = {_ParentID})')
         
         table = get_class_table(_class)
         _fields_list = []
@@ -301,12 +303,18 @@ def compile_INSERT_script (_class: str, _attr_value_dict: dict):
                         
                         _fields_list.append ( db_constants.DB_FIELDS_MAPPING[_class][attr][0])
                         
+                        
+                                
+                        
                         if db_constants.DB_FIELDS_MAPPING[_class][attr][1] == "TEXT":
                                 _values_list.append ("'"+_attr_value_dict[attr]+"'")
                         else:
                                 _values_list.append ( str(_attr_value_dict[attr]))
                                 
-                                
+                        #if has parent then add ParentID into the the fields list to populate
+                        if _hasParentID == True:
+                                _fields_list.append('ParentID')
+                                _values_list.append(str(_ParentID))        
                                 
         _fields_list_str = ', '.join(_fields_list)
         _values_list_str = ', '.join(_values_list)
