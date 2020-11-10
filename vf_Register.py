@@ -190,6 +190,19 @@ REGISTER_BLOCKS = {
                         'RolesResponsibilities': ['Roles and Responsibilities', 2, 1],
                         'Records': ['Records', 3, 0]}
                 },
+        'DailyLog':{
+                'Register':{
+                        'ID':['ID', 70],
+                        'BusinessID':['BusinessID', 70],
+                        'RaisedDate':['RaisedDate', 100],
+                        'Category':['Category', 250],
+                        'Description':['Description', 300],
+                        'Responsible':['Responsible', 250],
+                        'TargetDate':['TargetDate', 100],
+                        'Status':['Status', 100],
+                        'Results' :['Results', 100]},
+                'Breakdown':{}
+                },
                 
         'Stage':{
                 'Register':{

@@ -95,6 +95,18 @@ REGISTER_BLOCKS = {
                 'Category': ['COMBO', 4, 1],
                 'AcceptanceCriterias': ['TEXT_BOX', 3, 2]
                 },
+        'DailyLog':{
+                'ID':['TEXT_LINE_BLOCKED', 0, 0],
+                'BusinessID':['TEXT_LINE', 0, 1],
+                'RaisedDate':['TEXT_LINE', 1, 0],
+                'Category':['TEXT_LINE', 1, 1],      # make it combo
+                'Description':['Description', 2, 0],
+                'Responsible':['TEXT_LINE', 3, 0],
+                'TargetDate':['TEXT_LINE', 3, 1],
+                'Status':['TEXT_LINE', 4, 0],        # make it combo
+                'Results' :['TEXT_LINE', 4, 1]},
+                
+                
         'Issue':{
                 'ID': ['TEXT_LINE_BLOCKED', 0, 0],
                 'BusinessID': ['TEXT_LINE', 0, 1],

@@ -447,6 +447,9 @@ class Frame_DailyLog (Frame):
         
         def __init__ (self, master):
                 super().__init__(master)
+                # #############
+                dailyLogRegister = vf_Register.MainFrame(self, self.master.master.ProjectPack.Project.ID, 'DailyLog', _BGC)
+                dailyLogRegister.pack()                
 
 class Frame_DashBoard (Frame):
         """Level 2. Frame within Dashboard Tab (EMPTY)"""
