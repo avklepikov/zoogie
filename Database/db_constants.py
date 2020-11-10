@@ -220,8 +220,7 @@ DB_FIELDS_MAPPING ={                                #Class attributes -> Db Fiel
                  'EndDate': ['EndDate', 'TEXT'],
                  'Status': ['Status', 'TEXT'],
                  'Title': ['Title', 'TEXT'],
-                 'Category': ['Category', 'TEXT'],
-                 'ParentID': ['ParentID', 'INTEGER']}, 
+                 'Category': ['Category', 'TEXT']}, 
         
         'CommunicationApproach':{'ID': ['ID', 'INTEGER PRIMARY KEY AUTOINCREMENT'], 
                                  'RelatedProject': ['RelatedProject', 'INTEGER'],

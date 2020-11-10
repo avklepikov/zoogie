@@ -194,7 +194,6 @@ REGISTER_BLOCKS = {
         'Stage':{
                 'Register':{
                         'ID': ['ID', 0],
-                        'ParentID': ['ParentID', 0],
                         'Title': ['Title', 250],
                         'Category': ['Stage Category', 250],
                         'StartDate': ['Start Date', 100],
