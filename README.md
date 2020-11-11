@@ -12,7 +12,7 @@
 
 
 # Installation
-* MacOS / Windows / Linux
+* MacOS / Linux   (zoogie has a UI problem when on windows. investigating...)
 * [Python 3.7 or higher](https://www.python.org)
 * clone code from GitHub [Zoogie repository](https://github.com/avklepikov/zoogie.git)
 * detailed [Installation instruction](INSTALLATION.md)
@@ -29,13 +29,13 @@ support@zoogieproject.com
 * structure to keep project data at different project stages
 * Registers
 * Logging  
+* daily log (journal)
 * SQLite database as a data source for QlikView, Tableau, etc
 * Sample project data
 
 
 ## Next release is expected to contain:
 * version control
-* daily log (journal)
 * PM daily meetings (agenda & minutes) made simple 
 * (?) switching to multiuser
 * (?) Project plan visualisation 

@@ -1,5 +1,8 @@
 Explanation how to start using the Zoogie
 
+! currently there is a problem with windows version !
+! please use MACOS of Linux                         !
+
 ## 1. You need Python
 Make sure you have Python 3.6 (or newer) installed
 * `MacOS` and `Windows` To check please open the terminal and enter 'python3 --version'. In case you have Python system will answer you with its version number. To install Python just open https://www.python.org and follow the instruction
@@ -12,7 +15,7 @@ To run Zoogie you need the code. There are two ways:
 
 # 3. Run Zoogie
 * At the moment zoogie is built with pure python and do not need additional packages.
-* Open terminal, move to the folder with Zoogie code and type 'python3 view.py'.
+* Open terminal, move to the folder with Zoogie code and type 'python3 main.py'.
 * Initially zoogie is provided without database file, which is automatically generated upon 1st start of the program.
 
 # 4. Sample project data
