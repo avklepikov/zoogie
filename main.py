@@ -10,14 +10,16 @@ import logging
 
 #IMPORT OWN MODULES:
 import controller
-import vf_RiskApproach1  # I do not know how to split them in vf_Register
-import vf_RiskApproach2  # I do not know how to split them in vf_Register 
 
-import db_initialization
+import Frames.vf_RiskApproach1 as vf_RiskApproach1  # I do not know how to split them in vf_Register
+import Frames.vf_RiskApproach2 as vf_RiskApproach2  # I do not know how to split them in vf_Register 
+import Frames.vf_Register as vf_Register
+import Frames.CustomizedElements as CustomizedElements
+
+import Database.db_initialization as db_initialization
 
 
-import vf_Register
-import CustomizedElements
+
 
 _activeProject = None
 
@@ -94,7 +96,7 @@ class PortfoliosTree (ttk.Treeview):
 
         
         def Refresh (self):
-                print ('Refresh tree')
+                #print ('Refresh tree')
                 
                 #Go around the tree and delete all existing records at all levels.
                 for i in self.get_children():

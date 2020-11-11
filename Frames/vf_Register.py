@@ -1,8 +1,10 @@
 from tkinter import *
-import CustomizedElements
+import logging
+
+import Frames.CustomizedElements as CustomizedElements
 import controller
 
-import logging
+
 
 #TODO Add Title to Qulity Register
 

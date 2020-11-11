@@ -195,13 +195,15 @@ class ProjectsList():
                 print ('Register of Portfolios (HEADS)')
                 print ('------------------')
                 for item in self.HeadList:
-                        print (item)
+                        #print (item)
+                        pass
                         
                 print ('==================')
                 print ('Register of Portfolios (DETAILED)')
                 print ('------------------')      
                 for item in self.DetailList:
-                        print (item)                
+                        # print (item)  
+                        pass
                 #print ('------------------')
                 
                 
@@ -417,25 +419,25 @@ class ProjectPack():
                 
                 project = Project()
                 _keysP, _dataP = project.viewItem(_dbProjectID)
-                print (_keysP)
-                print (_dataP)
+                #print (_keysP)
+                #print (_dataP)
                 
                 #_dataP[0][_keysP['ID']]
                 
                 filename = str(_dataP[0][_keysP['ID']])
-                print (filename)
+                #print (filename)
                 
                 filename = filename + " " + _dataP[0][_keysP['BusinessID']]
-                print (filename)
+                #print (filename)
                 
                 filename = filename + " " + _dataP[0][_keysP['Project']]
-                print (filename)        
+                #print (filename)        
                 
                 ObjectClass = getattr(mod, _class)
                 objectInstance = ObjectClass()
                 _keys, _data = objectInstance.viewProjectRelatedItems(_dbProjectID)
-                print (_keys)
-                print (_data)
+                #print (_keys)
+                #print (_data)
                 filename = f"{_class} " + filename +".csv"
                 with open(filename, mode='w', newline='') as project_file:
                         project_writer = csv.writer(project_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)  
@@ -493,7 +495,7 @@ class ProjectObject():   # Unified methods are set in this SuperClass
         def update (self):
                 """Finds related Project Object record and overwrites all Project Object attributes into it
                 """
-                print ('update', self.__class__.__name__, self.__dict__)
+                #print ('update', self.__class__.__name__, self.__dict__)
                 _sql = db.compile_UPDATE_script (self.__class__.__name__, self.__dict__)
                 db.executeSQL(_sql)
                 

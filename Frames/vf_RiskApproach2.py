@@ -18,7 +18,8 @@ TODO [ ] Link object ID with the overall Project
 
 from tkinter import *
 from tkinter import ttk
-import CustomizedElements as CE
+
+import Frames.CustomizedElements as CE
 import controller
 
 colorCode = '#abc4e7'

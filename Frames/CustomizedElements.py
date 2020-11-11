@@ -1,9 +1,10 @@
 from tkinter import *
 from tkinter import ttk
-import ChangeTopLevel
-import controller
 import logging
-import vf_Top_RegisterCard
+
+import controller
+import Frames.ChangeTopLevel as ChangeTopLevel
+import Frames.vf_Top_RegisterCard as vf_Top_RegisterCard
 
     
                 
@@ -181,26 +182,26 @@ class RegisterList (ttk.Treeview):
         
         def Refresh (self):
                 
-                print ('........REFRESH...............')
-                print (self.master.__dict__)
+                #print ('........REFRESH...............')
+                #print (self.master.__dict__)
                 
                 # Cleaning the tree from the data 
                 for i in self.get_children():
                         self.delete(i)                 
                 
-                print ('Refresh Object', self)
-                print ('Arglist: ', self.ArgList)
+                #print ('Refresh Object', self)
+                #print ('Arglist: ', self.ArgList)
                 
                 # Retrieve the data
                 Keys, Data = controller.RefreshBusinessObject(self.ObjectName, self.ProjectID)
                 
                 
-                print ('Object: ', self.ObjectName)
-                print ('\n')
-                print ('Keys: ', Keys) 
-                print ('\n')
-                print ('Data: ', Data)
-                print ('\n')
+                #print ('Object: ', self.ObjectName)
+                #print ('\n')
+                #print ('Keys: ', Keys) 
+                #print ('\n')
+                #print ('Data: ', Data)
+                #print ('\n')
                 #print ('Columns: ', self('column'))
                 
                 if 'ParentID' in Keys:
@@ -230,8 +231,8 @@ class RegisterList (ttk.Treeview):
                                 #print (insert_list)
                                 del insert_list[:]
                 else:
-                        print ('is Nested')
-                        print ('Data initial: \n', Data)
+                        #print ('is Nested')
+                        #print ('Data initial: \n', Data)
                         self.column('#0', width = 70)
                         self.column('ID', minwidth = 0)
                         self.column('ParentID', minwidth = 0)
@@ -241,7 +242,7 @@ class RegisterList (ttk.Treeview):
                         for item in Data:
                                 insert_list = []
                                 
-                                print ('\ncheck item:', item)
+                                #print ('\ncheck item:', item)
                                 if item[Keys['ParentID']] == 0:
                                         for arg in self.ArgList:
                                                 #print (arg, item[Keys[arg]])
@@ -256,30 +257,30 @@ class RegisterList (ttk.Treeview):
                                         
                                 del insert_list[:]
                         
-                        print ('\nData from which to remove: \n', Data)
-                        print ('\nList for removal\n', remove_list)   
+                        #print ('\nData from which to remove: \n', Data)
+                        #print ('\nList for removal\n', remove_list)   
                         
                         for item in remove_list:
-                                print ('\nitem from Data to remove: \n', item)
+                                #print ('\nitem from Data to remove: \n', item)
                                 Data.remove(item)
                                 
                         
                                 
-                        print ('data after base level has been completed : \n', Data)
+                        #print ('data after base level has been completed : \n', Data)
                         
                         #Population of nested items
                         #1st loop. Go through remaining Data list
-                        print (Keys['ParentID'])
+                        #print (Keys['ParentID'])
                         indexParentID=Keys['ParentID']
-                        print ('Parent ID index:', indexParentID)
+                        #print ('Parent ID index:', indexParentID)
                         while len(Data) > 0:
-                                print ('Data Len:', len(Data))
+                                #print ('Data Len:', len(Data))
                                 for item in Data:
                                         insert_list = []
                                         #Parent is retrieved with index 13 in item 
                                         
-                                        print (item[indexParentID], 'DataItem Parent------>')
-                                        print ('search index:', item[indexParentID], ':', self.exists(item[indexParentID]))
+                                        #print (item[indexParentID], 'DataItem Parent------>')
+                                        #print ('search index:', item[indexParentID], ':', self.exists(item[indexParentID]))
                                         #for child in self.get_children():
                                                 #print ('get children:', self.get_children())
                                                 #print('tree item:', self.item(child)["values"][0])
