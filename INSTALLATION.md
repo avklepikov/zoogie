@@ -11,8 +11,12 @@ To run Zoogie you need the code. There are two ways:
 * Visit reporsitory at https://github.com/avklepikov/zoogie , find `Clone and Download` button and get zip file with the code.
 
 # 3. Run Zoogie
-Open terminal, move to the folder with Zoogie code and type 'python3 view.py'.
-Zoogie application currently comes with some test Project records so you may play with them for a while then to delete.
+* At the moment zoogie is built with pure python and do not need additional packages.
+* Open terminal, move to the folder with Zoogie code and type 'python3 view.py'.
+* Initially zoogie is provided without database file, which is automatically generated upon 1st start of the program.
+
+# 4. Sample project data
+* On the initial window of project portfolio add sample project with right mouse click.
 
 > **Important:** Current Zoogie.Alfa.1.0 release is created as a `Alfa-version` of production version and is provided *mostly* for introduction and collaboration purposes.  In case you want to use it for your work we suggest you to wait until production release
 
