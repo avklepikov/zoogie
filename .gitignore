@@ -3,6 +3,7 @@ Zoogie.wpr
 __pycache__/db.cpython-37.pyc
 __pycache__/db_constants.cpython-37.pyc
 .vscode/settings.json
+.DS_Store
 
 # Ignore testing data
 *.pyc
