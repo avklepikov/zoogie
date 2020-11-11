@@ -3,8 +3,14 @@ Zoogie.wpr
 __pycache__/db.cpython-37.pyc
 __pycache__/db_constants.cpython-37.pyc
 .vscode/settings.json
+
+# Ignore testing data
 *.pyc
 *.csv
+*.db
 logging.txt
+
+
+# Something strange
 to delete
 manual_model_check.py
