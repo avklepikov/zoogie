@@ -67,6 +67,15 @@ PREDEFINED_LISTS_OF_VALUES = {
                              'Quality', 
                              'Benefits', 
                              'Scope']},
+        'DailyLog':{
+                'Category': ['Event', 
+                           'Note', 
+                           'Problem', 
+                           'Risk', 
+                           'Action'],
+                'Status': ['Open',
+                           'Done',
+                           'Canceled']},
         'Issue': {
                 'Category' : ['change request (CR)', 
                               'problem', 
@@ -710,11 +719,11 @@ class DailyLog (ProjectObject):         # OK
             BusinessID      (int): BusinessID in format accepted by Project Office
             RelatedProject  (int): Related Project primary key
             RaisedDate      (str): Date of recording
-            Category        (str): Category of Record {Event; Problem; Action}
+            Category        (str): Category of Record {Event; Note; Problem; Risk; Action}
             Description     (str): Description
             Responsible     (str): Responsible for action
             TargetDate      (str): Target date for Actions
-            Status          (str): Problem or Action status - {Closed; Canceled}
+            Status          (str): Problem or Action status - {Open; Closed; Canceled}
             Results         (str): Extra explanation of results for problems or events or actions
         
         Methods:
