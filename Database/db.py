@@ -3,24 +3,15 @@
 """
 import sqlite3
 import logging
-#import model   # ??? two ways import?
+
 from Database import db_constants
 
-#PROJECT_OBJECTS = (model.ProjectObject.__subclasses__())
-#"""List of Class objects from the Model which should be transformed into Tables in database
-#"""
 
-#def get_classes():
-        #"""Method returns list of Classes used in Project
-        #"""
-        #class_list = []
-        #for _class in PROJECT_OBJECTS:
-                #class_list.append (_class.__name__)
-        #return class_list
 
 def sql_connection():
         try:
-                con = sqlite3.connect('ProjectApp.db')
+                
+                con = sqlite3.connect(db_constants.DB_DATABASE['filename'])
                 return con
         
         except Error:

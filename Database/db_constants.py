@@ -1,4 +1,6 @@
 
+DB_DATABASE={
+        'filename': 'ProjectApp.db'}
 
 DB_FIELDS_MAPPING ={                                #Class attributes -> Db Fields
         'Product': {

@@ -7,6 +7,7 @@ import sqlite3
 from Database import db_constants
 from Database import db 
 from Model import model
+import pathlib
 
 PROJECT_OBJECTS = (model.ProjectObject.__subclasses__())
 """List of Class objects from the Model which should be transformed into Tables in database
@@ -33,8 +34,18 @@ def initiateDB():
         print ('done')
         
 
+def checkDBExists():
+        """verification that database exists. if not creating new empty database"""
+        path = pathlib.Path(db_constants.DB_DATABASE['filename'])
+        #print ('DB verification:', path.is_file())
+        if path.is_file() == False:
+                print ('.... creating SQLite Database ', db_constants.DB_DATABASE['filename'])
+                initiateDB()
+        
+
 def Main():
-        initiateDB()
+        
+        checkDBExists()
         
 
 if __name__ == '__main__':

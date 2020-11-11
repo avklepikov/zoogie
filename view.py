@@ -13,6 +13,8 @@ import controller
 import vf_RiskApproach1  # I do not know how to split them in vf_Register
 import vf_RiskApproach2  # I do not know how to split them in vf_Register 
 
+import db_initialization
+
 
 import vf_Register
 import CustomizedElements
@@ -570,11 +572,15 @@ class QualityTabControl (ttk.Notebook):
                 
 def Main ():
         logging.basicConfig(filename='logging.txt',level=logging.DEBUG, format='%(asctime)s %(name)-12s %(levelname)-8s %(message)s', datefmt='%m-%d %H:%M', filemode='w')
-        
+        db_initialization.Main()
         #X = ProjectApp()
         X = Application()
         X.title ('Zoogie Project')
         X.mainloop()
+
+
+def DataBaseCheck():
+        pass
 
 
 if __name__ == '__main__':

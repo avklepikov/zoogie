@@ -166,8 +166,8 @@ REGISTER_BLOCKS = {
                 'Category': ['COMBO', 1, 1],
                 'StartDate': ['TEXT_LINE', 2, 0],
                 'EndDate': ['TEXT_LINE', 2, 1],
-                'Status': ['COMBO', 3, 0],
-                'ParentID': ['TEXT_LINE', 4, 1]}
+                'Status': ['COMBO', 3, 0]
+                }
         }
         
 
